@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.lesconstructions.sapete.stempyerp.core.shared.util.StringUtil;
+
 /*
- * Example usage:
+ * A lightweight SQL builder that can dynamically append or replace
+ * query fragments (WHERE, JOIN, ORDER BY, LIMIT, etc.).
+ * 
+ * Usage Example:
 
     // Get base SQL String
     String base = Query.RETAIL_PRODUCT_SELECT_BASE;
@@ -31,7 +36,21 @@ import java.util.List;
             ...
         }
     }
- * 
+
+ *
+ * Supports placeholders in base queries, e.g.:
+ *
+
+    SELECT
+      rp.product_no,
+      ...
+    FROM
+      retail_products AS rp
+    \*WHERE*\
+    \*ORDERBY*\
+
+ * The builder will replace these tokens IF found, otherwise
+ * append the clauses at the end.
  */
 
 public class SqlBuilder {
@@ -50,9 +69,8 @@ public class SqlBuilder {
 
   // --- WHERE with params ---
   public SqlBuilder where(String condition, Object... values) {
-    // Skip if any param is null
     if (values == null || Arrays.stream(values).anyMatch(v -> v == null)) {
-      return this;
+      return this; // Skip if any param is null
     }
     whereClauses.add(condition);
     params.addAll(Arrays.asList(values));
@@ -92,38 +110,43 @@ public class SqlBuilder {
     return this;
   }
 
-  // --- Build final SQL ---
+  /**
+   * Build final SQL with query fragments
+   */
   public String build() {
-    StringBuilder sql = new StringBuilder(base);
+    String sql = base;
 
     if (!joinClauses.isEmpty()) {
-      sql.append(" ");
-      sql.append(String.join(" ", joinClauses));
+      sql = StringUtil.replaceOrAppend(
+          sql, "/*JOIN*/", String.join(" ", joinClauses));
     }
 
     if (!whereClauses.isEmpty()) {
-      sql.append(" WHERE ");
-      sql.append(String.join(" AND ", whereClauses));
+      sql = StringUtil.replaceOrAppend(
+          sql, "/*WHERE*/", "WHERE " + String.join(" AND ", whereClauses));
     }
 
     if (groupByClause != null) {
-      sql.append(" GROUP BY ").append(groupByClause);
+      sql = StringUtil.replaceOrAppend(
+          sql, "/*GROUPBY*/", "GROUP BY " + groupByClause);
     }
 
     if (!orderByClauses.isEmpty()) {
-      sql.append(" ORDER BY ");
-      sql.append(String.join(", ", orderByClauses));
+      sql = StringUtil.replaceOrAppend(
+          sql, "/*ORDERBY*/", "ORDER BY " + String.join(", ", orderByClauses));
     }
 
     if (limit != null) {
-      sql.append(" LIMIT ").append(limit);
+      sql = StringUtil.replaceOrAppend(
+          sql, "/*LIMIT*/", "LIMIT " + limit);
     }
 
     if (offset != null) {
-      sql.append(" OFFSET ").append(offset);
+      sql = StringUtil.replaceOrAppend(
+          sql, "/*OFFSET*/", "OFFSET " + offset);
     }
 
-    return sql.toString();
+    return StringUtil.normalizeWhitespace(sql);
   }
 
   // --- Get params ---
