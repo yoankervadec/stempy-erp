@@ -16,7 +16,6 @@ public class ConnectionPool {
     try {
       Dotenv dotenv = Dotenv.load();
 
-      // HikariConfig config = new HikariConfig("/db.properties");
       HikariConfig config = new HikariConfig();
 
       config.setJdbcUrl(dotenv.get("DB_URL"));
