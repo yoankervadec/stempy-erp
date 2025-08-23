@@ -1,0 +1,25 @@
+# Java / IDE
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.iml
+*.idea/
+*.vscode/
+out/
+target/
+bin/
+
+# Maven / Gradle
+/.mvn/
+.mvn/
+build/
+!gradle-wrapper.jar
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database / env / sensitive files
+.env
