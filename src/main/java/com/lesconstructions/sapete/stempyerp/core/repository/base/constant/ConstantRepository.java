@@ -191,7 +191,7 @@ public class ConstantRepository {
     }
   }
 
-  // Retail Locations
+  // Role Actions
   public static List<RoleAction> loadRoleActions(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
@@ -236,7 +236,7 @@ public class ConstantRepository {
   public static List<UserRole> loadUserRoles(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
-        Query.SELECT_CONFIG_ROLE_ACTIONS);
+        Query.SELECT_CONFIG_USER_ROLE);
 
     try (var stmt = con.prepareStatement(sqlString);
         var rs = stmt.executeQuery()) {

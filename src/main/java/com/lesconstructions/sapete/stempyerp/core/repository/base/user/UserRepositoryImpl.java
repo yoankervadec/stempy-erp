@@ -1,0 +1,59 @@
+package com.lesconstructions.sapete.stempyerp.core.repository.base.user;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.lesconstructions.sapete.stempyerp.core.domain.base.constant.UserRole;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructions.sapete.stempyerp.core.shared.query.Query;
+import com.lesconstructions.sapete.stempyerp.core.shared.query.QueryCache;
+import com.lesconstructions.sapete.stempyerp.core.shared.query.SqlBuilder;
+
+public class UserRepositoryImpl implements UserRepository {
+
+  @Override
+  public User validateCredentials(Connection connection, String usernameLong, String password) throws SQLException {
+    User user;
+
+    String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
+
+    SqlBuilder builder = new SqlBuilder(sqlBase)
+        .where("us.username_long = ?", usernameLong)
+        .and("us.user_password = ?", password);
+
+    String sqlString = builder.build();
+    List<Object> params = builder.getParams();
+
+    try (var stmt = connection.prepareStatement(sqlString)) {
+
+      for (int i = 0; i < params.size(); i++) {
+        stmt.setObject(i + 1, params.get(i));
+      }
+
+      try (var rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("NO USER FOUND");
+          return null;
+        }
+        user = new User(
+            rs.getLong("user_seq"),
+            rs.getString("username_short"),
+            rs.getString("username_long"),
+            new UserRole(rs.getInt("user_role"), null, true),
+            rs.getString("user_password"),
+            rs.getString("user_pin"),
+            null,
+            null,
+            rs.getBoolean("is_enabled"),
+            null,
+            rs.getObject("created_at", LocalDateTime.class));
+      }
+
+    }
+
+    return user;
+  }
+
+}

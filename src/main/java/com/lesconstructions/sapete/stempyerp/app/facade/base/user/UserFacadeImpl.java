@@ -1,0 +1,48 @@
+package com.lesconstructions.sapete.stempyerp.app.facade.base.user;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.lesconstructions.sapete.stempyerp.core.config.db.ConnectionPool;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructions.sapete.stempyerp.core.repository.base.user.UserRepository;
+
+public class UserFacadeImpl implements UserFacade {
+
+  private final UserRepository userRepository;
+
+  public UserFacadeImpl(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  @Override
+  public User validateCredentials(String usernameLong, String password) {
+
+    Connection con = null;
+
+    try {
+      con = ConnectionPool.getConnection();
+      con.setAutoCommit(false);
+
+      User user = userRepository.validateCredentials(con, usernameLong, password);
+
+      con.commit();
+      return user;
+    } catch (SQLException e) {
+      if (con != null)
+        try {
+          con.rollback();
+        } catch (SQLException e1) {
+        }
+      throw new RuntimeException("Failed...", e);
+
+    } finally {
+      if (con != null)
+        try {
+          con.close();
+        } catch (SQLException e) {
+        }
+    }
+  }
+
+}

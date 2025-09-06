@@ -33,6 +33,12 @@ public enum Query {
   // Retail Product
   SELECT_RETAIL_PRODUCT_BY_PRODUCT_NO("app/retail_product/select_by_product_no.sql", true),
 
+  // Auth/Refresh Tokens
+  SELECT_AUTH_REFRESH_TOKENS("app/auth/select_auth_refresh_tokens.sql", true),
+
+  // Users
+  SELECT_FULL_USER("app/user/select_full_user.sql", true),
+
   /**
    * ==========================
    * INSERT
@@ -41,6 +47,9 @@ public enum Query {
 
   // Retail Product
   INSERT_RETAIL_PRODUCT("app/retail_product/insert_retail_product.sql", true),
+
+  // Auth/Refresh Tokens
+  INSERT_AUTH_REFRESH_TOKEN("app/auth/insert_auth_refresh_token.sql", true),
 
   /**
    * ==========================
