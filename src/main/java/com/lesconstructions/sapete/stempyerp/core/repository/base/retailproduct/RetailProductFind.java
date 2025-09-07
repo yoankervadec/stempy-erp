@@ -13,7 +13,7 @@ import com.lesconstructions.sapete.stempyerp.core.shared.query.SqlBuilder;
 class RetailProductFind {
 
   /**
-   * Find by RetailProduct Number (e.g., PR000187)
+   * Find by RetailProduct Number (e.g., "PR000187")
    */
   RetailProduct findByProductNo(Connection con, String productNo) throws SQLException {
     RetailProduct retailProduct;

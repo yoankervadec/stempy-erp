@@ -2,7 +2,7 @@
 
 ## Configuration Tables
 
-**config_customer_order_header_status**
+#### config_customer_order_header_status
 
 ```sql
 CREATE TABLE `config_customer_order_header_status` (
@@ -13,7 +13,7 @@ CREATE TABLE `config_customer_order_header_status` (
 )
 ```
 
-**config_customer_order_line_status**
+#### config_customer_order_line_status
 
 ```sql
 CREATE TABLE `config_customer_order_line_status` (
@@ -24,7 +24,7 @@ CREATE TABLE `config_customer_order_line_status` (
 )
 ```
 
-**config_entity_sequences**
+#### config_entity_sequences
 
 ```sql
 CREATE TABLE `config_entity_sequences` (
@@ -36,7 +36,7 @@ CREATE TABLE `config_entity_sequences` (
 )
 ```
 
-**config_entity_types**
+#### config_entity_types
 
 ```sql
 CREATE TABLE `config_entity_types` (
@@ -49,7 +49,7 @@ CREATE TABLE `config_entity_types` (
 )
 ```
 
-**config_payment_methods**
+#### config_payment_methods
 
 ```sql
 CREATE TABLE `config_payment_methods` (
@@ -60,7 +60,7 @@ CREATE TABLE `config_payment_methods` (
 )
 ```
 
-**config_pos_transaction_types**
+#### config_pos_transaction_types
 
 ```sql
 CREATE TABLE `config_pos_transaction_types` (
@@ -71,7 +71,7 @@ CREATE TABLE `config_pos_transaction_types` (
 )
 ```
 
-**config_retail_categories**
+#### config_retail_categories
 
 ```sql
 CREATE TABLE `config_retail_categories` (
@@ -83,7 +83,7 @@ CREATE TABLE `config_retail_categories` (
 )
 ```
 
-**config_retail_locations**
+#### config_retail_locations
 
 ```sql
 CREATE TABLE `config_retail_locations` (
@@ -95,7 +95,7 @@ CREATE TABLE `config_retail_locations` (
 )
 ```
 
-**config_item_entry_types**
+#### config_item_entry_types
 
 ```sql
 CREATE TABLE `config_item_entry_types` (
@@ -106,7 +106,7 @@ CREATE TABLE `config_item_entry_types` (
 )
 ```
 
-**config_role_actions**
+#### config_role_actions
 
 ```sql
 CREATE TABLE `config_role_actions` (
@@ -120,7 +120,7 @@ CREATE TABLE `config_role_actions` (
 )
 ```
 
-**config_tax_rates**
+#### config_tax_rates
 
 ```sql
 CREATE TABLE `config_tax_rates` (
@@ -134,7 +134,7 @@ CREATE TABLE `config_tax_rates` (
 )
 ```
 
-**config_user_actions**
+#### config_user_actions
 
 ```sql
 CREATE TABLE `config_user_actions` (
@@ -145,7 +145,7 @@ CREATE TABLE `config_user_actions` (
 )
 ```
 
-**config_user_roles**
+#### config_user_roles
 
 ```sql
 CREATE TABLE `config_user_roles` (
@@ -158,7 +158,7 @@ CREATE TABLE `config_user_roles` (
 
 ## Application Tables
 
-**auth_refresh_tokens**
+#### auth_refresh_tokens
 
 ```sql
 CREATE TABLE `auth_refresh_tokens` (
@@ -173,7 +173,7 @@ CREATE TABLE `auth_refresh_tokens` (
 )
 ```
 
-**customer_order_headers**
+#### customer_order_headers
 
 ```sql
 CREATE TABLE `customer_order_headers` (
@@ -215,7 +215,7 @@ CREATE TABLE `customer_order_headers` (
 )
 ```
 
-**customer_order_line_attributes**
+#### customer_order_line_attributes
 
 ```sql
 CREATE TABLE `customer_order_line_attributes` (
@@ -229,7 +229,7 @@ CREATE TABLE `customer_order_line_attributes` (
 )
 ```
 
-**customer_order_lines**
+#### customer_order_lines
 
 ```sql
 CREATE TABLE `customer_order_lines` (
@@ -264,7 +264,7 @@ CREATE TABLE `customer_order_lines` (
 )
 ```
 
-**customers**
+#### customers
 
 ```sql
 CREATE TABLE `customers` (
@@ -295,7 +295,7 @@ CREATE TABLE `customers` (
 )
 ```
 
-**item_entries**
+#### item_entries
 
 ```sql
 CREATE TABLE `item_entries` (
@@ -319,7 +319,7 @@ CREATE TABLE `item_entries` (
 )
 ```
 
-**item_entry_attributes**
+#### item_entry_attributes
 
 ```sql
 CREATE TABLE `item_entry_attributes` (
@@ -332,7 +332,7 @@ CREATE TABLE `item_entry_attributes` (
 )
 ```
 
-**payment_entries**
+#### payment_entries
 
 ```sql
 CREATE TABLE `payment_entries` (
@@ -356,7 +356,7 @@ CREATE TABLE `payment_entries` (
 )
 ```
 
-**pos_transaction_headers_staging**
+#### pos_transaction_headers_staging
 
 ```sql
 CREATE TABLE `pos_transaction_headers_staging` (
@@ -382,7 +382,7 @@ CREATE TABLE `pos_transaction_headers_staging` (
 )
 ```
 
-**pos_transaction_line_attributes_staging**
+#### pos_transaction_line_attributes_staging
 
 ```sql
 CREATE TABLE `pos_transaction_line_attributes_staging` (
@@ -396,7 +396,7 @@ CREATE TABLE `pos_transaction_line_attributes_staging` (
 )
 ```
 
-**pos_transaction_lines_staging**
+#### pos_transaction_lines_staging
 
 ```sql
 CREATE TABLE `pos_transaction_lines_staging` (
@@ -423,7 +423,7 @@ CREATE TABLE `pos_transaction_lines_staging` (
 )
 ```
 
-**pos_transactions**
+#### pos_transactions
 
 ```sql
 CREATE TABLE `pos_transactions` (
@@ -446,7 +446,7 @@ CREATE TABLE `pos_transactions` (
 )
 ```
 
-**reservation_entries**
+#### reservation_entries
 
 ```sql
 CREATE TABLE `reservation_entries` (
@@ -463,7 +463,7 @@ CREATE TABLE `reservation_entries` (
 )
 ```
 
-**retail_products**
+#### retail_products
 
 ```sql
 CREATE TABLE `retail_products` (
@@ -490,7 +490,7 @@ CREATE TABLE `retail_products` (
 )
 ```
 
-**sale_entry_attributes**
+#### sale_entry_attributes
 
 ```sql
 CREATE TABLE `sale_entry_attributes` (
@@ -503,7 +503,7 @@ CREATE TABLE `sale_entry_attributes` (
 )
 ```
 
-**sales_entries**
+#### sales_entries
 
 ```sql
 CREATE TABLE `sales_entries` (
@@ -525,7 +525,7 @@ CREATE TABLE `sales_entries` (
 )
 ```
 
-**users**
+#### users
 
 ```sql
 CREATE TABLE `users` (
@@ -553,7 +553,7 @@ CREATE TABLE `users` (
 
 ## Reference (Extension) Tables
 
-**ref_customer_order_services**
+#### ref_customer_order_services
 
 ```sql
 CREATE TABLE `ref_customer_order_services` (
@@ -566,7 +566,7 @@ CREATE TABLE `ref_customer_order_services` (
 )
 ```
 
-**ref_product_attributes**
+#### ref_product_attributes
 
 ```sql
 CREATE TABLE `ref_product_attributes` (
@@ -577,7 +577,7 @@ CREATE TABLE `ref_product_attributes` (
 )
 ```
 
-**ref_wood_species**
+#### ref_wood_species
 
 ```sql
 CREATE TABLE `ref_wood_species` (

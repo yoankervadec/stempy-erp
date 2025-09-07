@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.lesconstructions.sapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
-import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserReference;
 
 public interface RetailProductRepository {
 
@@ -14,6 +13,6 @@ public interface RetailProductRepository {
   List<RetailProduct> fetchAll(Connection connection, Boolean isEnabled)
       throws SQLException; // Wrapper class for null value
 
-  RetailProduct insertRetailProduct(Connection connection, RetailProduct retailProduct, UserReference userReference)
+  RetailProduct insertRetailProduct(Connection connection, RetailProduct retailProduct)
       throws SQLException;
 }
