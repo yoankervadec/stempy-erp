@@ -63,3 +63,4 @@ RetailProduct findByproductNo(Connection con, String productNo) throws SQLExcept
 | Extension           |    `rcos`    | `ref_customer_order_services`             | Services offered for customer orders (e.g., delivery, assembly), may remove/add attributes |
 | Extension           |    `rpa`     | `ref_product_attributes`                  | Attribute definitions for `retail_products`                                                |
 | Extension           |    `rws`     | `ref_wood_species`                        | Reference table for wood species                                                           |
+| Application         |    `ort`     | `auth_refresh_tokens`                     | Refresh Tokens                                                                             |
