@@ -1,8 +1,8 @@
 # Table Structure and Relations
 
----
-
 ## Configuration Tables
+
+**config_customer_order_header_status**
 
 ```sql
 CREATE TABLE `config_customer_order_header_status` (
@@ -13,6 +13,8 @@ CREATE TABLE `config_customer_order_header_status` (
 )
 ```
 
+**config_customer_order_line_status**
+
 ```sql
 CREATE TABLE `config_customer_order_line_status` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -21,6 +23,8 @@ CREATE TABLE `config_customer_order_line_status` (
   PRIMARY KEY (`id`)
 )
 ```
+
+**config_entity_sequences**
 
 ```sql
 CREATE TABLE `config_entity_sequences` (
@@ -31,6 +35,8 @@ CREATE TABLE `config_entity_sequences` (
   CONSTRAINT `fk_entity_type` FOREIGN KEY (`entity_type`) REFERENCES `config_entity_types` (`id`)
 )
 ```
+
+**config_entity_types**
 
 ```sql
 CREATE TABLE `config_entity_types` (
@@ -43,6 +49,8 @@ CREATE TABLE `config_entity_types` (
 )
 ```
 
+**config_payment_methods**
+
 ```sql
 CREATE TABLE `config_payment_methods` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -52,6 +60,8 @@ CREATE TABLE `config_payment_methods` (
 )
 ```
 
+**config_pos_transaction_types**
+
 ```sql
 CREATE TABLE `config_pos_transaction_types` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -60,6 +70,8 @@ CREATE TABLE `config_pos_transaction_types` (
   PRIMARY KEY (`id`)
 )
 ```
+
+**config_retail_categories**
 
 ```sql
 CREATE TABLE `config_retail_categories` (
@@ -71,6 +83,8 @@ CREATE TABLE `config_retail_categories` (
 )
 ```
 
+**config_retail_locations**
+
 ```sql
 CREATE TABLE `config_retail_locations` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -81,6 +95,8 @@ CREATE TABLE `config_retail_locations` (
 )
 ```
 
+**config_item_entry_types**
+
 ```sql
 CREATE TABLE `config_item_entry_types` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -89,6 +105,8 @@ CREATE TABLE `config_item_entry_types` (
   PRIMARY KEY (`id`)
 )
 ```
+
+**config_role_actions**
 
 ```sql
 CREATE TABLE `config_role_actions` (
@@ -102,6 +120,8 @@ CREATE TABLE `config_role_actions` (
 )
 ```
 
+**config_tax_rates**
+
 ```sql
 CREATE TABLE `config_tax_rates` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -114,6 +134,8 @@ CREATE TABLE `config_tax_rates` (
 )
 ```
 
+**config_user_actions**
+
 ```sql
 CREATE TABLE `config_user_actions` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -122,6 +144,8 @@ CREATE TABLE `config_user_actions` (
   PRIMARY KEY (`id`)
 )
 ```
+
+**config_user_roles**
 
 ```sql
 CREATE TABLE `config_user_roles` (
@@ -132,9 +156,9 @@ CREATE TABLE `config_user_roles` (
 )
 ```
 
----
-
 ## Application Tables
+
+**auth_refresh_tokens**
 
 ```sql
 CREATE TABLE `auth_refresh_tokens` (
@@ -148,6 +172,8 @@ CREATE TABLE `auth_refresh_tokens` (
   CONSTRAINT `auth_refresh_tokens_ibfk_1` FOREIGN KEY (`user_seq`) REFERENCES `users` (`user_seq`)
 )
 ```
+
+**customer_order_headers**
 
 ```sql
 CREATE TABLE `customer_order_headers` (
@@ -189,6 +215,8 @@ CREATE TABLE `customer_order_headers` (
 )
 ```
 
+**customer_order_line_attributes**
+
 ```sql
 CREATE TABLE `customer_order_line_attributes` (
   `customer_order_line_seq` bigint NOT NULL,
@@ -200,6 +228,8 @@ CREATE TABLE `customer_order_line_attributes` (
   CONSTRAINT `customer_order_line_attributes_ibfk_2` FOREIGN KEY (`product_attribute_id`) REFERENCES `ref_product_attributes` (`id`)
 )
 ```
+
+**customer_order_lines**
 
 ```sql
 CREATE TABLE `customer_order_lines` (
@@ -234,6 +264,8 @@ CREATE TABLE `customer_order_lines` (
 )
 ```
 
+**customers**
+
 ```sql
 CREATE TABLE `customers` (
   `customer_no` varchar(64) NOT NULL,
@@ -263,6 +295,8 @@ CREATE TABLE `customers` (
 )
 ```
 
+**item_entries**
+
 ```sql
 CREATE TABLE `item_entries` (
   `item_entry_no` varchar(64) NOT NULL,
@@ -285,6 +319,8 @@ CREATE TABLE `item_entries` (
 )
 ```
 
+**item_entry_attributes**
+
 ```sql
 CREATE TABLE `item_entry_attributes` (
   `item_entry_seq` bigint NOT NULL,
@@ -295,6 +331,8 @@ CREATE TABLE `item_entry_attributes` (
   CONSTRAINT `item_entry_attributes_ibfk_2` FOREIGN KEY (`product_attribute_id`) REFERENCES `ref_product_attributes` (`id`)
 )
 ```
+
+**payment_entries**
 
 ```sql
 CREATE TABLE `payment_entries` (
@@ -317,6 +355,8 @@ CREATE TABLE `payment_entries` (
   CONSTRAINT `payment_entries_ibfk_4` FOREIGN KEY (`payment_method`) REFERENCES `config_payment_methods` (`id`)
 )
 ```
+
+**pos_transaction_headers_staging**
 
 ```sql
 CREATE TABLE `pos_transaction_headers_staging` (
@@ -342,6 +382,8 @@ CREATE TABLE `pos_transaction_headers_staging` (
 )
 ```
 
+**pos_transaction_line_attributes_staging**
+
 ```sql
 CREATE TABLE `pos_transaction_line_attributes_staging` (
   `reserved_transaction_seq` bigint NOT NULL,
@@ -353,6 +395,8 @@ CREATE TABLE `pos_transaction_line_attributes_staging` (
   CONSTRAINT `pos_transaction_line_attributes_staging_ibfk_2` FOREIGN KEY (`product_attribute_id`) REFERENCES `ref_product_attributes` (`id`)
 )
 ```
+
+**pos_transaction_lines_staging**
 
 ```sql
 CREATE TABLE `pos_transaction_lines_staging` (
@@ -379,6 +423,8 @@ CREATE TABLE `pos_transaction_lines_staging` (
 )
 ```
 
+**pos_transactions**
+
 ```sql
 CREATE TABLE `pos_transactions` (
   `pos_transaction_no` varchar(64) NOT NULL,
@@ -400,6 +446,8 @@ CREATE TABLE `pos_transactions` (
 )
 ```
 
+**reservation_entries**
+
 ```sql
 CREATE TABLE `reservation_entries` (
   `reservation_entry_no` varchar(64) NOT NULL,
@@ -414,6 +462,8 @@ CREATE TABLE `reservation_entries` (
   CONSTRAINT `reservation_entries_ibfk_1` FOREIGN KEY (`customer_order_seq`, `customer_order_line_seq`) REFERENCES `customer_order_lines` (`customer_order_seq`, `customer_order_line_seq`)
 )
 ```
+
+**retail_products**
 
 ```sql
 CREATE TABLE `retail_products` (
@@ -440,6 +490,8 @@ CREATE TABLE `retail_products` (
 )
 ```
 
+**sale_entry_attributes**
+
 ```sql
 CREATE TABLE `sale_entry_attributes` (
   `sale_entry_seq` bigint NOT NULL,
@@ -450,6 +502,8 @@ CREATE TABLE `sale_entry_attributes` (
   CONSTRAINT `sale_entry_attributes_ibfk_2` FOREIGN KEY (`product_attribute_id`) REFERENCES `ref_product_attributes` (`id`)
 )
 ```
+
+**sales_entries**
 
 ```sql
 CREATE TABLE `sales_entries` (
@@ -470,6 +524,8 @@ CREATE TABLE `sales_entries` (
   CONSTRAINT `sales_entries_ibfk_2` FOREIGN KEY (`product_seq`) REFERENCES `retail_products` (`product_seq`)
 )
 ```
+
+**users**
 
 ```sql
 CREATE TABLE `users` (
@@ -495,9 +551,9 @@ CREATE TABLE `users` (
 )
 ```
 
----
-
 ## Reference (Extension) Tables
+
+**ref_customer_order_services**
 
 ```sql
 CREATE TABLE `ref_customer_order_services` (
@@ -510,6 +566,8 @@ CREATE TABLE `ref_customer_order_services` (
 )
 ```
 
+**ref_product_attributes**
+
 ```sql
 CREATE TABLE `ref_product_attributes` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -518,6 +576,8 @@ CREATE TABLE `ref_product_attributes` (
   PRIMARY KEY (`id`)
 )
 ```
+
+**ref_wood_species**
 
 ```sql
 CREATE TABLE `ref_wood_species` (
