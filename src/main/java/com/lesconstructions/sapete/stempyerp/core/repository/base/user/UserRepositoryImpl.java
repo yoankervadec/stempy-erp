@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.lesconstructions.sapete.stempyerp.core.domain.base.constant.TaxRegion;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.constant.UserRole;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserCredential;
@@ -43,11 +44,20 @@ public class UserRepositoryImpl implements UserRepository {
             rs.getString("user_no"),
             rs.getString("username_short"),
             rs.getString("username_long"),
-            new UserRole(rs.getInt("user_role"), null, true),
+            new UserRole(
+                rs.getInt("user_role_id"),
+                rs.getString("role_name"),
+                rs.getBoolean("is_user_role_enabled")),
             rs.getString("user_password"),
             rs.getString("user_pin"),
             null,
-            null,
+            new TaxRegion(
+                rs.getInt("user_tax_region_id"),
+                rs.getString("tax_region"),
+                rs.getString("region_name"),
+                rs.getDouble("gst_rate"),
+                rs.getDouble("pst_rate"),
+                rs.getBoolean("is_tax_region_enabled")),
             rs.getBoolean("is_enabled"),
             rs.getLong("created_by"),
             rs.getObject("created_at", LocalDateTime.class));
@@ -60,8 +70,54 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public User findByUserNo(Connection connection, String userNo) throws SQLException {
-    // TODO Auto-generated method stub
-    return null;
+    User user;
+
+    String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
+
+    SqlBuilder builder = new SqlBuilder(sqlBase)
+        .where("us.user_no = ?", userNo);
+
+    String sqlString = builder.build();
+    List<Object> params = builder.getParams();
+
+    try (var stmt = connection.prepareStatement(sqlString)) {
+
+      for (int i = 0; i < params.size(); i++) {
+        stmt.setObject(i + 1, params.get(i));
+      }
+
+      try (var rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("NO USER FOUND");
+          return null;
+        }
+        user = new User(
+            rs.getLong("user_seq"),
+            rs.getString("user_no"),
+            rs.getString("username_short"),
+            rs.getString("username_long"),
+            new UserRole(
+                rs.getInt("user_role_id"),
+                rs.getString("role_name"),
+                rs.getBoolean("is_user_role_enabled")),
+            rs.getString("user_password"),
+            rs.getString("user_pin"),
+            null,
+            new TaxRegion(
+                rs.getInt("user_tax_region_id"),
+                rs.getString("tax_region"),
+                rs.getString("region_name"),
+                rs.getDouble("gst_rate"),
+                rs.getDouble("pst_rate"),
+                rs.getBoolean("is_tax_region_enabled")),
+            rs.getBoolean("is_enabled"),
+            rs.getLong("created_by"),
+            rs.getObject("created_at", LocalDateTime.class));
+      }
+
+    }
+
+    return user;
   }
 
 }

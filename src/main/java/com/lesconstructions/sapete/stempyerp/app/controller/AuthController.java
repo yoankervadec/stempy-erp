@@ -8,9 +8,8 @@ import com.lesconstructions.sapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructions.sapete.stempyerp.core.auth.JwtConfig;
 import com.lesconstructions.sapete.stempyerp.core.auth.JwtUtil;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.auth.AuthToken;
-import com.lesconstructions.sapete.stempyerp.core.domain.base.constant.UserRole;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
-import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserSimple;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserCredential;
 
 import io.javalin.http.Context;
 
@@ -25,20 +24,20 @@ public class AuthController {
   }
 
   public void login(Context ctx) {
-    UserSimple req = ctx.bodyAsClass(UserSimple.class);
+    UserCredential userCredential = ctx.bodyAsClass(UserCredential.class);
 
-    User user = userFacade.validateCredentials(req.getUsernameLong(), req.getPassword());
+    User user = userFacade.validateCredentials(userCredential);
     if (user == null) {
       ctx.status(401).result("Invalid credentials");
       return;
     }
 
-    String accessToken = JwtUtil.generateAccessToken(user.getEntityNo(), user.getUserRole());
+    String accessToken = JwtUtil.generateAccessToken(user.getEntityNo(), user.getUserRole().getName());
     String refreshToken = JwtUtil.generateRefreshToken(user.getEntityNo());
 
     AuthToken token = new AuthToken(
         null,
-        user.getSequenceNo(),
+        user.getEntitySeq(),
         user.getEntityNo(),
         accessToken,
         refreshToken,
@@ -57,7 +56,7 @@ public class AuthController {
 
     String userNo;
     try {
-      userNo = JwtUtil.validateTokenAndGetUserId(refreshToken);
+      userNo = JwtUtil.validateTokenAndGetUserNo(refreshToken);
     } catch (Exception e) {
       ctx.status(401).result("Invalid refresh token");
       return;
@@ -68,7 +67,11 @@ public class AuthController {
       return;
     }
 
-    String newAccessToken = JwtUtil.generateAccessToken(userNo, new UserRole(0, "role", true));
+    User user = userFacade.findByUserNo(userNo);
+    String role = user.getUserRole().getName();
+
+    String newAccessToken = JwtUtil.generateAccessToken(userNo, role);
+
     ctx.json(Map.of("accessToken", newAccessToken));
   }
 
