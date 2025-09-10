@@ -83,4 +83,23 @@ public final class StringUtil {
     return input.trim().replaceAll("\\s+", " ");
   }
 
+  /**
+   * Parse an entityNo into a Long
+   */
+  public static Long parseEntityNo(String entityNo) {
+    if (entityNo != null && !entityNo.isEmpty()) {
+
+      // Remove non-digit characters from the start
+      String numericPart = entityNo.replaceAll("\\D+", "");
+
+      if (numericPart.isEmpty()) {
+        throw new IllegalArgumentException("Failed to parse: entityNo does not contain a numeric part");
+      }
+
+      return Long.valueOf(numericPart);
+    }
+
+    throw new IllegalArgumentException("Failed to parse: entityNo cannot be null");
+  }
+
 }

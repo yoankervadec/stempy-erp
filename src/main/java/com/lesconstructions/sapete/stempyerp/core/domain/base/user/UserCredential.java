@@ -1,14 +1,14 @@
 package com.lesconstructions.sapete.stempyerp.core.domain.base.user;
 
-public class UserSimple {
+public class UserCredential {
 
   private String usernameLong;
   private String password;
 
-  public UserSimple() {
+  public UserCredential() {
   }
 
-  public UserSimple(String usernameLong, String password) {
+  public UserCredential(String usernameLong, String password) {
     this.usernameLong = usernameLong;
     this.password = password;
   }

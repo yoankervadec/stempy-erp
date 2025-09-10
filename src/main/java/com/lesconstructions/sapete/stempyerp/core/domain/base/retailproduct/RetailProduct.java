@@ -3,7 +3,7 @@ package com.lesconstructions.sapete.stempyerp.core.domain.base.retailproduct;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.lesconstructions.sapete.stempyerp.core.domain.base.GenericEntity;
+import com.lesconstructions.sapete.stempyerp.core.domain.generic.GenericEntity;
 import com.lesconstructions.sapete.stempyerp.core.shared.constant.ConstantCache;
 import com.lesconstructions.sapete.stempyerp.core.shared.constant.ConstantUtil;
 
@@ -40,6 +40,7 @@ public class RetailProduct extends GenericEntity {
         ConstantUtil.findByName(
             ConstantCache.getEntityTypes(),
             RETAIL_PRODUCT_ENTITY_NAME),
+        productNo,
         sequenceNo,
         createdAt,
         createdByUserSeq);

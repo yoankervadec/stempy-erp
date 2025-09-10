@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import com.lesconstructions.sapete.stempyerp.core.config.db.ConnectionPool;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserCredential;
 import com.lesconstructions.sapete.stempyerp.core.repository.base.user.UserRepository;
 
 public class UserFacadeImpl implements UserFacade {
@@ -16,7 +17,7 @@ public class UserFacadeImpl implements UserFacade {
   }
 
   @Override
-  public User validateCredentials(String usernameLong, String password) {
+  public User validateCredentials(UserCredential userCredential) {
 
     Connection con = null;
 
@@ -24,7 +25,36 @@ public class UserFacadeImpl implements UserFacade {
       con = ConnectionPool.getConnection();
       con.setAutoCommit(false);
 
-      User user = userRepository.validateCredentials(con, usernameLong, password);
+      User user = userRepository.validateCredentials(con, userCredential);
+
+      con.commit();
+      return user;
+    } catch (SQLException e) {
+      if (con != null)
+        try {
+          con.rollback();
+        } catch (SQLException e1) {
+        }
+      throw new RuntimeException("Failed...", e);
+
+    } finally {
+      if (con != null)
+        try {
+          con.close();
+        } catch (SQLException e) {
+        }
+    }
+  }
+
+  @Override
+  public User findByUserNo(String userNo) {
+    Connection con = null;
+
+    try {
+      con = ConnectionPool.getConnection();
+      con.setAutoCommit(false);
+
+      User user = userRepository.findByUserNo(con, userNo);
 
       con.commit();
       return user;

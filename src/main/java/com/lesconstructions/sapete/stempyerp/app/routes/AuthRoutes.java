@@ -14,6 +14,7 @@ public class AuthRoutes {
 
   public void register(Javalin app) {
     app.post("/api/login", authController::login);
+    app.post("/api/refresh", authController::refresh);
   }
 
 }

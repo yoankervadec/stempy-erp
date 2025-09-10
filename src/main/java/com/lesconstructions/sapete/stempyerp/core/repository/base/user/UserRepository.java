@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserCredential;
 
 public interface UserRepository {
 
-  User validateCredentials(Connection connection, String usernameLong, String password) throws SQLException;
+  User validateCredentials(Connection connection, UserCredential userCredential) throws SQLException;
+
+  User findByUserNo(Connection connection, String userNo) throws SQLException;
 }

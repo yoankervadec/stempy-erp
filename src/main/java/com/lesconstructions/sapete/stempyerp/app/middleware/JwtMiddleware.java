@@ -17,8 +17,10 @@ public class JwtMiddleware implements Handler {
 
     String token = authHeader.substring(7);
     try {
-      String userId = JwtUtil.validateTokenAndGetUserId(token);
-      ctx.attribute("userId", userId);
+      String userNo = JwtUtil.validateTokenAndGetUserNo(token);
+      if (userNo != null) {
+        ctx.attribute("userNo", userNo);
+      }
     } catch (Exception e) {
       ctx.status(401).result("Invalid or expired token");
     }

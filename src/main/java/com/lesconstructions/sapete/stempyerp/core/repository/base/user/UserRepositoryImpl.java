@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.lesconstructions.sapete.stempyerp.core.domain.base.constant.UserRole;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserCredential;
 import com.lesconstructions.sapete.stempyerp.core.shared.query.Query;
 import com.lesconstructions.sapete.stempyerp.core.shared.query.QueryCache;
 import com.lesconstructions.sapete.stempyerp.core.shared.query.SqlBuilder;
@@ -14,14 +15,14 @@ import com.lesconstructions.sapete.stempyerp.core.shared.query.SqlBuilder;
 public class UserRepositoryImpl implements UserRepository {
 
   @Override
-  public User validateCredentials(Connection connection, String usernameLong, String password) throws SQLException {
+  public User validateCredentials(Connection connection, UserCredential userCredential) throws SQLException {
     User user;
 
     String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
 
     SqlBuilder builder = new SqlBuilder(sqlBase)
-        .where("us.username_long = ?", usernameLong)
-        .and("us.user_password = ?", password);
+        .where("us.username_long = ?", userCredential.getUsernameLong())
+        .and("us.user_password = ?", userCredential.getPassword());
 
     String sqlString = builder.build();
     List<Object> params = builder.getParams();
@@ -39,6 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
         user = new User(
             rs.getLong("user_seq"),
+            rs.getString("user_no"),
             rs.getString("username_short"),
             rs.getString("username_long"),
             new UserRole(rs.getInt("user_role"), null, true),
@@ -47,13 +49,19 @@ public class UserRepositoryImpl implements UserRepository {
             null,
             null,
             rs.getBoolean("is_enabled"),
-            null,
+            rs.getLong("created_by"),
             rs.getObject("created_at", LocalDateTime.class));
       }
 
     }
 
     return user;
+  }
+
+  @Override
+  public User findByUserNo(Connection connection, String userNo) throws SQLException {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

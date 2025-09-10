@@ -45,5 +45,6 @@ public class Dependencies {
     // Controllers
     this.retailProductController = new RetailProductController(retailProductService);
     this.authController = new AuthController(userFacade, authFacade);
+
   }
 }

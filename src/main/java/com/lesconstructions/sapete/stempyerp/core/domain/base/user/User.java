@@ -22,7 +22,8 @@ public class User extends UserReference {
   private boolean isEnabled;
 
   public User(
-      Long sequenceNo,
+      Long userSeq,
+      String userNo,
       String usernameShort,
       String usernameLong,
       UserRole userRole,
@@ -34,9 +35,9 @@ public class User extends UserReference {
       Long createdByUserSeq,
       LocalDateTime createdAt) {
     super(
-        sequenceNo,
-        usernameShort,
-        createdByUserSeq);
+        userSeq,
+        userNo,
+        usernameShort);
     this.usernameLong = usernameLong;
     this.userRole = userRole;
     this.password = password;
@@ -44,6 +45,8 @@ public class User extends UserReference {
     this.userActions = userActions;
     this.userTaxRegion = userTaxRegion;
     this.isEnabled = isEnabled;
+    this.setCreatedByUserSeq(createdByUserSeq);
+    this.setCreatedAt(createdAt);
   }
 
   public String getUsernameLong() {

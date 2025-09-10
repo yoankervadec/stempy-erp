@@ -16,7 +16,7 @@ class RetailProductInsert {
 
     try (var stmt = con.prepareStatement(sqlString)) {
       stmt.setString(1, rp.getProductNo());
-      stmt.setLong(2, rp.getSequenceNo());
+      stmt.setLong(2, rp.getEntitySeq());
       stmt.setBigDecimal(3, rp.getRetailPrice());
       stmt.setBigDecimal(4, rp.getCost());
       stmt.setString(5, rp.getDescription());
