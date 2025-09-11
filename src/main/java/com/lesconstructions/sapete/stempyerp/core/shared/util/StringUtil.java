@@ -85,15 +85,26 @@ public final class StringUtil {
 
   /**
    * Parse an entityNo into a Long
+   *
+   * @param entityNo           the entity number string to parse
+   * @param removeLeadingZeros if true, remove leading zeros before parsing
+   * @return the parsed Long
    */
-  public static Long parseEntityNo(String entityNo) {
+  public static Long parseEntityNo(String entityNo, boolean removeLeadingZeros) {
     if (entityNo != null && !entityNo.isEmpty()) {
 
-      // Remove non-digit characters from the start
+      // Remove non-digit characters
       String numericPart = entityNo.replaceAll("\\D+", "");
 
       if (numericPart.isEmpty()) {
         throw new IllegalArgumentException("Failed to parse: entityNo does not contain a numeric part");
+      }
+
+      if (removeLeadingZeros) {
+        numericPart = numericPart.replaceFirst("^0+", "");
+        if (numericPart.isEmpty()) {
+          numericPart = "0"; // handle case like "0000"
+        }
       }
 
       return Long.valueOf(numericPart);
