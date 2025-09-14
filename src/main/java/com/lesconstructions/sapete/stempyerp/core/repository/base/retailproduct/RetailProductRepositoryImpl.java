@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.lesconstructions.sapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
-import com.lesconstructions.sapete.stempyerp.core.domain.base.user.UserReference;
 
 public class RetailProductRepositoryImpl implements RetailProductRepository {
 

@@ -14,10 +14,10 @@ public abstract class GenericEntity {
   protected String entityNo;
   protected final long entitySeq;
   protected LocalDateTime createdAt;
-  protected Long createdByUserSeq;
+  protected final long createdByUserSeq;
 
   // New GenericEntity generates createdAt
-  public GenericEntity(EntityType entityType, long entitySeq, Long createdByUserSeq) {
+  public GenericEntity(EntityType entityType, long entitySeq, long createdByUserSeq) {
     this.entityType = entityType;
     this.entitySeq = entitySeq;
     this.createdAt = LocalDateTime.now();
@@ -26,7 +26,7 @@ public abstract class GenericEntity {
 
   // Existing GenericEntity gets entityNo & createdAt
   public GenericEntity(EntityType entityType, String entityNo, long entitySeq, LocalDateTime createdAt,
-      Long createdByUserSeq) {
+      long createdByUserSeq) {
     this.entityType = entityType;
     this.entityNo = entityNo;
     this.entitySeq = entitySeq;
@@ -35,10 +35,11 @@ public abstract class GenericEntity {
   }
 
   // Minimal existing GenericEntity without createdByUserSeq & createdAt
-  public GenericEntity(EntityType entityType, String entityNo, long entitySeq) {
+  public GenericEntity(EntityType entityType, String entityNo, long entitySeq, long createdByUserSeq) {
     this.entityType = entityType;
     this.entityNo = entityNo;
     this.entitySeq = entitySeq;
+    this.createdByUserSeq = createdByUserSeq;
   }
 
   public EntityType getEntityType() {
@@ -65,12 +66,8 @@ public abstract class GenericEntity {
     this.createdAt = createdAt;
   }
 
-  public Long getCreatedByUserSeq() {
+  public long getCreatedByUserSeq() {
     return createdByUserSeq;
-  }
-
-  public void setCreatedByUserSeq(Long createdByUserSeq) {
-    this.createdByUserSeq = createdByUserSeq;
   }
 
 }

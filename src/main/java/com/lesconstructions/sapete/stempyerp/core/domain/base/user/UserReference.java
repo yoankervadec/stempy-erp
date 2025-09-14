@@ -17,11 +17,13 @@ public class UserReference extends GenericEntity {
   public UserReference(
       Long userSeq,
       String userNo,
-      String usernameShort) {
+      String usernameShort,
+      long createdByUserSeq) {
     super(
         ConstantUtil.findByName(ConstantCache.getEntityTypes(), USER_ENTITY_NAME),
         userNo,
-        userSeq);
+        userSeq,
+        createdByUserSeq);
     this.usernameShort = usernameShort;
   }
 

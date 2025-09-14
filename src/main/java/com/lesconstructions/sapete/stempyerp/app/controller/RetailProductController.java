@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lesconstructions.sapete.stempyerp.app.dto.retailproduct.RetailProductDto;
 import com.lesconstructions.sapete.stempyerp.app.facade.base.retailproduct.RetailProductFacade;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
+import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructions.sapete.stempyerp.core.http.ApiRequest;
-import com.lesconstructions.sapete.stempyerp.core.shared.util.StringUtil;
 
 import io.javalin.http.Context;
 
@@ -55,24 +55,27 @@ public class RetailProductController {
       // ctx.json(rp);
 
       ApiRequest<?> request = ctx.bodyAsClass(ApiRequest.class);
-      RetailProductDto rpd = mapper.convertValue(request.getPayload(), RetailProductDto.class);
+      RetailProductDto rpDto = mapper.convertValue(request.getPayload(), RetailProductDto.class);
 
-      String userNo = ctx.attribute("userNo");
-      long createdByUserSeq = StringUtil.parseEntityNo(userNo);
+      User user = ctx.attribute("user");
 
-      RetailProduct rp2 = retailProductService.insert(
-          rpd.getProductNo(),
-          rpd.getRetailPrice(),
-          rpd.getCost(),
-          rpd.getDescription(),
-          rpd.getRetailCategoryId(),
-          rpd.getWoodSpecyId(),
-          rpd.getProductWidth(),
-          rpd.getProductThickness(),
-          rpd.getProductLength(),
-          createdByUserSeq);
+      if (user != null) {
+        RetailProduct rp = retailProductService.insert(
+            rpDto.getProductNo(),
+            rpDto.getRetailPrice(),
+            rpDto.getCost(),
+            rpDto.getDescription(),
+            rpDto.getRetailCategoryId(),
+            rpDto.getWoodSpecyId(),
+            rpDto.getProductWidth(),
+            rpDto.getProductThickness(),
+            rpDto.getProductLength(),
+            user.getCreatedByUserSeq());
 
-      ctx.json(rp2);
+        ctx.json(rp);
+      } else {
+        throw new RuntimeException("Failed to insert: no user defined");
+      }
 
     } catch (IllegalArgumentException e) {
       ctx.status(400).result("Invalid request body: " + e.getMessage());

@@ -32,12 +32,13 @@ public class User extends UserReference {
       List<UserAction> userActions,
       TaxRegion userTaxRegion,
       boolean isEnabled,
-      Long createdByUserSeq,
+      long createdByUserSeq,
       LocalDateTime createdAt) {
     super(
         userSeq,
         userNo,
-        usernameShort);
+        usernameShort,
+        createdByUserSeq);
     this.usernameLong = usernameLong;
     this.userRole = userRole;
     this.password = password;
@@ -45,7 +46,6 @@ public class User extends UserReference {
     this.userActions = userActions;
     this.userTaxRegion = userTaxRegion;
     this.isEnabled = isEnabled;
-    this.setCreatedByUserSeq(createdByUserSeq);
     this.setCreatedAt(createdAt);
   }
 
