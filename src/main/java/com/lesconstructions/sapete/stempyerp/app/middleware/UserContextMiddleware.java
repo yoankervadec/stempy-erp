@@ -1,5 +1,7 @@
 package com.lesconstructions.sapete.stempyerp.app.middleware;
 
+import java.util.Map;
+
 import com.lesconstructions.sapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.user.User;
 
@@ -23,7 +25,9 @@ public class UserContextMiddleware implements Handler {
       if (user != null) {
         ctx.attribute("user", user);
       } else {
-        ctx.status(401).result("user not found");
+        ctx.status(401).json(Map.of(
+            "message", "Invalid or expired token",
+            "errorCode", "UNAUTHORIZED"));
       }
     }
 
