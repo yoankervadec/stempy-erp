@@ -4,7 +4,7 @@ package com.lesconstructions.sapete.stempyerp.core.exception;
  * Abstract parent for all custom exceptions.
  * Holds common fields (message, optional cause, errorCode).
  */
-public abstract class BaseException extends RuntimeException {
+abstract class BaseException extends RuntimeException {
 
   protected final String errorCode;
 

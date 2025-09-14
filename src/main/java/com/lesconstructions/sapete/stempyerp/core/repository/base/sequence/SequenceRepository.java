@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.constant.EntityType;
 import com.lesconstructions.sapete.stempyerp.core.domain.base.sequence.LiveSequence;
 import com.lesconstructions.sapete.stempyerp.core.exception.domain.SequenceNotFoundException;
-import com.lesconstructions.sapete.stempyerp.core.exception.domain.SequenceUpdateException;
+import com.lesconstructions.sapete.stempyerp.core.exception.internal.SequenceUpdateException;
 import com.lesconstructions.sapete.stempyerp.core.shared.query.Query;
 import com.lesconstructions.sapete.stempyerp.core.shared.query.QueryCache;
 

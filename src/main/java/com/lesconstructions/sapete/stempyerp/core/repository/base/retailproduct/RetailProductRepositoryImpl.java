@@ -20,7 +20,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
   @Override
   public List<RetailProduct> fetchAll(Connection connection, Boolean isEnabled) throws SQLException {
-    // TODO Auto-generated method stub
+
     return null;
   }
 
