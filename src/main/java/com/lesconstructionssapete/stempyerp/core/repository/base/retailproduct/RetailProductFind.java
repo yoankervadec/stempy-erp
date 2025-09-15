@@ -22,20 +22,20 @@ class RetailProductFind {
         Query.SELECT_RETAIL_PRODUCT_BY_PRODUCT_NO);
 
     SqlBuilder builder = new SqlBuilder(sqlBase)
-        .where("rp.product_no = ?", productNo);
+        .where("rp.product_no = :productNo", productNo);
 
     String sqlString = builder.build();
-    List<Object> params = builder.getParams();
+    List<SqlBuilder.SqlParam> params = builder.getParams();
 
     try (var stmt = con.prepareStatement(sqlString)) {
 
-      for (int i = 0; i < params.size(); i++) {
-        stmt.setObject(i + 1, params.get(i));
+      int idx = 1;
+      for (SqlBuilder.SqlParam p : params) {
+        stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
       try (var rs = stmt.executeQuery()) {
         if (!rs.next()) {
-          // TODO Handle empty resultSet
           return null;
         }
         retailProduct = new RetailProduct(

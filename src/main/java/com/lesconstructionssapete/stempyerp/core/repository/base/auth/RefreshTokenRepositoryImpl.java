@@ -17,16 +17,17 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     String sqlBase = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
 
     SqlBuilder builder = new SqlBuilder(sqlBase)
-        .where("us.user_no = ?", userNo)
-        .and("ort.token = ?", refreshToken);
+        .where("us.user_no = :userNo", userNo)
+        .and("ort.token = :refreshToken", refreshToken);
 
     String sqlString = builder.build();
-    List<Object> params = builder.getParams();
+    List<SqlBuilder.SqlParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
-      for (int i = 0; i < params.size(); i++) {
-        stmt.setObject(i + 1, params.get(i));
+      int idx = 1;
+      for (SqlBuilder.SqlParam p : params) {
+        stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
       try (var rs = stmt.executeQuery()) {

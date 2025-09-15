@@ -5,11 +5,11 @@ import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.AuthFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
-import com.lesconstructionssapete.stempyerp.core.auth.JwtConfig;
-import com.lesconstructionssapete.stempyerp.core.auth.JwtUtil;
 import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.UserCredential;
+import com.lesconstructionssapete.stempyerp.core.jwt.JwtConfig;
+import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
 
 import io.javalin.http.Context;
 

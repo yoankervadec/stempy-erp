@@ -36,4 +36,10 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     return retailProductInsert.insertRetailProduct(connection, retailProduct);
   }
 
+  @Override
+  public RetailProduct save(Connection connection, RetailProduct retailProduct) throws SQLException {
+
+    return retailProductUpdate.save(connection, retailProduct);
+  }
+
 }

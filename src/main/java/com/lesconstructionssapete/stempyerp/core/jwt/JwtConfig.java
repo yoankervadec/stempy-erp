@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.auth;
+package com.lesconstructionssapete.stempyerp.core.jwt;
 
 public class JwtConfig {
   public static final String SECRET = "twelve-thousand-rats-dev-only-1234567890987654321"; // TODO Figure out how to

@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.auth;
+package com.lesconstructionssapete.stempyerp.core.jwt;
 
 import java.security.Key;
 import java.util.Date;

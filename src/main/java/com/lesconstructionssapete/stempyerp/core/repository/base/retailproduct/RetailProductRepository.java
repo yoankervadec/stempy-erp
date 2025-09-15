@@ -15,4 +15,6 @@ public interface RetailProductRepository {
 
   RetailProduct insertRetailProduct(Connection connection, RetailProduct retailProduct)
       throws SQLException;
+
+  RetailProduct save(Connection connection, RetailProduct retailProduct) throws SQLException;
 }

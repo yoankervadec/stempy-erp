@@ -24,4 +24,4 @@ JOIN
   config_tax_rates AS ctr ON us.user_tax_region = ctr.id
 JOIN
   config_user_roles AS cur ON us.user_role = cur.id
-/* WHERE */
+/*WHERE*/

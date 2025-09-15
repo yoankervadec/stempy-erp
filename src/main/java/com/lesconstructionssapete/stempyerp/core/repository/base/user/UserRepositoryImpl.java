@@ -22,16 +22,17 @@ public class UserRepositoryImpl implements UserRepository {
     String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
 
     SqlBuilder builder = new SqlBuilder(sqlBase)
-        .where("us.username_long = ?", userCredential.getUsernameLong())
-        .and("us.user_password = ?", userCredential.getPassword());
+        .where("us.username_long = :usernameLong", userCredential.getUsernameLong())
+        .and("us.user_password = :password", userCredential.getPassword());
 
     String sqlString = builder.build();
-    List<Object> params = builder.getParams();
+    List<SqlBuilder.SqlParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
-      for (int i = 0; i < params.size(); i++) {
-        stmt.setObject(i + 1, params.get(i));
+      int idx = 1;
+      for (SqlBuilder.SqlParam p : params) {
+        stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
       try (var rs = stmt.executeQuery()) {
@@ -75,15 +76,16 @@ public class UserRepositoryImpl implements UserRepository {
     String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
 
     SqlBuilder builder = new SqlBuilder(sqlBase)
-        .where("us.user_no = ?", userNo);
+        .where("us.user_no = :userNo", userNo);
 
     String sqlString = builder.build();
-    List<Object> params = builder.getParams();
+    List<SqlBuilder.SqlParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
-      for (int i = 0; i < params.size(); i++) {
-        stmt.setObject(i + 1, params.get(i));
+      int idx = 1;
+      for (SqlBuilder.SqlParam p : params) {
+        stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
       try (var rs = stmt.executeQuery()) {
