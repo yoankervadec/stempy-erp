@@ -27,6 +27,9 @@ public enum Query {
   SELECT_CONFIG_USER_ACTION("config/select_config_user_actions.sql", false),
   SELECT_CONFIG_USER_ROLE("config/select_config_user_roles.sql", false),
 
+  // Scheduler/Job
+  SELECT_JOBS("app/scheduler/select_jobs.sql", false),
+
   // Entity Sequence
   SELECT_NEXT_SEQUENCE_NO("app/sequence/select_next_sequence_no.sql", true),
 
@@ -56,6 +59,8 @@ public enum Query {
    * UPDATE
    * ==========================
    */
+
+  UPDATE_RETAIL_PRODUCT("app/retail_product/update_retail_product.sql", true),
 
   // Entity Sequence
   UPDATE_NEXT_SEQUENCE_NO("app/sequence/update_next_sequence_no.sql", true),

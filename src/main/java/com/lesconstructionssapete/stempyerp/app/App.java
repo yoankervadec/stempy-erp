@@ -14,6 +14,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.UserContextMiddleware;
 import com.lesconstructionssapete.stempyerp.app.routes.RouteRegistrar;
+import com.lesconstructionssapete.stempyerp.core.automation.Scheduler;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
 
@@ -43,6 +44,10 @@ public class App {
 
     // Pass the mapper + whether to pretty print (false = compact JSON)
     JavalinJackson jackson = new JavalinJackson(mapper, true);
+
+    // Scheduler
+    var scheduler = new Scheduler();
+    scheduler.init();
 
     Javalin app = Javalin.create(config -> {
       config.bundledPlugins.enableDevLogging();

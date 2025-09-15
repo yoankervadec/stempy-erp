@@ -64,3 +64,4 @@ RetailProduct findByproductNo(Connection con, String productNo) throws SQLExcept
 | Extension           |    `rpa`     | `ref_product_attributes`                  | Attribute definitions for `retail_products`                                                |
 | Extension           |    `rws`     | `ref_wood_species`                        | Reference table for wood species                                                           |
 | Application         |    `ort`     | `auth_refresh_tokens`                     | Refresh Tokens                                                                             |
+| Scheduler/Job       |    `jobs`    | `jobs`                                    | Stores scheduler and job configurations                                                    |

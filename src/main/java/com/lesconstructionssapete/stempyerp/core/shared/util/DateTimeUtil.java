@@ -7,6 +7,9 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Utility class for working with dates and times.
@@ -97,5 +100,43 @@ public final class DateTimeUtil {
   // Convert Instant to LocalDateTime in a given zone
   public static LocalDateTime fromInstant(Instant instant, ZoneId zone) {
     return LocalDateTime.ofInstant(instant, zone);
+  }
+
+  /**
+   * ==========================
+   * RUN TIMES HELPERS
+   * ==========================
+   */
+
+  // Parse string like ["08:00:00","12:30:00"] → List<LocalTime>
+  public static List<LocalTime> parseRunTimes(String json) {
+    if (json == null || json.isBlank()) {
+      return new ArrayList<>();
+    }
+    String cleaned = json.trim();
+    if (cleaned.startsWith("["))
+      cleaned = cleaned.substring(1);
+    if (cleaned.endsWith("]"))
+      cleaned = cleaned.substring(0, cleaned.length() - 1);
+
+    List<LocalTime> result = new ArrayList<>();
+    if (!cleaned.isBlank()) {
+      String[] parts = cleaned.split(",");
+      for (String part : parts) {
+        String timeStr = part.trim().replace("\"", ""); // remove quotes
+        result.add(LocalTime.parse(timeStr)); // expects HH:mm or HH:mm:ss
+      }
+    }
+    return result;
+  }
+
+  // Convert List<LocalTime> → string like ["08:00:00","12:30:00"]
+  public static String toRunTimesJson(List<LocalTime> runTimes) {
+    if (runTimes == null || runTimes.isEmpty()) {
+      return "[]";
+    }
+    return runTimes.stream()
+        .map(t -> "\"" + t.toString() + "\"") // LocalTime.toString() → "HH:mm:ss"
+        .collect(Collectors.joining(",", "[", "]"));
   }
 }
