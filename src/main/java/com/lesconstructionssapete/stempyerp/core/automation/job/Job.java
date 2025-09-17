@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Job {
+public class Job implements JobExecutable {
 
   private final int jobId;
   private final String jobName;
@@ -51,8 +51,10 @@ public class Job {
     this.isEnabled = isEnabled;
   }
 
+  @Override
   public void execute() {
-  };
+    throw new UnsupportedOperationException();
+  }
 
   public boolean isFixedTimeJob() {
     return intervalMinutes == null;
