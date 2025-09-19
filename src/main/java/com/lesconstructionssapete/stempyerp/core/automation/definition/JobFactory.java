@@ -1,11 +1,11 @@
-package com.lesconstructionssapete.stempyerp.core.automation.job;
+package com.lesconstructionssapete.stempyerp.core.automation.definition;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class JobFactory {
 
-  private static final String JOB_PACKAGE = "com.lesconstructionssapete.stempyerp.core.automation.job";
+  private static final String JOB_PACKAGE = "com.lesconstructionssapete.stempyerp.core.automation.handler";
 
   public static JobExecutable create(Job baseJob) {
     try {

@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.automation.job;
+package com.lesconstructionssapete.stempyerp.core.automation.definition;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

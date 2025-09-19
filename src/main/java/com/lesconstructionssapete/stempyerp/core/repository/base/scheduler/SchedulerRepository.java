@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.automation.job.Job;
+import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 
 public interface SchedulerRepository {
 

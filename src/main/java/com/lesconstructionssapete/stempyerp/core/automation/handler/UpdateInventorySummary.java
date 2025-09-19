@@ -1,8 +1,10 @@
-package com.lesconstructionssapete.stempyerp.core.automation.job;
+package com.lesconstructionssapete.stempyerp.core.automation.handler;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
+import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 
 public class UpdateInventorySummary extends Job {
 

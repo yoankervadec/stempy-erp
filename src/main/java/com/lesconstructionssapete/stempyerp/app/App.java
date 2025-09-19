@@ -14,11 +14,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.UserContextMiddleware;
 import com.lesconstructionssapete.stempyerp.app.routes.RouteRegistrar;
-import com.lesconstructionssapete.stempyerp.core.automation.queue.JobQueue;
+import com.lesconstructionssapete.stempyerp.core.automation.execution.Manager;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.SchedulerRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.SchedulerRepository;
-import com.lesconstructionssapete.stempyerp.core.automation.job.JobManager;
+import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.SchedulerRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
 
 import io.javalin.Javalin;
@@ -38,15 +37,11 @@ public class App {
     try (Connection con = ConnectionPool.getConnection()) {
       ConstantCache.loadAll(con);
 
-      JobQueue queue = new JobQueue();
-      queue.start();
-
-      JobManager manager = new JobManager(queue);
-
-      SchedulerRepository repo = new SchedulerRepositoryImpl();
-      var jobs = repo.findAll(con);
-
-      manager.loadJobs(jobs);
+      // Scheduler
+      SchedulerRepository schedulerRepository = new SchedulerRepositoryImpl();
+      var jobs = schedulerRepository.findAll(con);
+      Manager schedulerManager = new Manager(jobs);
+      schedulerManager.start();
 
     }
 
