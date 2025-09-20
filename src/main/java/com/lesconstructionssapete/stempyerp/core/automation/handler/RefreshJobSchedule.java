@@ -7,9 +7,9 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
 
-public class UpdateInventorySummary extends Job implements JobExecutable {
+public class RefreshJobSchedule extends Job implements JobExecutable {
 
-  public UpdateInventorySummary(
+  public RefreshJobSchedule(
       int jobId,
       String jobName,
       String jobDescription,
@@ -41,7 +41,8 @@ public class UpdateInventorySummary extends Job implements JobExecutable {
 
   @Override
   public void execute() {
-    System.out.println("UPDATING INVENTORY SUMMARY");
+    System.out.println("REFRESH JOB SCHEDULE");
+
   }
 
 }

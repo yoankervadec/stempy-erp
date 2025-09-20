@@ -45,7 +45,7 @@ public class Manager {
         // Schedule once at next run time
         scheduler.scheduleOnce(
             executable,
-            computeDelayUntil(job.getNextRun()),
+            computeDelayUntil(job.calculateNextRun()),
             TimeUnit.SECONDS);
       }
     }

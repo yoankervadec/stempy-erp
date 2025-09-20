@@ -108,7 +108,7 @@ public final class DateTimeUtil {
    * ==========================
    */
 
-  // Parse string like ["08:00:00","12:30:00"] → List<LocalTime>
+  // Parse string like ["08:00:00","12:30:00"] -> List<LocalTime>
   public static List<LocalTime> parseRunTimes(String json) {
     if (json == null || json.isBlank()) {
       return new ArrayList<>();
@@ -130,13 +130,13 @@ public final class DateTimeUtil {
     return result;
   }
 
-  // Convert List<LocalTime> → string like ["08:00:00","12:30:00"]
+  // Convert List<LocalTime> -> string like ["08:00:00","12:30:00"]
   public static String toRunTimesJson(List<LocalTime> runTimes) {
     if (runTimes == null || runTimes.isEmpty()) {
       return "[]";
     }
     return runTimes.stream()
-        .map(t -> "\"" + t.toString() + "\"") // LocalTime.toString() → "HH:mm:ss"
+        .map(t -> "\"" + t.toString() + "\"") // LocalTime.toString() -> "HH:mm:ss"
         .collect(Collectors.joining(",", "[", "]"));
   }
 }

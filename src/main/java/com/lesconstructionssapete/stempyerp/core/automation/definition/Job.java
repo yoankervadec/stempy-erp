@@ -6,27 +6,44 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Job implements JobExecutable {
+/**
+ * Represents a scheduled job definition.
+ * 
+ * A job can either:
+ * - Run at fixed intervals (e.g., every 10 minutes), OR
+ * - Run at fixed times of day (e.g., 02:00 and 14:00).
+ *
+ * Jobs carry metadata such as description, retry rules,
+ * priority, and scheduling details to help schedulers
+ * and workers manage execution.
+ */
+public class Job {
 
+  // --- Core job metadata ---
   private final int jobId;
   private final String jobName;
   private final String jobDescription;
-  private final String handlerAString;
+  private final String handlerAsString;
+
+  // --- Scheduling and execution ---
   private boolean isActive;
-  private boolean deactivateOnFailure;
-  private int retriesOnFailure;
-  private Double intervalMinutes;
-  private List<LocalTime> runTimes = new ArrayList<>();
+  private final boolean deactivateOnFailure;
+  private final int retriesOnFailure;
+  private final Double intervalMinutes;
+  private final List<LocalTime> runTimes;
   private LocalDateTime lastRun;
   private LocalDateTime nextRun;
-  private int priority;
-  private boolean isEnabled;
+  private final int priority;
+  private final boolean isEnabled;
 
+  /**
+   * Creates a new Job definition.
+   */
   public Job(
       int jobId,
       String jobName,
       String jobDescription,
-      String handlerAString,
+      String handlerAsString,
       boolean isActive,
       boolean deactivateOnFailure,
       int retriesOnFailure,
@@ -39,27 +56,35 @@ public class Job implements JobExecutable {
     this.jobId = jobId;
     this.jobName = jobName;
     this.jobDescription = jobDescription;
-    this.handlerAString = handlerAString;
+    this.handlerAsString = handlerAsString;
     this.isActive = isActive;
     this.deactivateOnFailure = deactivateOnFailure;
     this.retriesOnFailure = retriesOnFailure;
     this.intervalMinutes = intervalMinutes;
-    this.runTimes = runTimes;
+    this.runTimes = runTimes != null ? runTimes : new ArrayList<>();
     this.lastRun = lastRun;
     this.nextRun = nextRun;
     this.priority = priority;
     this.isEnabled = isEnabled;
   }
 
-  @Override
-  public void execute() {
-    throw new UnsupportedOperationException();
-  }
+  // =====================================================
+  // Scheduling helpers
+  // =====================================================
 
+  /**
+   * Returns true if this job runs at specific times (fixed-time),
+   * false if it runs at regular intervals.
+   */
   public boolean isFixedTimeJob() {
-    return intervalMinutes == null;
+    return intervalMinutes == null || intervalMinutes == 0;
   }
 
+  /**
+   * Gets the configured interval as a Duration (for interval jobs).
+   * 
+   * @return duration, or null if this is a fixed-time job
+   */
   public Duration getInterval() {
     if (!isFixedTimeJob()) {
       return Duration.ofMillis((long) (getIntervalMinutes() * 60_000));
@@ -67,7 +92,78 @@ public class Job implements JobExecutable {
     return null;
   }
 
-  // --- Getters & Setters ---
+  /**
+   * Calculates the next run time based on the scheduling type:
+   * - Interval jobs: lastRun + interval
+   * - Fixed-time jobs: first runTime after now, otherwise earliest tomorrow
+   * 
+   * @return LocalDateTime of next run, or null if no schedule
+   */
+  public LocalDateTime calculateNextRun() {
+    var now = LocalDateTime.now();
+
+    // Interval-based scheduling
+    if (!isFixedTimeJob() && lastRun != null) {
+      return lastRun.plus(getInterval());
+    }
+
+    // Fixed-time scheduling
+    if (isFixedTimeJob() && !runTimes.isEmpty()) {
+      var todayCandidate = runTimes.stream()
+          .map(t -> LocalDateTime.of(now.toLocalDate(), t))
+          .filter(dt -> dt.isAfter(now))
+          .findFirst()
+          .orElse(null);
+
+      if (todayCandidate != null) {
+        return todayCandidate;
+      }
+
+      // Otherwise roll to the next day
+      return LocalDateTime.of(now.toLocalDate().plusDays(1), runTimes.get(0));
+    }
+
+    return null; // No scheduling data
+  }
+
+  /**
+   * Updates the nextRun field by recalculating it.
+   */
+  public void updateNextRun() {
+    this.nextRun = calculateNextRun();
+  }
+
+  /**
+   * Checks if this job is due to run right now.
+   * 
+   * @return true if enabled, active, and nextRun <= now
+   */
+  public boolean isDueToRun() {
+    return isEnabled && isActive && nextRun != null && !nextRun.isAfter(LocalDateTime.now());
+  }
+
+  /**
+   * Marks this job as having completed execution.
+   * Updates lastRun and recalculates nextRun.
+   */
+  public void markRunCompleted() {
+    this.lastRun = LocalDateTime.now();
+    updateNextRun();
+  }
+
+  /**
+   * Time remaining until the next run.
+   * 
+   * @return Duration until next run, or null if no schedule
+   */
+  public Duration timeUntilNextRun() {
+    return nextRun == null ? null : Duration.between(LocalDateTime.now(), nextRun);
+  }
+
+  // =====================================================
+  // Getters & Setters
+  // =====================================================
+
   public int getJobId() {
     return jobId;
   }
@@ -81,7 +177,7 @@ public class Job implements JobExecutable {
   }
 
   public String getHandlerAsString() {
-    return handlerAString;
+    return handlerAsString;
   }
 
   public boolean isActive() {
@@ -96,63 +192,31 @@ public class Job implements JobExecutable {
     return deactivateOnFailure;
   }
 
-  public void setDeactivateOnFailure(boolean stopOnFailure) {
-    this.deactivateOnFailure = stopOnFailure;
-  }
-
   public int getRetriesOnFailure() {
     return retriesOnFailure;
-  }
-
-  public void setRetriesOnFailure(int retriesOnFailure) {
-    this.retriesOnFailure = retriesOnFailure;
   }
 
   public Double getIntervalMinutes() {
     return intervalMinutes;
   }
 
-  public void setIntervalMinutes(Double intervalMinutes) {
-    this.intervalMinutes = intervalMinutes;
-  }
-
   public List<LocalTime> getRunTimes() {
     return runTimes;
-  }
-
-  public void setRunTimes(List<LocalTime> runTimes) {
-    this.runTimes = runTimes;
   }
 
   public LocalDateTime getLastRun() {
     return lastRun;
   }
 
-  public void setLastRun(LocalDateTime lastRun) {
-    this.lastRun = lastRun;
-  }
-
   public LocalDateTime getNextRun() {
     return nextRun;
-  }
-
-  public void setNextRun(LocalDateTime nextRun) {
-    this.nextRun = nextRun;
   }
 
   public int getPriority() {
     return priority;
   }
 
-  public void setPriority(int priority) {
-    this.priority = priority;
-  }
-
   public boolean isEnabled() {
     return isEnabled;
-  }
-
-  public void setEnabled(boolean isEnabled) {
-    this.isEnabled = isEnabled;
   }
 }
