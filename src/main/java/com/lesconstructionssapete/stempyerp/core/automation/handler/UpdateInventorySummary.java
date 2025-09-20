@@ -1,47 +1,24 @@
 package com.lesconstructionssapete.stempyerp.core.automation.handler;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
+import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
 
 public class UpdateInventorySummary extends Job implements JobExecutable {
 
-  public UpdateInventorySummary(
-      int jobId,
-      String jobName,
-      String jobDescription,
-      String handlerAString,
-      boolean isActive,
-      boolean deactivateOnFailure,
-      int retriesOnFailure,
-      Double intervalMinutes,
-      List<LocalTime> runTimes,
-      LocalDateTime lastRun,
-      LocalDateTime nextRun,
-      int priority,
-      boolean isEnabled) {
-    super(
-        jobId,
-        jobName,
-        jobDescription,
-        handlerAString,
-        isActive,
-        deactivateOnFailure,
-        retriesOnFailure,
-        intervalMinutes,
-        runTimes,
-        lastRun,
-        nextRun,
-        priority,
-        isEnabled);
+  public UpdateInventorySummary(Job job) {
+    super(job);
   }
 
   @Override
-  public void execute() {
+  public JobLog execute(JobLog log) {
     System.out.println("UPDATING INVENTORY SUMMARY");
+    return log;
+  }
+
+  @Override
+  public Job meta() {
+    return this;
   }
 
 }

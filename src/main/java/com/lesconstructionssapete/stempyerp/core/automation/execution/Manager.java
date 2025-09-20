@@ -7,6 +7,8 @@ import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobFactory;
 import com.lesconstructionssapete.stempyerp.core.automation.scheduling.Scheduler;
+import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepositoryImpl;
 
 public class Manager {
 
@@ -15,7 +17,7 @@ public class Manager {
   private final Thread workerThread = new Thread(worker, "JobWorker");
   private final Scheduler scheduler = new Scheduler(queue);
 
-  private final List<Job> jobs;
+  private List<Job> jobs;
 
   public Manager(List<Job> jobs) {
     this.jobs = jobs;
@@ -30,11 +32,16 @@ public class Manager {
         continue;
       }
 
-      // Convert Job to concrete implementation
-      JobExecutable executable = JobFactory.create(job);
+      // Store dependencies
+      JobFactory factory = new JobFactory()
+          .register(AutomationRepository.class, new AutomationRepositoryImpl())
+          .register(Manager.class, this);
+
+      // Convert Job to concrete implementation with dependencies
+      JobExecutable executable = factory.create(job);
 
       // Determine scheduling strategy
-      if (job.getIntervalMinutes() != null && job.getIntervalMinutes() != 0) {
+      if (job.isIntervalBasedJob()) {
         // Schedule immediately
         scheduler.scheduleAtFixedRate(
             executable,
@@ -60,8 +67,15 @@ public class Manager {
 
   // Manual job trigger
   public void runNow(Job job) {
-    JobExecutable executable = JobFactory.create(job);
-    scheduler.addNow(executable);
+    // JobExecutable executable = JobFactory.create(job);
+    // scheduler.addNow(executable);
+  }
+
+  // Refresh jobs
+  public synchronized void refresh(List<Job> jobs) {
+    this.jobs = jobs;
+    System.out.println("JOBS REFRESHES");
+    // optionally re-schedule here if jobs changed
   }
 
   private long computeDelayUntil(java.time.LocalDateTime nextRun) {

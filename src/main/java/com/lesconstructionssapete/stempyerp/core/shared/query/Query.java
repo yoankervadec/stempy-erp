@@ -54,6 +54,9 @@ public enum Query {
   // Auth/Refresh Tokens
   INSERT_AUTH_REFRESH_TOKEN("app/auth/insert_auth_refresh_token.sql", true),
 
+  // Automation
+  INSERT_JOB_LOG("app/automation/insert_job_log.sql", true),
+
   /**
    * ==========================
    * UPDATE

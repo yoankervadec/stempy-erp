@@ -68,6 +68,22 @@ public class Job {
     this.isEnabled = isEnabled;
   }
 
+  public Job(Job job) {
+    this.jobId = job.getJobId();
+    this.jobName = job.getJobName();
+    this.jobDescription = job.getJobDescription();
+    this.handlerAsString = job.getHandlerAsString();
+    this.isActive = job.isActive();
+    this.deactivateOnFailure = job.isDeactivateOnFailure();
+    this.retriesOnFailure = job.getRetriesOnFailure();
+    this.intervalMinutes = job.getIntervalMinutes();
+    this.runTimes = job.getRunTimes();
+    this.lastRun = job.getLastRun();
+    this.nextRun = job.calculateNextRun();
+    this.priority = job.getPriority();
+    this.isEnabled = job.isEnabled();
+  }
+
   // =====================================================
   // Scheduling helpers
   // =====================================================
@@ -76,8 +92,8 @@ public class Job {
    * Returns true if this job runs at specific times (fixed-time),
    * false if it runs at regular intervals.
    */
-  public boolean isFixedTimeJob() {
-    return intervalMinutes == null || intervalMinutes == 0;
+  public boolean isIntervalBasedJob() {
+    return intervalMinutes > 0 && intervalMinutes != null;
   }
 
   /**
@@ -86,8 +102,8 @@ public class Job {
    * @return duration, or null if this is a fixed-time job
    */
   public Duration getInterval() {
-    if (!isFixedTimeJob()) {
-      return Duration.ofMillis((long) (getIntervalMinutes() * 60_000));
+    if (isIntervalBasedJob()) {
+      return Duration.ofMillis((long) (intervalMinutes * 60_000));
     }
     return null;
   }
@@ -103,12 +119,12 @@ public class Job {
     var now = LocalDateTime.now();
 
     // Interval-based scheduling
-    if (!isFixedTimeJob() && lastRun != null) {
+    if (!isIntervalBasedJob() && lastRun != null) {
       return lastRun.plus(getInterval());
     }
 
     // Fixed-time scheduling
-    if (isFixedTimeJob() && !runTimes.isEmpty()) {
+    if (isIntervalBasedJob() && !runTimes.isEmpty()) {
       var todayCandidate = runTimes.stream()
           .map(t -> LocalDateTime.of(now.toLocalDate(), t))
           .filter(dt -> dt.isAfter(now))
@@ -196,7 +212,7 @@ public class Job {
     return retriesOnFailure;
   }
 
-  public Double getIntervalMinutes() {
+  protected Double getIntervalMinutes() {
     return intervalMinutes;
   }
 
