@@ -119,12 +119,15 @@ public class Job {
     var now = LocalDateTime.now();
 
     // Interval-based scheduling
-    if (!isIntervalBasedJob() && lastRun != null) {
+    if (isIntervalBasedJob()) {
+      if (lastRun == null) {
+        return now.plus(getInterval());
+      }
       return lastRun.plus(getInterval());
     }
 
     // Fixed-time scheduling
-    if (isIntervalBasedJob() && !runTimes.isEmpty()) {
+    if (!isIntervalBasedJob() && !runTimes.isEmpty()) {
       var todayCandidate = runTimes.stream()
           .map(t -> LocalDateTime.of(now.toLocalDate(), t))
           .filter(dt -> dt.isAfter(now))

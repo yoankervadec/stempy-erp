@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.repository.base.scheduler;
+package com.lesconstructionssapete.stempyerp.core.repository.base.automation;
 
 import java.sql.Connection;
 import java.sql.SQLException;

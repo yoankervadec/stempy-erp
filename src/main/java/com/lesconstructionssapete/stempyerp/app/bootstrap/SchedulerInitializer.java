@@ -4,8 +4,8 @@ import java.sql.Connection;
 
 import com.lesconstructionssapete.stempyerp.core.automation.execution.Manager;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepositoryImpl;
 
 public class SchedulerInitializer {
 

@@ -11,7 +11,7 @@ import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepository;
 
 public class LogJobRuns extends Job implements JobExecutable {
 
@@ -36,7 +36,15 @@ public class LogJobRuns extends Job implements JobExecutable {
   @Override
   public JobLog execute(JobLog executionLog) {
 
+    int totalLogs = logQueue.size();
+    int totalBatches = (int) Math.ceil((double) totalLogs / MAX_BATCH_SIZE);
+
+    executionLog.appendMessage(
+        String.format("Queue length: %d, running %d batch%s...",
+            totalLogs, totalBatches, totalBatches > 1 ? "es" : ""));
+
     List<JobLog> batch = new ArrayList<>(MAX_BATCH_SIZE);
+    int batchCount = 0;
 
     while (!logQueue.isEmpty()) {
       batch.clear();
@@ -48,15 +56,21 @@ public class LogJobRuns extends Job implements JobExecutable {
         batch.add(queuedLog);
       }
 
-      if (!batch.isEmpty()) {
-        // Batch insert
-        try {
-          Connection connection = ConnectionPool.getConnection();
-          connection.setAutoCommit(false);
-          automationRepository.batchLog(connection, batch);
-          connection.commit();
+      batchCount++;
+      executionLog.appendMessage(
+          String.format("Processing batch %d/%d (%d records)", batchCount, totalBatches, batch.size()));
 
+      if (!batch.isEmpty()) {
+        executionLog.appendMessage("Persisting records...");
+
+        try (Connection connection = ConnectionPool.getConnection()) {
+          connection.setAutoCommit(false);
+
+          automationRepository.batchLog(connection, batch);
+
+          connection.commit();
         } catch (SQLException e) {
+          executionLog.appendMessage("Error persisting batch: " + e.getMessage());
         }
       }
     }

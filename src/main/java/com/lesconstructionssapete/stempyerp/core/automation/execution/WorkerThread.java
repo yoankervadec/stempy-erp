@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
 
-public class JobWorker implements Runnable {
+public class WorkerThread implements Runnable {
 
   private final JobQueue queue;
   private volatile boolean running = true;
 
-  public JobWorker(JobQueue queue) {
+  public WorkerThread(JobQueue queue) {
     this.queue = queue;
   }
 
@@ -44,21 +44,20 @@ public class JobWorker implements Runnable {
 
       try {
         // Execute
+        log.setMessage("Executing: " + job.meta().getJobName() + "...");
         log = job.execute(log);
-        // Log
-        log.setError(false);
-        log.setMessage("ran");
-        // Exit
+
+        log.markSuccess(job.meta().getJobName());
+
         return;
       } catch (Exception e1) {
-        // Log
-        log.setError(true);
-        log.setMessage("error");
+
+        log.markFailure(job.meta().getJobName(), e1, attempt, maxAttempts);
 
         attempt++;
         if (attempt >= maxAttempts) {
           job.meta().setActive(false);
-          log.setMessage("failed");
+          log.markFinalFailure(job.meta().getJobName(), e1);
           return;
         }
 

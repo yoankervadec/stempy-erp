@@ -7,13 +7,13 @@ import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobFactory;
 import com.lesconstructionssapete.stempyerp.core.automation.scheduling.Scheduler;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepositoryImpl;
 
 public class Manager {
 
   private final JobQueue queue = new JobQueue();
-  private final JobWorker worker = new JobWorker(queue);
+  private final WorkerThread worker = new WorkerThread(queue);
   private final Thread workerThread = new Thread(worker, "JobWorker");
   private final Scheduler scheduler = new Scheduler(queue);
 
@@ -43,6 +43,7 @@ public class Manager {
       // Determine scheduling strategy
       if (job.isIntervalBasedJob()) {
         // Schedule immediately
+        System.out.println("Scheduling at interval rate: " + job.getJobName() + " " + job.getInterval().getSeconds());
         scheduler.scheduleAtFixedRate(
             executable,
             0,
@@ -50,6 +51,8 @@ public class Manager {
             TimeUnit.MILLISECONDS);
       } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
         // Schedule once at next run time
+        System.out.println("Scheduling at fixed-time rate: " + job.getJobName() + " " + job.getNextRun());
+
         scheduler.scheduleOnce(
             executable,
             computeDelayUntil(job.calculateNextRun()),
@@ -74,7 +77,6 @@ public class Manager {
   // Refresh jobs
   public synchronized void refresh(List<Job> jobs) {
     this.jobs = jobs;
-    System.out.println("JOBS REFRESHES");
     // optionally re-schedule here if jobs changed
   }
 

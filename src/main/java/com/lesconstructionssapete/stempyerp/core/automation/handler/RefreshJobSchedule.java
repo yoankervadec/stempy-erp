@@ -8,7 +8,7 @@ import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecut
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
 import com.lesconstructionssapete.stempyerp.core.automation.execution.Manager;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
-import com.lesconstructionssapete.stempyerp.core.repository.base.scheduler.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepository;
 
 public class RefreshJobSchedule extends Job implements JobExecutable {
 
@@ -29,6 +29,8 @@ public class RefreshJobSchedule extends Job implements JobExecutable {
 
       var jobs = repository.findAll(connection);
       manager.refresh(jobs);
+
+      log.appendMessage("Refreshed " + jobs.size() + " jobs");
 
     } catch (SQLException e) {
     } finally {
