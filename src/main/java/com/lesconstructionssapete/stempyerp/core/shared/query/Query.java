@@ -63,10 +63,14 @@ public enum Query {
    * ==========================
    */
 
+  // Retail Product
   UPDATE_RETAIL_PRODUCT("app/retail_product/update_retail_product.sql", true),
 
   // Entity Sequence
   UPDATE_NEXT_SEQUENCE_NO("app/sequence/update_next_sequence_no.sql", true),
+
+  // Automation
+  UPDATE_JOB("app/automation/update_job.sql", true);
 
   /**
    * ==========================

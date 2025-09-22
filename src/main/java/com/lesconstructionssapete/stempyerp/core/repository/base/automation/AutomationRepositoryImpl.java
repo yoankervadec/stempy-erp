@@ -3,6 +3,7 @@ package com.lesconstructionssapete.stempyerp.core.repository.base.automation;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -31,14 +32,12 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     List<SqlBuilder.SqlParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
-
       int idx = 1;
       for (SqlBuilder.SqlParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
       try (var rs = stmt.executeQuery()) {
-
         while (rs.next()) {
 
           String runTimesString = rs.getString("run_times");
@@ -63,7 +62,6 @@ public class AutomationRepositoryImpl implements AutomationRepository {
       }
       return jobs;
     }
-
   }
 
   @Override
@@ -91,6 +89,34 @@ public class AutomationRepositoryImpl implements AutomationRepository {
   @Override
   public void save(Connection connection, Job job) throws SQLException {
 
+    String sqlBase = QueryCache.get(Query.UPDATE_JOB);
+
+    SqlBuilder builder = new SqlBuilder(sqlBase)
+        .bindTyped(job.getJobDescription(), Types.VARCHAR)
+        .bindTyped(job.getHandlerAsString(), Types.VARCHAR)
+        .bindTyped(job.isActive(), Types.TINYINT)
+        .bindTyped(job.isDeactivateOnFailure(), Types.TINYINT)
+        .bindTyped(job.getRetriesOnFailure(), Types.INTEGER)
+        .bindTyped(job.getIntervalMinutes(), Types.DOUBLE)
+        .bindTyped(DateTimeUtil.toRunTimesJson(job.getRunTimes()), Types.VARCHAR)
+        .bind(job.getLastRun())
+        .bind(job.getNextRun())
+        .bindTyped(job.getPriority(), Types.INTEGER)
+        .bindTyped(job.isEnabled(), Types.TINYINT)
+        .where("id = :jobid", job.getJobId());
+
+    String sqlString = builder.build();
+    List<SqlBuilder.SqlParam> params = builder.getParams();
+
+    try (var stmt = connection.prepareStatement(sqlString)) {
+
+      int idx = 1;
+      for (SqlBuilder.SqlParam p : params) {
+        stmt.setObject(idx, p.value(), p.sqlType());
+      }
+
+      stmt.executeUpdate();
+    }
   }
 
 }

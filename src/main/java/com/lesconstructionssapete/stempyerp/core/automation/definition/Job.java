@@ -215,7 +215,7 @@ public class Job {
     return retriesOnFailure;
   }
 
-  protected Double getIntervalMinutes() {
+  public Double getIntervalMinutes() {
     return intervalMinutes;
   }
 

@@ -37,11 +37,12 @@ public class Manager {
           .register(AutomationRepository.class, new AutomationRepositoryImpl())
           .register(Manager.class, this);
 
-      // Convert Job to concrete implementation with dependencies
+      // Convert Job to concrete executable implementation with dependencies
       JobExecutable executable = factory.create(job);
 
       // Determine scheduling strategy
       if (job.isIntervalBasedJob()) {
+
         // Schedule immediately
         System.out.println("Scheduling at interval rate: " + job.getJobName() + " " + job.getInterval().getSeconds());
         scheduler.scheduleAtFixedRate(
@@ -49,17 +50,14 @@ public class Manager {
             0,
             job.getInterval().toMillis(),
             TimeUnit.MILLISECONDS);
-      } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
-        // Schedule once at next run time
-        System.out.println("Scheduling at fixed-time rate: " + job.getJobName() + " " + job.getNextRun());
 
-        scheduler.scheduleOnce(
-            executable,
-            computeDelayUntil(job.calculateNextRun()),
-            TimeUnit.SECONDS);
+      } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
+
+        // Schedule once at next run time
+        System.out.println("Scheduling at fixed-time rate: " + job.getJobName() + " " + job.calculateNextRun());
+        scheduler.scheduleFixedTime(executable);
       }
     }
-
   }
 
   public void stop() {
@@ -78,10 +76,6 @@ public class Manager {
   public synchronized void refresh(List<Job> jobs) {
     this.jobs = jobs;
     // optionally re-schedule here if jobs changed
-  }
-
-  private long computeDelayUntil(java.time.LocalDateTime nextRun) {
-    return java.time.Duration.between(java.time.LocalDateTime.now(), nextRun).getSeconds();
   }
 
 }

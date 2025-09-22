@@ -13,12 +13,12 @@ import com.lesconstructionssapete.stempyerp.core.repository.base.automation.Auto
 public class RefreshJobSchedule extends Job implements JobExecutable {
 
   private final Manager manager;
-  private final AutomationRepository repository;
+  private final AutomationRepository automationRepository;
 
-  public RefreshJobSchedule(Job baseJob, Manager manager, AutomationRepository repository) {
+  public RefreshJobSchedule(Job baseJob, Manager manager, AutomationRepository automationRepository) {
     super(baseJob);
     this.manager = manager;
-    this.repository = repository;
+    this.automationRepository = automationRepository;
   }
 
   @Override
@@ -27,7 +27,7 @@ public class RefreshJobSchedule extends Job implements JobExecutable {
     try {
       connection = ConnectionPool.getConnection();
 
-      var jobs = repository.findAll(connection);
+      var jobs = automationRepository.findAll(connection);
       manager.refresh(jobs);
 
       log.appendMessage("Refreshed " + jobs.size() + " jobs");

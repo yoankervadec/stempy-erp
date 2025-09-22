@@ -34,30 +34,30 @@ public class WorkerThread implements Runnable {
     running = false;
   }
 
-  private void executeAndLog(JobExecutable job) throws InterruptedException {
+  private void executeAndLog(JobExecutable executable) throws InterruptedException {
 
     int attempt = 0;
-    int maxAttempts = job.meta().getRetriesOnFailure(); // 0 = only one try
+    int maxAttempts = executable.meta().getRetriesOnFailure(); // 0 = only one try
 
     while (attempt <= maxAttempts) {
-      var log = new JobLog(job.meta().getJobId());
+      var log = new JobLog(executable.meta().getJobId());
 
       try {
         // Execute
-        log.setMessage("Executing: " + job.meta().getJobName() + "...");
-        log = job.execute(log);
+        log.setMessage("Executing: " + executable.meta().getJobName() + "...");
+        log = executable.execute(log);
 
-        log.markSuccess(job.meta().getJobName());
+        log.markSuccess(executable.meta().getJobName());
 
         return;
       } catch (Exception e1) {
 
-        log.markFailure(job.meta().getJobName(), e1, attempt, maxAttempts);
+        log.markFailure(executable.meta().getJobName(), e1, attempt, maxAttempts);
 
         attempt++;
         if (attempt >= maxAttempts) {
-          job.meta().setActive(false);
-          log.markFinalFailure(job.meta().getJobName(), e1);
+          executable.meta().setActive(false);
+          log.markFinalFailure(executable.meta().getJobName(), e1);
           return;
         }
 

@@ -74,7 +74,6 @@ public class LogJobRuns extends Job implements JobExecutable {
         }
       }
     }
-
     return executionLog;
   }
 
