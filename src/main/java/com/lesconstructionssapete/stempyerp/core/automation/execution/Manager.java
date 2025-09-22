@@ -1,7 +1,6 @@
 package com.lesconstructionssapete.stempyerp.core.automation.execution;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
@@ -16,6 +15,9 @@ public class Manager {
   private final WorkerThread worker = new WorkerThread(queue);
   private final Thread workerThread = new Thread(worker, "JobWorker");
   private final Scheduler scheduler = new Scheduler(queue);
+  private final JobFactory factory = new JobFactory()
+      .register(AutomationRepository.class, new AutomationRepositoryImpl())
+      .register(Manager.class, this);
 
   private List<Job> jobs;
 
@@ -32,31 +34,10 @@ public class Manager {
         continue;
       }
 
-      // Store dependencies
-      JobFactory factory = new JobFactory()
-          .register(AutomationRepository.class, new AutomationRepositoryImpl())
-          .register(Manager.class, this);
-
       // Convert Job to concrete executable implementation with dependencies
       JobExecutable executable = factory.create(job);
 
-      // Determine scheduling strategy
-      if (job.isIntervalBasedJob()) {
-
-        // Schedule immediately
-        System.out.println("Scheduling at interval rate: " + job.getJobName() + " " + job.getInterval().getSeconds());
-        scheduler.scheduleAtFixedRate(
-            executable,
-            0,
-            job.getInterval().toMillis(),
-            TimeUnit.MILLISECONDS);
-
-      } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
-
-        // Schedule once at next run time
-        System.out.println("Scheduling at fixed-time rate: " + job.getJobName() + " " + job.calculateNextRun());
-        scheduler.scheduleFixedTime(executable);
-      }
+      scheduler.schedule(executable);
     }
   }
 
@@ -68,8 +49,8 @@ public class Manager {
 
   // Manual job trigger
   public void runNow(Job job) {
-    // JobExecutable executable = JobFactory.create(job);
-    // scheduler.addNow(executable);
+    JobExecutable executable = factory.create(job);
+    scheduler.queueNow(executable);
   }
 
   // Refresh jobs
