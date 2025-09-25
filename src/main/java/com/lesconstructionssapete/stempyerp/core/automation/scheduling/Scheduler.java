@@ -20,37 +20,52 @@ public class Scheduler {
   private final JobQueue queue;
   private final ScheduledExecutorService execScheduler = Executors
       .newScheduledThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() / 2));
-  private final Map<Integer, ScheduledFuture<?>> futures = new ConcurrentHashMap<>();
+  private final Map<Integer, ScheduledJob> futures = new ConcurrentHashMap<>();
 
   public Scheduler(JobQueue queue) {
     this.queue = queue;
+  }
+
+  private static class ScheduledJob {
+    final JobExecutable executable;
+    final ScheduledFuture<?> future;
+
+    ScheduledJob(JobExecutable executable, ScheduledFuture<?> future) {
+      this.executable = executable;
+      this.future = future;
+    }
   }
 
   public void schedule(JobExecutable executable) {
 
     Job job = executable.meta();
 
-    if (job.isIntervalBasedJob()) {
+    // Only schedule active jobs
+    if (job.isActive()) {
+      // Interval-based job
+      if (job.isIntervalBasedJob()) {
+        long intervalMs = job.getInterval().toMillis();
+        if (intervalMs <= MIN_INTERVAL_MS) {
+          throw new IllegalArgumentException(
+              "Interval " + intervalMs + "ms must be greater than " + MIN_INTERVAL_MS + "ms for job "
+                  + job.getJobName());
+        }
 
-      long intervalMs = job.getInterval().toMillis();
-      if (intervalMs <= MIN_INTERVAL_MS) {
-        throw new IllegalArgumentException(
-            "Interval " + intervalMs + "ms must be greater than " + MIN_INTERVAL_MS + "ms for job " + job.getJobName());
+        scheduleIntervalJob(executable, intervalMs, intervalMs, TimeUnit.MILLISECONDS);
+
+        // Run-times job
+      } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
+
+        scheduleAtRunTimes(executable);
       }
-
-      scheduleIntervalJob(executable, intervalMs, intervalMs, TimeUnit.MILLISECONDS);
-    } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
-
-      scheduleAtRunTimes(executable);
     }
-
   }
 
   /**
    * Schedule an interval-based job
    */
   private void scheduleIntervalJob(JobExecutable executable, long initialDelay, long period, TimeUnit unit) {
-    cancel(executable); // Ensures no duplicates
+    cancelByJobId(executable.meta().getJobId());
 
     ScheduledFuture<?> future = execScheduler.scheduleAtFixedRate(
         () -> queue.add(executable),
@@ -58,14 +73,14 @@ public class Scheduler {
         period,
         unit);
 
-    futures.put(executable.meta().getJobId(), future);
+    futures.put(executable.meta().getJobId(), new ScheduledJob(executable, future));
   }
 
   /**
    * Schedule a run-times job (self-schedule)
    */
   private void scheduleAtRunTimes(JobExecutable executable) {
-    cancel(executable);
+    cancelByJobId(executable.meta().getJobId());
 
     LocalDateTime next = executable.meta().calculateNextRun();
     if (next == null)
@@ -84,20 +99,20 @@ public class Scheduler {
         delay,
         TimeUnit.MILLISECONDS);
 
-    futures.put(executable.meta().getJobId(), future);
+    futures.put(executable.meta().getJobId(), new ScheduledJob(executable, future));
   }
 
-  /**
-   * Cancel an existing job.
-   */
-  public void cancel(JobExecutable executable) {
-    ScheduledFuture<?> future = futures.remove(executable.meta().getJobId());
-    if (future != null) {
-      future.cancel(false);
+  public void cancelByJobId(int jobId) {
+    ScheduledJob scheduledJob = futures.remove(jobId);
+    if (scheduledJob != null && scheduledJob.future != null) {
+      scheduledJob.future.cancel(false);
     }
   }
 
-  // manual add
+  public boolean isScheduled(int jobId) {
+    return futures.containsKey(jobId);
+  }
+
   public void queueNow(JobExecutable executable) {
     queue.add(executable);
   }
@@ -105,6 +120,40 @@ public class Scheduler {
   public void shutdown() {
     execScheduler.shutdown();
     futures.clear();
+  }
+
+  // TODO return a Collection of scheduled jobs
+  public void printFutures() {
+    if (futures.isEmpty()) {
+      System.out.println("No jobs scheduled.");
+      return;
+    }
+
+    System.out.println("=== Scheduled Jobs ===");
+    for (var entry : futures.values()) {
+      Job job = entry.executable.meta();
+      ScheduledFuture<?> future = entry.future;
+
+      StringBuilder sb = new StringBuilder();
+      sb.append("Job ID: ").append(job.getJobId())
+          .append(" | Name: ").append(job.getJobName());
+
+      if (job.isIntervalBasedJob()) {
+        sb.append(" | Type: Interval")
+            .append(" | Every: ").append(job.getInterval().toMillis()).append(" ms");
+      } else {
+        sb.append(" | Type: Run-times")
+            .append(" | Next run: ").append(job.calculateNextRun());
+      }
+
+      sb.append(" | Status: ")
+          .append(future.isCancelled() ? "Cancelled"
+              : future.isDone() ? "Done"
+                  : "Scheduled");
+
+      System.out.println(sb.toString());
+    }
+    System.out.println("======================");
   }
 
 }

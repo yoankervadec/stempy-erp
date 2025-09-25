@@ -37,14 +37,14 @@ public class WorkerThread implements Runnable {
   private void executeAndLog(JobExecutable executable) throws InterruptedException {
 
     int attempt = 0;
-    int maxAttempts = executable.meta().getRetriesOnFailure(); // 0 = only one try
+    final int maxAttempts = executable.meta().getRetriesOnFailure(); // 0 = only one try
 
     while (attempt <= maxAttempts) {
       var log = new JobLog(executable.meta().getJobId());
 
       try {
-        // Execute
         log.setMessage("Executing: " + executable.meta().getJobName() + "...");
+
         log = executable.execute(log);
 
         log.markSuccess(executable.meta().getJobName());
@@ -56,7 +56,7 @@ public class WorkerThread implements Runnable {
 
         attempt++;
         if (attempt >= maxAttempts) {
-          executable.meta().setActive(false);
+          executable.meta().setActive(false); // Deactivate job after final failure
           log.markFinalFailure(executable.meta().getJobName(), e1);
           return;
         }

@@ -2,12 +2,12 @@ package com.lesconstructionssapete.stempyerp.app.bootstrap;
 
 import java.sql.Connection;
 
-import com.lesconstructionssapete.stempyerp.core.automation.execution.Manager;
+import com.lesconstructionssapete.stempyerp.core.automation.execution.AutomationManager;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
 import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepositoryImpl;
 
-public class SchedulerInitializer {
+public class AutomationInitializer {
 
   public static void initialize() {
     try (Connection con = ConnectionPool.getConnection()) {
@@ -15,7 +15,8 @@ public class SchedulerInitializer {
       AutomationRepository repo = new AutomationRepositoryImpl();
       var jobs = repo.findAll(con);
 
-      Manager manager = new Manager(jobs);
+      AutomationManager.create(jobs);
+      AutomationManager manager = AutomationManager.getInstance();
       manager.start();
 
     } catch (Exception e) {

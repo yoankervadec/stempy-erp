@@ -1,8 +1,8 @@
 
 package com.lesconstructionssapete.stempyerp.app;
 
+import com.lesconstructionssapete.stempyerp.app.bootstrap.AutomationInitializer;
 import com.lesconstructionssapete.stempyerp.app.bootstrap.ConstantCacheInitializer;
-import com.lesconstructionssapete.stempyerp.app.bootstrap.SchedulerInitializer;
 import com.lesconstructionssapete.stempyerp.app.config.ExceptionConfig;
 import com.lesconstructionssapete.stempyerp.app.config.JsonConfig;
 import com.lesconstructionssapete.stempyerp.app.config.MiddlewareConfig;
@@ -19,7 +19,7 @@ public class App {
   public static void main(String[] args) {
 
     ConstantCacheInitializer.initialize();
-    SchedulerInitializer.initialize();
+    AutomationInitializer.initialize();
 
     // Dependencies container
     Dependencies deps = new Dependencies();
