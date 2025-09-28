@@ -28,7 +28,6 @@ public class RefreshJobSchedule extends Job implements JobExecutable {
       var jobs = automationRepository.findAll(connection);
 
       AutomationManager manager = AutomationManager.getInstance();
-      manager.printScheduledJobs();
       manager.refresh(jobs);
 
       log.appendMessage("Refreshed " + jobs.size() + " jobs");

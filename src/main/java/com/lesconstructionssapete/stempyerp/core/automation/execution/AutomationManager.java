@@ -2,6 +2,8 @@ package com.lesconstructionssapete.stempyerp.core.automation.execution;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
@@ -132,6 +134,8 @@ public class AutomationManager {
         continue; // Skip disabled jobs
       }
 
+      job.updateNextRun(); // Ensure next run is calculated
+
       JobExecutable executable = factory.create(job);
       scheduler.schedule(executable);
     }
@@ -170,29 +174,35 @@ public class AutomationManager {
    * @param newJobs the updated list of jobs from persistence
    */
   public synchronized void refresh(List<Job> newJobs) {
-    this.jobs = newJobs;
+
+    Map<Integer, Job> oldJobsMap = jobs.stream()
+        .collect(Collectors.toMap(Job::getJobId, j -> j));
 
     Map<Integer, Job> newJobsMap = newJobs.stream()
-        .collect(java.util.stream.Collectors.toMap(Job::getJobId, j -> j));
+        .collect(Collectors.toMap(Job::getJobId, j -> j));
 
-    for (Job oldJob : jobs) {
-      if (!newJobsMap.containsKey(oldJob.getJobId())
-          || !newJobsMap.get(oldJob.getJobId()).isEnabled()) {
+    this.jobs = newJobs; // update after extracting old map
+
+    // 1. Cancel jobs that were removed or disabled
+    for (Job oldJob : oldJobsMap.values()) {
+      Job updated = newJobsMap.get(oldJob.getJobId());
+      if (updated == null || !updated.isEnabled()) {
         scheduler.cancelByJobId(oldJob.getJobId());
       }
     }
 
-    for (Job job : newJobs) {
-      if (!job.isEnabled())
+    // 2. Add or reschedule new or updated jobs
+    for (Job newJob : newJobs) {
+      if (!newJob.isEnabled())
         continue;
 
-      JobExecutable executable = factory.create(job);
+      Job oldJob = oldJobsMap.get(newJob.getJobId());
+      boolean shouldSchedule = !scheduler.isScheduled(newJob.getJobId())
+          || hasRelevantChanges(oldJob, newJob);
 
-      if (!scheduler.isScheduled(job.getJobId())) {
-        scheduler.schedule(executable);
-      } else {
-        scheduler.cancelByJobId(job.getJobId());
-        scheduler.schedule(executable);
+      if (shouldSchedule) {
+        scheduler.cancelByJobId(newJob.getJobId());
+        scheduler.schedule(factory.create(newJob));
       }
     }
   }
@@ -204,6 +214,20 @@ public class AutomationManager {
    */
   public void printScheduledJobs() {
     scheduler.printFutures();
+  }
+
+  private boolean hasRelevantChanges(Job oldJob, Job newJob) {
+    if (oldJob == null)
+      return true;
+
+    return oldJob.isEnabled() != newJob.isEnabled()
+        || oldJob.isActive() != newJob.isActive()
+        || !Objects.equals(oldJob.getIntervalMinutes(), newJob.getIntervalMinutes())
+        || !Objects.equals(oldJob.getRunTimes(), newJob.getRunTimes())
+        || oldJob.isDeactivateOnFailure() != newJob.isDeactivateOnFailure()
+        || oldJob.getRetriesOnFailure() != newJob.getRetriesOnFailure()
+        || oldJob.isDeactivateOnFailure() != newJob.isDeactivateOnFailure();
+
   }
 
 }

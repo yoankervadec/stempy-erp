@@ -179,6 +179,15 @@ public class Job {
     return nextRun == null ? null : Duration.between(LocalDateTime.now(), nextRun);
   }
 
+  /**
+   * Time elapsed since the last run.
+   * 
+   * @return Duration since last run, or null if never run
+   */
+  public Duration timeSinceLastRun() {
+    return lastRun == null ? null : Duration.between(lastRun, LocalDateTime.now());
+  }
+
   // =====================================================
   // Getters & Setters
   // =====================================================

@@ -1,6 +1,5 @@
 package com.lesconstructionssapete.stempyerp.core.automation.scheduling;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +14,7 @@ import com.lesconstructionssapete.stempyerp.core.automation.execution.JobQueue;
 
 public class Scheduler {
 
-  private final static long MIN_INTERVAL_MS = 10;
+  private final static long MIN_DELAY = 10000; // 10 seconds
 
   private final JobQueue queue;
   private final ScheduledExecutorService execScheduler = Executors
@@ -26,6 +25,9 @@ public class Scheduler {
     this.queue = queue;
   }
 
+  /**
+   * Holds a scheduled job and its future for management.
+   */
   private static class ScheduledJob {
     final JobExecutable executable;
     final ScheduledFuture<?> future;
@@ -36,72 +38,70 @@ public class Scheduler {
     }
   }
 
+  /**
+   * Schedules a job for queuing based on its defined schedule.
+   * If the job is inactive, it will not be scheduled.
+   * 
+   * @param executable
+   */
   public void schedule(JobExecutable executable) {
-
     Job job = executable.meta();
 
     // Only schedule active jobs
     if (job.isActive()) {
-      // Interval-based job
-      if (job.isIntervalBasedJob()) {
-        long intervalMs = job.getInterval().toMillis();
-        if (intervalMs <= MIN_INTERVAL_MS) {
-          throw new IllegalArgumentException(
-              "Interval " + intervalMs + "ms must be greater than " + MIN_INTERVAL_MS + "ms for job "
-                  + job.getJobName());
-        }
-
-        scheduleIntervalJob(executable, intervalMs, intervalMs, TimeUnit.MILLISECONDS);
-
-        // Run-times job
-      } else if (job.getRunTimes() != null && !job.getRunTimes().isEmpty()) {
-
-        scheduleAtRunTimes(executable);
-      }
+      scheduleSelf(executable);
     }
   }
 
   /**
-   * Schedule an interval-based job
+   * Schedules the given job executable to run at its next scheduled time.
+   * If the job is already scheduled, it will be canceled and rescheduled.
+   * 
+   * @param executable
    */
-  private void scheduleIntervalJob(JobExecutable executable, long initialDelay, long period, TimeUnit unit) {
-    cancelByJobId(executable.meta().getJobId());
+  private void scheduleSelf(JobExecutable executable) {
+    Job job = executable.meta();
 
-    ScheduledFuture<?> future = execScheduler.scheduleAtFixedRate(
-        () -> queue.add(executable),
-        initialDelay,
-        period,
-        unit);
+    cancelByJobId(job.getJobId());
 
-    futures.put(executable.meta().getJobId(), new ScheduledJob(executable, future));
-  }
+    if (job.timeSinceLastRun() != null && job.timeSinceLastRun().toMillis() < MIN_DELAY) {
+      throw new IllegalArgumentException("Job ID " + job.getJobId() + " (" + job.getJobName()
+          + ") was run less than " + (MIN_DELAY / 1000) + " seconds ago. Cannot reschedule so soon.");
+    }
 
-  /**
-   * Schedule a run-times job (self-schedule)
-   */
-  private void scheduleAtRunTimes(JobExecutable executable) {
-    cancelByJobId(executable.meta().getJobId());
-
-    LocalDateTime next = executable.meta().calculateNextRun();
+    LocalDateTime next = job.calculateNextRun();
     if (next == null)
       return;
 
-    long delay = Duration.between(LocalDateTime.now(), next).toMillis();
+    long delay = job.timeUntilNextRun().toMillis();
     if (delay < 0)
       delay = 0;
 
     ScheduledFuture<?> future = execScheduler.schedule(
         () -> {
-          executable.meta().markRunCompleted(); // Advance schedule
+          // Don't run if job was deactivated in the meantime
+          if (!job.isActive())
+            return;
+
           queue.add(executable);
-          scheduleAtRunTimes(executable); // Reschedule next
+
+          job.markRunCompleted(); // Advance schedule
+
+          // Self-reschedule for next cycle
+          scheduleSelf(executable);
         },
         delay,
         TimeUnit.MILLISECONDS);
 
-    futures.put(executable.meta().getJobId(), new ScheduledJob(executable, future));
+    futures.put(job.getJobId(), new ScheduledJob(executable, future));
   }
 
+  /**
+   * Cancels the scheduled queuing of a job by its ID.
+   * If the job is not scheduled, this method does nothing.
+   * 
+   * @param jobId
+   */
   public void cancelByJobId(int jobId) {
     ScheduledJob scheduledJob = futures.remove(jobId);
     if (scheduledJob != null && scheduledJob.future != null) {
@@ -109,14 +109,29 @@ public class Scheduler {
     }
   }
 
+  /**
+   * Checks if a job with the given ID is currently scheduled.
+   * 
+   * @param jobId
+   * @return true if scheduled, false otherwise
+   */
   public boolean isScheduled(int jobId) {
     return futures.containsKey(jobId);
   }
 
+  /**
+   * Queues the given job executable for immediate execution.
+   * 
+   * @param executable
+   */
   public void queueNow(JobExecutable executable) {
     queue.add(executable);
   }
 
+  /**
+   * Shuts down the scheduler, cancelling all scheduled jobs, without clearing the
+   * queue.
+   */
   public void shutdown() {
     execScheduler.shutdown();
     futures.clear();
@@ -140,7 +155,7 @@ public class Scheduler {
 
       if (job.isIntervalBasedJob()) {
         sb.append(" | Type: Interval")
-            .append(" | Every: ").append(job.getInterval().toMillis()).append(" ms");
+            .append(" | Every: ").append(job.getInterval().toSeconds()).append(" s");
       } else {
         sb.append(" | Type: Run-times")
             .append(" | Next run: ").append(job.calculateNextRun());

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobExecutable;
@@ -13,6 +13,19 @@ import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
 import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
 import com.lesconstructionssapete.stempyerp.core.repository.base.automation.AutomationRepository;
 
+/**
+ * Job that processes and persists queued job logs in batches.
+ * <p>
+ * This job dequeues log entries from a static queue and writes them to the
+ * database in batches to improve performance.
+ * <p>
+ * Configuration:
+ * <ul>
+ * <li>Should be scheduled to run at regular intervals (e.g., every
+ * minute).</li>
+ * <li>Should be active to ensure logs are processed.</li>
+ * </ul>
+ */
 public class LogJobRuns extends Job implements JobExecutable {
 
   private final AutomationRepository automationRepository;
@@ -22,7 +35,8 @@ public class LogJobRuns extends Job implements JobExecutable {
     this.automationRepository = automationRepository;
   }
 
-  private static final Queue<JobLog> logQueue = new ConcurrentLinkedDeque<>();
+  private static final Queue<JobLog> logQueue = new ConcurrentLinkedQueue<>();
+
   private static final int MAX_BATCH_SIZE = 10;
 
   public static void enqueueLog(JobLog log) {

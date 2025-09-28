@@ -14,11 +14,17 @@ public class WorkerThread implements Runnable {
     this.queue = queue;
   }
 
+  /**
+   * Continuously processes jobs from the queue until stopped.
+   * Each job is executed with retry logic and logging.
+   */
   @Override
   public void run() {
     while (running && !Thread.currentThread().isInterrupted()) {
       try {
         JobExecutable executable = queue.take(); // blocks until a job arrives
+        System.out.println("Worker picked up job ID " + executable.meta().getJobId() + " ("
+            + executable.meta().getJobName() + ") at " + LocalDateTime.now());
         executeAndLog(executable);
 
       } catch (InterruptedException e) {
@@ -34,6 +40,14 @@ public class WorkerThread implements Runnable {
     running = false;
   }
 
+  /**
+   * Executes the given job executable with retry logic and logging.
+   * If the job fails, it will be retried up to its configured number of retries.
+   * After exhausting retries, if configured, the job will be deactivated.
+   * 
+   * @param executable the job executable to run
+   * @throws InterruptedException if the thread is interrupted during execution
+   */
   private void executeAndLog(JobExecutable executable) throws InterruptedException {
 
     int attempt = 0;
