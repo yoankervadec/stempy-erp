@@ -23,8 +23,10 @@ public class WorkerThread implements Runnable {
     while (running && !Thread.currentThread().isInterrupted()) {
       try {
         JobExecutable executable = queue.take(); // blocks until a job arrives
+
         System.out.println("Worker picked up job ID " + executable.meta().getJobId() + " ("
             + executable.meta().getJobName() + ") at " + LocalDateTime.now());
+
         executeAndLog(executable);
 
       } catch (InterruptedException e) {

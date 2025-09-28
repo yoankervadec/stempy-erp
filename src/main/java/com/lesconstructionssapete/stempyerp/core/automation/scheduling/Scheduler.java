@@ -62,7 +62,7 @@ public class Scheduler {
   private void scheduleSelf(JobExecutable executable) {
     Job job = executable.meta();
 
-    cancelByJobId(job.getJobId());
+    cancelByJobId(job.getJobId()); // Avoid double-scheduling
 
     if (job.timeSinceLastRun() != null && job.timeSinceLastRun().toMillis() < MIN_DELAY) {
       throw new IllegalArgumentException("Job ID " + job.getJobId() + " (" + job.getJobName()
@@ -83,12 +83,11 @@ public class Scheduler {
           if (!job.isActive())
             return;
 
-          queue.add(executable);
+          queue.add(executable); // Queue for execution
 
           job.markRunCompleted(); // Advance schedule
 
-          // Self-reschedule for next cycle
-          scheduleSelf(executable);
+          scheduleSelf(executable); // Self-reschedule for next cycle
         },
         delay,
         TimeUnit.MILLISECONDS);
@@ -98,6 +97,8 @@ public class Scheduler {
 
   /**
    * Cancels the scheduled queuing of a job by its ID.
+   * Does not clear the job from the queue if already queued.
+   * <p>
    * If the job is not scheduled, this method does nothing.
    * 
    * @param jobId
