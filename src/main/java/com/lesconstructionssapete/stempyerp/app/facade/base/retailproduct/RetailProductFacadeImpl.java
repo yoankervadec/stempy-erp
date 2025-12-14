@@ -1,6 +1,5 @@
 package com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -52,9 +51,7 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
   }
 
   @Override
-  public RetailProduct insert(String productNo, BigDecimal retailPrice, BigDecimal cost, String description,
-      int retailCategory, int woodSpecie, double productWidth, double productThickness, double productLength,
-      long createdByUserSeq) {
+  public RetailProduct insert(RetailProduct product) {
 
     Connection con = null;
 
@@ -66,19 +63,19 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
           con,
           ConstantUtil.findByName(
               ConstantCache.getEntityTypes(), "RETAIL PRODUCT"),
-          createdByUserSeq);
+          product.getCreatedByUserSeq());
 
       var rp = new RetailProduct(
           liveSequence.getSequenceNo(),
           liveSequence.getEntityNo(),
-          retailPrice,
-          cost,
-          description,
-          retailCategory,
-          woodSpecie,
-          productWidth,
-          productThickness,
-          productLength,
+          product.getRetailPrice(),
+          product.getCost(),
+          product.getDescription(),
+          product.getRetailCategoryId(),
+          product.getWoodSpecyId(),
+          product.getProductWidth(),
+          product.getProductThickness(),
+          product.getProductLength(),
           false,
           LocalDateTime.now(),
           liveSequence.getCreatedByUserSeq());
