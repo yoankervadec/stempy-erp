@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.app.dto.base.RetailProductRequest;
 import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacade;
+import com.lesconstructionssapete.stempyerp.app.http.ApiRequest;
+import com.lesconstructionssapete.stempyerp.app.http.ApiResponse;
+import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.app.mapper.base.RetailProductMapper;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
-import com.lesconstructionssapete.stempyerp.core.http.ApiRequest;
-import com.lesconstructionssapete.stempyerp.core.http.ApiResponse;
-import com.lesconstructionssapete.stempyerp.core.http.RequestMapper;
 
 import io.javalin.http.Context;
 

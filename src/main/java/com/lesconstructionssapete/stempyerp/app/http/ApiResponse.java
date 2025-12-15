@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.http;
+package com.lesconstructionssapete.stempyerp.app.http;
 
 import java.time.Instant;
 

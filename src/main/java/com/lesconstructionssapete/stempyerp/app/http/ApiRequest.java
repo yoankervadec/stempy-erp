@@ -1,17 +1,15 @@
-package com.lesconstructionssapete.stempyerp.core.http;
-
-import java.util.Map;
+package com.lesconstructionssapete.stempyerp.app.http;
 
 public class ApiRequest<T> {
 
-  private Map<String, Object> metadata; // e.g., requestId, timestamps, client info
+  private RequestMetadata metadata;
   private T payload; // the actual data, can be nested products, customers, etc.
 
-  public Map<String, Object> getMetadata() {
+  public RequestMetadata getMetadata() {
     return metadata;
   }
 
-  public void setMetadata(Map<String, Object> metadata) {
+  public void setMetadata(RequestMetadata metadata) {
     this.metadata = metadata;
   }
 

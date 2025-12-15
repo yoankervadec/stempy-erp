@@ -11,17 +11,20 @@ public class JwtMiddleware implements Handler {
 
   @Override
   public void handle(Context ctx) throws Exception {
+
     String authHeader = ctx.header("Authorization");
+
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      throw new UnauthorizedException(null, null);
+      throw new UnauthorizedException(null, "Invalid or missing Authorization header");
     }
 
     String token = authHeader.substring(7);
+
     try {
       String userNo = JwtUtil.validateTokenAndGetUserNo(token);
 
       if (userNo == null) {
-        throw new UnauthorizedException(null, null);
+        throw new UnauthorizedException(null, "Invalid or expired token");
       }
       ctx.attribute("userNo", userNo);
 
