@@ -16,6 +16,8 @@ public class MiddlewareConfig {
 
     app.before("/api/*", ctx -> {
       if (ctx.path().equals("/api/v1/auth/login") || ctx.path().equals("/api/v1/auth/refresh")) {
+        metadata.handle(ctx);
+
         return;
       }
       jwt.handle(ctx);

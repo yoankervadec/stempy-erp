@@ -4,15 +4,20 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class JsonUtil {
+public final class JsonUtil {
 
-  private static final ObjectMapper mapper = new ObjectMapper()
+  private static final ObjectMapper MAPPER = new ObjectMapper()
       .registerModule(new JavaTimeModule())
       .findAndRegisterModules()
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-  public static ObjectMapper getMapper() {
-    return mapper;
+  private JsonUtil() {
+    // Utility class
+  }
+
+  public static ObjectMapper mapper() {
+    return MAPPER;
   }
 
 }

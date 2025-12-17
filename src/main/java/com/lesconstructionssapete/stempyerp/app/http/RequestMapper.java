@@ -9,7 +9,7 @@ import io.javalin.http.Context;
 
 public class RequestMapper {
 
-  private static final ObjectMapper mapper = JsonUtil.getMapper();
+  private static final ObjectMapper mapper = JsonUtil.mapper();
 
   public static <T> T fromBody(Context ctx, Class<T> clazz) {
     try {
