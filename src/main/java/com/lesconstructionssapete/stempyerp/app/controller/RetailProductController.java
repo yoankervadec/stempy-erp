@@ -5,11 +5,12 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.app.dto.base.RetailProductRequest;
 import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequest;
-import com.lesconstructionssapete.stempyerp.app.http.ApiResponse;
+import com.lesconstructionssapete.stempyerp.app.http.RequestContext;
+import com.lesconstructionssapete.stempyerp.app.http.RequestContextHolder;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
+import com.lesconstructionssapete.stempyerp.app.http.Response;
 import com.lesconstructionssapete.stempyerp.app.mapper.base.RetailProductMapper;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
 import io.javalin.http.Context;
 
@@ -23,20 +24,23 @@ public class RetailProductController {
 
   public void fetchAllProducts(Context ctx) {
     List<RetailProduct> list = retailProductFacade.fetchAllProducts();
-    ctx.json(ApiResponse.ofSuccess("Products fetched", list));
+
+    Response.ok(ctx, null, list);
+
   }
 
   public void insertProduct(Context ctx) {
 
+    RequestContext req = RequestContextHolder.get(ctx);
+
     ApiRequest<RetailProductRequest> request = RequestMapper.fromApiRequest(ctx, RetailProductRequest.class);
 
-    User user = ctx.attribute("user");
     RetailProductRequest newProduct = request.getPayload();
 
     retailProductFacade.insert(RetailProductMapper.toDomain(newProduct));
 
-    ctx.status(201).json(
-        ApiResponse.ofSuccess("Product created", newProduct));
+    Response.created(ctx, "Product created", newProduct);
+
   }
 
 }

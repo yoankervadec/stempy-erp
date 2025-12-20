@@ -37,7 +37,7 @@ public class RequestMapper {
       String payloadJson = mapper.writeValueAsString(temp.getPayload());
       T payload = mapper.readValue(payloadJson, payloadClass);
       ApiRequest<T> finalReq = new ApiRequest<>();
-      finalReq.setMetadata(temp.getMetadata());
+      finalReq.setMetadata(ctx.attribute("requestMetadata"));
       finalReq.setPayload(payload);
       return finalReq;
     } catch (JsonProcessingException e) {

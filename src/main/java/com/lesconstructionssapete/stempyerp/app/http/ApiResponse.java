@@ -1,27 +1,25 @@
 package com.lesconstructionssapete.stempyerp.app.http;
 
-import java.time.Instant;
-
 public class ApiResponse<T> {
 
   private final boolean success;
   private final String message;
+  private final ResponseMetadata metadata;
   private final T data;
-  private final Instant timestamp;
 
-  public ApiResponse(boolean success, String message, T data) {
+  public ApiResponse(boolean success, String message, ResponseMetadata metadata, T data) {
     this.success = success;
     this.message = message;
+    this.metadata = metadata;
     this.data = data;
-    this.timestamp = Instant.now();
   }
 
-  public static <T> ApiResponse<T> ofSuccess(String message, T data) {
-    return new ApiResponse<>(true, message, data);
+  public static <T> ApiResponse<T> ofSuccess(String message, ResponseMetadata metadata, T data) {
+    return new ApiResponse<>(true, message, metadata, data);
   }
 
-  public static <T> ApiResponse<T> ofFailure(String message) {
-    return new ApiResponse<>(false, message, null);
+  public static <T> ApiResponse<T> ofFailure(String message, ResponseMetadata metadata) {
+    return new ApiResponse<>(false, message, metadata, null);
   }
 
   public boolean isSuccess() {
@@ -32,12 +30,12 @@ public class ApiResponse<T> {
     return message;
   }
 
-  public T getData() {
-    return data;
+  public ResponseMetadata getMetadata() {
+    return metadata;
   }
 
-  public Instant getTimestamp() {
-    return timestamp;
+  public T getData() {
+    return data;
   }
 
 }

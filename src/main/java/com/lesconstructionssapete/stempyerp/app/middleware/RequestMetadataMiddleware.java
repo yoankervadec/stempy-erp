@@ -4,26 +4,24 @@ import java.time.Instant;
 import java.util.UUID;
 
 import com.lesconstructionssapete.stempyerp.app.http.RequestMetadata;
+import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
 import io.javalin.http.Context;
-import io.javalin.http.Handler;
 
-public class RequestMetadataMiddleware implements Handler {
+public class RequestMetadataMiddleware {
 
-  @Override
-  public void handle(Context ctx) {
-
+  public RequestMetadata build(Context ctx, User user) {
     RequestMetadata metadata = new RequestMetadata();
 
     metadata.setRequestId(UUID.randomUUID().toString());
     metadata.setTimestamp(Instant.now());
 
-    metadata.setUserNo(ctx.attribute("userNo"));
-    metadata.setUser(ctx.attribute("user"));
+    metadata.setUserNo(user != null ? user.getEntityNo() : null);
+    metadata.setUser(user);
 
     metadata.setIdempotencyKey(ctx.header("Idempotency-Key"));
 
-    ctx.attribute("requestMetadata", metadata);
+    return metadata;
   }
 
 }

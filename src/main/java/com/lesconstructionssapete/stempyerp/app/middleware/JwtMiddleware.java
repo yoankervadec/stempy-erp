@@ -4,14 +4,11 @@ import com.lesconstructionssapete.stempyerp.core.exception.api.UnauthorizedExcep
 import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
 
 import io.javalin.http.Context;
-import io.javalin.http.Handler;
 import io.jsonwebtoken.JwtException;
 
-public class JwtMiddleware implements Handler {
+public class JwtMiddleware {
 
-  @Override
-  public void handle(Context ctx) throws Exception {
-
+  public String authenticate(Context ctx) {
     String authHeader = ctx.header("Authorization");
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -26,7 +23,7 @@ public class JwtMiddleware implements Handler {
       if (userNo == null) {
         throw new UnauthorizedException(null, "Invalid or expired token");
       }
-      ctx.attribute("userNo", userNo);
+      return userNo;
 
     } catch (JwtException e) {
       throw new UnauthorizedException(null, null);

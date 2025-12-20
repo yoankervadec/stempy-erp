@@ -4,10 +4,7 @@ import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructionssapete.stempyerp.core.exception.api.UnauthorizedException;
 
-import io.javalin.http.Context;
-import io.javalin.http.Handler;
-
-public class UserContextMiddleware implements Handler {
+public class UserContextMiddleware {
 
   private final UserFacade userFacade;
 
@@ -15,10 +12,7 @@ public class UserContextMiddleware implements Handler {
     this.userFacade = userFacade;
   }
 
-  @Override
-  public void handle(Context ctx) throws Exception {
-    String userNo = ctx.attribute("userNo");
-
+  public User resolve(String userNo) {
     if (userNo == null) {
       throw new UnauthorizedException(null, null);
     }
@@ -28,8 +22,7 @@ public class UserContextMiddleware implements Handler {
       throw new UnauthorizedException(null, null);
     }
 
-    ctx.attribute("user", user);
-
+    return user;
   }
 
 }

@@ -1,6 +1,8 @@
 package com.lesconstructionssapete.stempyerp.app.config;
 
 import com.lesconstructionssapete.stempyerp.app.Dependencies;
+import com.lesconstructionssapete.stempyerp.app.http.RequestContext;
+import com.lesconstructionssapete.stempyerp.app.http.RequestMetadata;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.RequestMetadataMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.UserContextMiddleware;
@@ -15,14 +17,21 @@ public class MiddlewareConfig {
     RequestMetadataMiddleware metadata = new RequestMetadataMiddleware();
 
     app.before("/api/*", ctx -> {
-      if (ctx.path().equals("/api/v1/auth/login") || ctx.path().equals("/api/v1/auth/refresh")) {
-        metadata.handle(ctx);
+      if (ctx.path().equals("/api/v1/auth/login") ||
+          ctx.path().equals("/api/v1/auth/refresh")) {
 
+        RequestMetadata meta = metadata.build(ctx, null);
+        ctx.attribute(RequestContext.class.getName(),
+            new RequestContext(meta, null));
         return;
       }
-      jwt.handle(ctx);
-      userCtx.handle(ctx);
-      metadata.handle(ctx);
+
+      String userNo = jwt.authenticate(ctx);
+      var user = userCtx.resolve(userNo);
+      RequestMetadata meta = metadata.build(ctx, user);
+      ctx.attribute(RequestContext.class.getName(),
+          new RequestContext(meta, user));
     });
+
   }
 }
