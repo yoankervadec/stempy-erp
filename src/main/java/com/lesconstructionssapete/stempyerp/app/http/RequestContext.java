@@ -16,6 +16,8 @@ public class RequestContext {
   private final RequestMetadata metadata;
   private final User user;
 
+  private ApiRequest<?> apiRequest;
+
   public RequestContext(RequestMetadata metadata, User user) {
     this.metadata = metadata;
     this.user = user;
@@ -27,6 +29,15 @@ public class RequestContext {
 
   public User getUser() {
     return user;
+  }
+
+  public void setApiRequest(ApiRequest<?> apiRequest) {
+    this.apiRequest = apiRequest;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> ApiRequest<T> getApiRequest() {
+    return (ApiRequest<T>) apiRequest;
   }
 
 }

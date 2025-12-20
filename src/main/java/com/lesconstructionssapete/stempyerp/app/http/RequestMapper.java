@@ -27,22 +27,27 @@ public class RequestMapper {
     }
   }
 
-  // Convenience overload for ApiRequest<T>
   public static <T> ApiRequest<T> fromApiRequest(Context ctx, Class<T> payloadClass) {
     try {
-      TypeReference<ApiRequest<T>> typeRef = new TypeReference<>() {
-      };
-      // Using intermediate string conversion to bind nested payload properly
-      ApiRequest<?> temp = mapper.readValue(ctx.body(), ApiRequest.class);
-      String payloadJson = mapper.writeValueAsString(temp.getPayload());
-      T payload = mapper.readValue(payloadJson, payloadClass);
-      ApiRequest<T> finalReq = new ApiRequest<>();
-      finalReq.setMetadata(ctx.attribute("requestMetadata"));
-      finalReq.setPayload(payload);
-      return finalReq;
+      return mapper.readValue(
+          ctx.body(),
+          mapper.getTypeFactory()
+              .constructParametricType(ApiRequest.class, payloadClass));
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Failed to parse ApiRequest<" + payloadClass.getSimpleName() + ">", e);
     }
+  }
+
+  public static ApiRequest<?> fromApiRequest(Context ctx) {
+    try {
+      return mapper.readValue(ctx.body(), ApiRequest.class);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Invalid ApiRequest payload", e);
+    }
+  }
+
+  public static <T> T convertPayload(Object payload, Class<T> clazz) {
+    return mapper.convertValue(payload, clazz);
   }
 
 }

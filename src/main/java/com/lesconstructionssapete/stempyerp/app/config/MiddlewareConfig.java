@@ -3,6 +3,7 @@ package com.lesconstructionssapete.stempyerp.app.config;
 import com.lesconstructionssapete.stempyerp.app.Dependencies;
 import com.lesconstructionssapete.stempyerp.app.http.RequestContext;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMetadata;
+import com.lesconstructionssapete.stempyerp.app.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.RequestMetadataMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.UserContextMiddleware;
@@ -31,6 +32,7 @@ public class MiddlewareConfig {
       RequestMetadata meta = metadata.build(ctx, user);
       ctx.attribute(RequestContext.class.getName(),
           new RequestContext(meta, user));
+      ApiRequestMiddleware.build(ctx);
     });
 
   }

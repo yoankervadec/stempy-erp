@@ -18,6 +18,8 @@ public class RequestMetadataMiddleware {
 
     metadata.setUserNo(user != null ? user.getEntityNo() : null);
     metadata.setUser(user);
+    metadata.setClientIp(ctx.ip());
+    metadata.setSource(ctx.header("X-Source"));
 
     metadata.setIdempotencyKey(ctx.header("Idempotency-Key"));
 
