@@ -1,27 +1,34 @@
 package com.lesconstructionssapete.stempyerp.app.middleware;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequest;
-import com.lesconstructionssapete.stempyerp.app.http.RequestContext;
-import com.lesconstructionssapete.stempyerp.app.http.RequestContextHolder;
-import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
+import com.lesconstructionssapete.stempyerp.app.http.RequestMetadata;
+import com.lesconstructionssapete.stempyerp.core.shared.util.JsonUtil;
 
 import io.javalin.http.Context;
+import io.javalin.http.Handler;
 
-public class ApiRequestMiddleware {
+public class ApiRequestMiddleware implements Handler {
 
-  public static void build(Context ctx) {
+  private static final ObjectMapper mapper = JsonUtil.mapper();
 
-    if (ctx.body().isBlank()) {
-      return;
+  @Override
+  public void handle(Context ctx) throws JsonMappingException, JsonProcessingException {
+
+    RequestMetadata metadata = ctx.attribute("REQUEST_METADATA");
+
+    JsonNode payload = null;
+
+    if (ctx.body().length() > 0) {
+      payload = mapper.readTree(ctx.body());
     }
 
-    RequestContext rc = RequestContextHolder.get(ctx);
+    ApiRequest apiRequest = new ApiRequest(metadata, null, payload);
 
-    ApiRequest<?> request = RequestMapper.fromApiRequest(ctx);
-    request.setMetadata(rc.getMetadata());
-
-    rc.setApiRequest(request);
-
+    ctx.attribute("API_REQUEST", apiRequest);
   }
 
 }

@@ -4,6 +4,12 @@ import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
+/**
+ * Metadata about an API request, including user info, timestamps, and flags.
+ * 
+ * Server-side only.
+ */
+
 public class RequestMetadata {
 
   private String requestId;

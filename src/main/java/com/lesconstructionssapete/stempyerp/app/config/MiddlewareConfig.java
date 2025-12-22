@@ -1,38 +1,45 @@
 package com.lesconstructionssapete.stempyerp.app.config;
 
 import com.lesconstructionssapete.stempyerp.app.Dependencies;
-import com.lesconstructionssapete.stempyerp.app.http.RequestContext;
-import com.lesconstructionssapete.stempyerp.app.http.RequestMetadata;
 import com.lesconstructionssapete.stempyerp.app.middleware.ApiRequestMiddleware;
-import com.lesconstructionssapete.stempyerp.app.middleware.JwtMiddleware;
-import com.lesconstructionssapete.stempyerp.app.middleware.RequestMetadataMiddleware;
-import com.lesconstructionssapete.stempyerp.app.middleware.UserContextMiddleware;
+import com.lesconstructionssapete.stempyerp.app.middleware.AuthorizationMiddleware;
+import com.lesconstructionssapete.stempyerp.app.middleware.JwtAuthenticationMiddleware;
+import com.lesconstructionssapete.stempyerp.app.middleware.RequestMetadataBuilderMiddleware;
 
 import io.javalin.Javalin;
 
-public class MiddlewareConfig {
+public final class MiddlewareConfig {
 
   public static void configure(Javalin app, Dependencies deps) {
-    JwtMiddleware jwt = new JwtMiddleware();
-    UserContextMiddleware userCtx = new UserContextMiddleware(deps.userFacade);
-    RequestMetadataMiddleware metadata = new RequestMetadataMiddleware();
+
+    JwtAuthenticationMiddleware jwtAuthMiddleware = new JwtAuthenticationMiddleware();
+    RequestMetadataBuilderMiddleware requestMetadataBuilderMiddleware = new RequestMetadataBuilderMiddleware();
+    ApiRequestMiddleware apiRequestMiddleware = new ApiRequestMiddleware();
+    AuthorizationMiddleware authorizationMiddleware = new AuthorizationMiddleware(deps.userFacade);
 
     app.before("/api/*", ctx -> {
       if (ctx.path().equals("/api/v1/auth/login") ||
           ctx.path().equals("/api/v1/auth/refresh")) {
 
-        RequestMetadata meta = metadata.build(ctx, null);
-        ctx.attribute(RequestContext.class.getName(),
-            new RequestContext(meta, null));
+        // Skip authentication and authorization for login and refresh endpoints
+
+        // Build ApiRequest with metadata
+        requestMetadataBuilderMiddleware.handle(ctx);
+        apiRequestMiddleware.handle(ctx);
+
         return;
       }
 
-      String userNo = jwt.authenticate(ctx);
-      var user = userCtx.resolve(userNo);
-      RequestMetadata meta = metadata.build(ctx, user);
-      ctx.attribute(RequestContext.class.getName(),
-          new RequestContext(meta, user));
-      ApiRequestMiddleware.build(ctx);
+      // JWT Authentication
+      jwtAuthMiddleware.handle(ctx);
+
+      // Build ApiRequest with metadata
+      requestMetadataBuilderMiddleware.handle(ctx);
+      apiRequestMiddleware.handle(ctx);
+
+      // Authorization
+      authorizationMiddleware.handle(ctx);
+
     });
 
   }

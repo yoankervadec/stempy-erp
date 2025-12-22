@@ -5,9 +5,9 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.app.dto.base.RetailProductRequest;
 import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequest;
-import com.lesconstructionssapete.stempyerp.app.http.RequestContextHolder;
-import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
+import com.lesconstructionssapete.stempyerp.app.http.ApiRequestMapper;
 import com.lesconstructionssapete.stempyerp.app.http.Response;
+import com.lesconstructionssapete.stempyerp.app.http.TypedApiRequest;
 import com.lesconstructionssapete.stempyerp.app.mapper.base.RetailProductMapper;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 
@@ -30,12 +30,13 @@ public class RetailProductController {
 
   public void insertProduct(Context ctx) {
 
-    ApiRequest<?> apiRequest = RequestContextHolder.get(ctx).getApiRequest();
+    ApiRequest request = ctx.attribute("API_REQUEST");
 
-    RetailProductRequest payload = RequestMapper.convertPayload(apiRequest.getPayload(), RetailProductRequest.class);
+    TypedApiRequest<RetailProductRequest> typed = ApiRequestMapper.map(request, RetailProductRequest.class);
 
-    RetailProduct result = retailProductFacade.insert(
-        RetailProductMapper.toDomain(payload));
+    RetailProductRequest productRequest = typed.getBody();
+
+    RetailProduct result = retailProductFacade.insert(RetailProductMapper.toDomain(productRequest));
 
     Response.created(ctx, "Product created", result);
 

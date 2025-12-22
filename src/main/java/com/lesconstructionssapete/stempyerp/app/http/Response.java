@@ -26,11 +26,10 @@ public final class Response {
       String message,
       T data) {
 
-    RequestContext reqCtx = ctx.attribute(RequestContext.class.getName());
-    RequestMetadata reqMeta = (null != reqCtx) ? reqCtx.getMetadata() : null;
+    ApiRequest request = ctx.attribute("API_REQUEST");
 
-    String reqId = (null != reqCtx && null != reqMeta.getRequestId())
-        ? reqMeta.getRequestId()
+    String reqId = (null != request && null != request.getMetadata().getRequestId())
+        ? request.getMetadata().getRequestId()
         : "unknown";
 
     ResponseMetadata resMeta = new ResponseMetadata(
