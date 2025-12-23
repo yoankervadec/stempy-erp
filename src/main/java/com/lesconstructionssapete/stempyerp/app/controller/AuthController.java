@@ -56,7 +56,7 @@ public class AuthController {
 
     String userNo;
     try {
-      userNo = JwtUtil.validateTokenAndGetUserNo(refreshToken);
+      userNo = JwtUtil.validateRefreshTokenAndGetUserNo(refreshToken);
     } catch (Exception e) {
       ctx.status(401).result("Invalid refresh token");
       return;

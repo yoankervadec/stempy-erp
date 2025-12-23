@@ -14,23 +14,24 @@ public class JwtAuthenticationMiddleware implements Handler {
 
     String authHeader = ctx.header("Authorization");
 
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      throw new UnauthorizedException(null, "Invalid or missing Authorization header");
+    if (authHeader == null) {
+      throw new UnauthorizedException(null, "Missing Authorization header");
     }
 
-    String token = authHeader.substring(7);
+    String[] parts = authHeader.split(" ");
+    if (parts.length != 2 || !parts[0].equalsIgnoreCase("Bearer")) {
+      throw new UnauthorizedException(null, "Invalid Authorization header format");
+    }
+
+    String token = parts[1];
 
     try {
-      String userNo = JwtUtil.validateTokenAndGetUserNo(token);
-
-      if (userNo == null) {
-        throw new UnauthorizedException(null, "Invalid or expired token");
-      }
+      String userNo = JwtUtil.validateAccessTokenAndGetUserNo(token);
 
       ctx.attribute("AUTHENTICATED_USER_NO", userNo);
 
     } catch (JwtException e) {
-      throw new UnauthorizedException(null, null);
+      throw new UnauthorizedException(null, "Invalid or expired token");
     }
   }
 

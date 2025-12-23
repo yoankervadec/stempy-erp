@@ -138,7 +138,6 @@ public class Scheduler {
     futures.clear();
   }
 
-  // TODO return a Collection of scheduled jobs
   public void printFutures() {
     if (futures.isEmpty()) {
       System.out.println("No jobs scheduled.");

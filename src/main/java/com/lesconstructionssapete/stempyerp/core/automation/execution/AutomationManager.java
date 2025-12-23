@@ -210,7 +210,7 @@ public class AutomationManager {
   /**
    * Prints all currently scheduled jobs to the standard output.
    * <p>
-   * TODO: Replace with a method returning a collection of scheduled jobs.
+   * Primarily for debugging purposes.
    */
   public void printScheduledJobs() {
     scheduler.printFutures();

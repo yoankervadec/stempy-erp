@@ -1,7 +1,9 @@
 package com.lesconstructionssapete.stempyerp.core.jwt;
 
+import java.time.Duration;
+
 public class JwtConfig {
-  public static final String SECRET = "twelve-thousand-rats-dev-only-1234567890987654321"; // TODO pull from .env
-  public static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000; // 15 min
-  public static final long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+  public static final String SECRET = "twelve-thousand-rats-dev-only-1234567890987654321";
+  public static final long ACCESS_TOKEN_EXPIRATION = Duration.ofMinutes(15).toMillis(); // 15 minutes
+  public static final long REFRESH_TOKEN_EXPIRATION = Duration.ofDays(7).toMillis(); // 7 days
 }
