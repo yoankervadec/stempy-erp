@@ -9,6 +9,7 @@ public enum ErrorCode {
   FORBIDDEN("FORBIDDEN", "You do not have permission"),
   NOT_FOUND("NOT_FOUND", "Resource not found"),
   CONFLICT("CONFLICT", "Conflict with current state"),
+  INVALID_BODY("INVALID_BODY", "The request body is invalid"),
 
   // DOMAIN
   UNDEFINED_DOMAIN_EXCEPTION("UNDEFINED_DOMAIN_EXCEPTION", "Undefined domain exception"),

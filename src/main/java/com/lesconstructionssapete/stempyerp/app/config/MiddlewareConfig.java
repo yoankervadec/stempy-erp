@@ -4,7 +4,7 @@ import com.lesconstructionssapete.stempyerp.app.Dependencies;
 import com.lesconstructionssapete.stempyerp.app.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.AuthorizationMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtAuthenticationMiddleware;
-import com.lesconstructionssapete.stempyerp.app.middleware.RequestMetadataBuilderMiddleware;
+import com.lesconstructionssapete.stempyerp.app.middleware.ServerContextMiddleware;
 
 import io.javalin.Javalin;
 
@@ -13,7 +13,7 @@ public final class MiddlewareConfig {
   public static void configure(Javalin app, Dependencies deps) {
 
     JwtAuthenticationMiddleware jwtAuthMiddleware = new JwtAuthenticationMiddleware();
-    RequestMetadataBuilderMiddleware requestMetadataBuilderMiddleware = new RequestMetadataBuilderMiddleware();
+    ServerContextMiddleware serverContextMiddleware = new ServerContextMiddleware();
     ApiRequestMiddleware apiRequestMiddleware = new ApiRequestMiddleware();
     AuthorizationMiddleware authorizationMiddleware = new AuthorizationMiddleware(deps.userFacade);
 
@@ -24,7 +24,7 @@ public final class MiddlewareConfig {
         // Skip authentication and authorization for login and refresh endpoints
 
         // Build ApiRequest with metadata
-        requestMetadataBuilderMiddleware.handle(ctx);
+        serverContextMiddleware.handle(ctx);
         apiRequestMiddleware.handle(ctx);
 
         return;
@@ -34,7 +34,7 @@ public final class MiddlewareConfig {
       jwtAuthMiddleware.handle(ctx);
 
       // Build ApiRequest with metadata
-      requestMetadataBuilderMiddleware.handle(ctx);
+      serverContextMiddleware.handle(ctx);
       apiRequestMiddleware.handle(ctx);
 
       // Authorization

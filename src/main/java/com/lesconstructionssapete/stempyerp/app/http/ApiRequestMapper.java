@@ -11,7 +11,8 @@ public final class ApiRequestMapper {
 
   public static <T> TypedApiRequest<T> map(ApiRequest request, Class<T> type) {
     if (!request.hasPayload()) {
-      // No payload present... could throw exception?
+      // No payload present...
+      // TODO : throw exception
       return new TypedApiRequest<>(request, null);
     }
 

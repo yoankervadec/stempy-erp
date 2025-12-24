@@ -5,13 +5,13 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
 public class ApiRequest {
 
-  private RequestMetadata metadata; // serves info about the request
-  private User user; // authenticated user making the request
+  private final ServerContext context;
+  private RequestOptions options;
+  private RequestQuery query;
   private JsonNode payload; // request body payload
 
-  public ApiRequest(RequestMetadata metadata, User user, JsonNode payload) {
-    this.metadata = metadata;
-    this.user = user;
+  public ApiRequest(ServerContext context, JsonNode payload) {
+    this.context = context;
     this.payload = payload;
   }
 
@@ -19,21 +19,28 @@ public class ApiRequest {
     return payload != null && !payload.isNull();
   }
 
-  public RequestMetadata getMetadata() {
-    return metadata;
+  public void setContextUser(User user) {
+    this.context.setUser(user);
   }
 
-  public void setMetadata(RequestMetadata metadata) {
-    this.metadata = metadata;
+  public ServerContext getContext() {
+    return context;
   }
 
-  public User getUser() {
-    return user;
+  public RequestOptions getOptions() {
+    return options;
   }
 
-  public void setUser(User user) {
-    this.user = user;
-    this.metadata.setUser(user);
+  public void setOptions(RequestOptions options) {
+    this.options = options;
+  }
+
+  public RequestQuery getQuery() {
+    return query;
+  }
+
+  public void setQuery(RequestQuery query) {
+    this.query = query;
   }
 
   public JsonNode getPayload() {

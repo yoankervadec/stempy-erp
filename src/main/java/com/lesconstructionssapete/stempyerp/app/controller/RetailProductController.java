@@ -30,7 +30,7 @@ public class RetailProductController {
 
   public void insertProduct(Context ctx) {
 
-    ApiRequest request = ctx.attribute("API_REQUEST");
+    ApiRequest request = ctx.attribute(ApiRequest.class.getName());
 
     TypedApiRequest<RetailProductRequest> typed = ApiRequestMapper.map(request, RetailProductRequest.class);
 

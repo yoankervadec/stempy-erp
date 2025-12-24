@@ -1,7 +1,5 @@
 package com.lesconstructionssapete.stempyerp.app.http;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
-
 public final class TypedApiRequest<T> {
 
   private final ApiRequest base;
@@ -12,12 +10,8 @@ public final class TypedApiRequest<T> {
     this.body = body;
   }
 
-  public RequestMetadata getMetadata() {
-    return base.getMetadata();
-  }
-
-  public User getUser() {
-    return base.getUser();
+  public ApiRequest getBase() {
+    return base;
   }
 
   public T getBody() {

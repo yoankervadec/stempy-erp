@@ -29,12 +29,12 @@ public class AuthorizationMiddleware implements Handler {
       throw new RuntimeException("User not found during authorization");
     }
 
-    ApiRequest apiRequest = ctx.attribute("API_REQUEST");
+    ApiRequest apiRequest = ctx.attribute(ApiRequest.class.getName());
     if (apiRequest == null) {
       throw new RuntimeException("Missing API request during authorization");
     } else {
-      apiRequest.setUser(user);
-      ctx.attribute("API_REQUEST", apiRequest);
+      apiRequest.setContextUser(user);
+      ctx.attribute(ApiRequest.class.getName(), apiRequest);
     }
 
     // Further authorization logic will be added later
