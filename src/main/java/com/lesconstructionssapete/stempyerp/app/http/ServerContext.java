@@ -4,6 +4,10 @@ import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
+/**
+ * Context information about the current request (server owned).
+ */
+
 public final class ServerContext {
 
   private final String requestId;
@@ -17,8 +21,7 @@ public final class ServerContext {
       String requestId,
       Instant timestamp,
       String userNo,
-      String clientIp,
-      String source) {
+      String clientIp) {
     this.requestId = requestId;
     this.timestamp = timestamp;
     this.userNo = userNo;

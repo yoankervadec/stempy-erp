@@ -5,13 +5,12 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
 public class ApiRequest {
 
-  private final ServerContext context;
+  private ServerContext context;
   private RequestOptions options;
   private RequestQuery query;
   private JsonNode payload; // request body payload
 
-  public ApiRequest(ServerContext context, JsonNode payload) {
-    this.context = context;
+  public ApiRequest(JsonNode payload) {
     this.payload = payload;
   }
 
@@ -20,11 +19,17 @@ public class ApiRequest {
   }
 
   public void setContextUser(User user) {
-    this.context.setUser(user);
+    if (this.context != null) {
+      this.context.setUser(user);
+    }
   }
 
   public ServerContext getContext() {
     return context;
+  }
+
+  public void setContext(ServerContext context) {
+    this.context = context;
   }
 
   public RequestOptions getOptions() {

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequest;
-import com.lesconstructionssapete.stempyerp.app.http.ServerContext;
+import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.core.exception.api.InvalidBodyException;
 import com.lesconstructionssapete.stempyerp.core.shared.util.JsonUtil;
 
@@ -18,8 +18,6 @@ public class ApiRequestMiddleware implements Handler {
 
   @Override
   public void handle(Context ctx) throws JsonMappingException, JsonProcessingException {
-
-    ServerContext serverContext = ctx.attribute(ServerContext.class.getName());
 
     JsonNode payload = null;
 
@@ -35,9 +33,9 @@ public class ApiRequestMiddleware implements Handler {
       }
     }
 
-    ApiRequest apiRequest = new ApiRequest(serverContext, payload);
+    ApiRequest req = new ApiRequest(payload);
 
-    ctx.attribute(ApiRequest.class.getName(), apiRequest);
+    ApiRequestContext.set(ctx, req);
   }
 
 }

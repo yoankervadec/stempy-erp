@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.app.middleware;
 
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequest;
+import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
 import io.javalin.http.Context;
@@ -18,7 +19,9 @@ public class AuthorizationMiddleware implements Handler {
   @Override
   public void handle(Context ctx) {
 
-    String userNo = ctx.attribute("AUTHENTICATED_USER_NO");
+    ApiRequest apiRequest = ApiRequestContext.get(ctx);
+
+    String userNo = apiRequest.getContext().getUserNo();
     if (userNo == null) {
       throw new RuntimeException("Missing authenticated user number during authorization");
     }
@@ -29,13 +32,7 @@ public class AuthorizationMiddleware implements Handler {
       throw new RuntimeException("User not found during authorization");
     }
 
-    ApiRequest apiRequest = ctx.attribute(ApiRequest.class.getName());
-    if (apiRequest == null) {
-      throw new RuntimeException("Missing API request during authorization");
-    } else {
-      apiRequest.setContextUser(user);
-      ctx.attribute(ApiRequest.class.getName(), apiRequest);
-    }
+    apiRequest.setContextUser(user);
 
     // Further authorization logic will be added later
 
