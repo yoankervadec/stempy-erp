@@ -1,21 +1,21 @@
-package com.lesconstructionssapete.stempyerp.app.http;
+package com.lesconstructionssapete.stempyerp.app.http.contract;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
 public class ApiRequest {
 
-  private ServerContext context;
+  private RequestContext context;
   private RequestOptions options;
   private RequestQuery query;
-  private JsonNode payload; // request body payload
+  private JsonNode body;
 
-  public ApiRequest(JsonNode payload) {
-    this.payload = payload;
+  public ApiRequest(JsonNode body) {
+    this.body = body;
   }
 
-  public boolean hasPayload() {
-    return payload != null && !payload.isNull();
+  public boolean hasBody() {
+    return body != null && !body.isNull();
   }
 
   public void setContextUser(User user) {
@@ -24,11 +24,11 @@ public class ApiRequest {
     }
   }
 
-  public ServerContext getContext() {
+  public RequestContext getContext() {
     return context;
   }
 
-  public void setContext(ServerContext context) {
+  public void setContext(RequestContext context) {
     this.context = context;
   }
 
@@ -48,12 +48,12 @@ public class ApiRequest {
     this.query = query;
   }
 
-  public JsonNode getPayload() {
-    return payload;
+  public JsonNode getBody() {
+    return body;
   }
 
-  public void setPayload(JsonNode payload) {
-    this.payload = payload;
+  public void setBody(JsonNode payload) {
+    this.body = payload;
   }
 
 }

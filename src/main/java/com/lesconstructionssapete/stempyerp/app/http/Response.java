@@ -1,5 +1,9 @@
 package com.lesconstructionssapete.stempyerp.app.http;
 
+import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
+import com.lesconstructionssapete.stempyerp.app.http.contract.ApiResponse;
+import com.lesconstructionssapete.stempyerp.app.http.contract.ResponseMetadata;
+
 import io.javalin.http.Context;
 
 public final class Response {
@@ -26,11 +30,11 @@ public final class Response {
       String message,
       T data) {
 
-    ApiRequest request = ctx.attribute(ApiRequest.class.getName());
+    ApiRequest request = ApiRequestContext.get(ctx);
 
-    String reqId = (null != request && null != request.getContext().getRequestId())
-        ? request.getContext().getRequestId()
-        : "unknown";
+    ctx.header("Idempotency-Key", request.getOptions().getIdempotencyKey());
+
+    String reqId = request.getContext().getRequestId();
 
     ResponseMetadata resMeta = new ResponseMetadata(
         reqId,

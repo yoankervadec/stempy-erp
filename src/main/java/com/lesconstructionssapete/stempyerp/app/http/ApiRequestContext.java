@@ -1,5 +1,7 @@
 package com.lesconstructionssapete.stempyerp.app.http;
 
+import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
+
 import io.javalin.http.Context;
 
 public final class ApiRequestContext {

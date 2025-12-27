@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.app.http;
+package com.lesconstructionssapete.stempyerp.app.http.contract;
 
 import java.time.Instant;
 
@@ -8,7 +8,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
  * Context information about the current request (server owned).
  */
 
-public final class ServerContext {
+public final class RequestContext {
 
   private final String requestId;
   private final Instant timestamp;
@@ -17,7 +17,7 @@ public final class ServerContext {
   private final String userNo;
   private final String clientIp;
 
-  public ServerContext(
+  public RequestContext(
       String requestId,
       Instant timestamp,
       String userNo,

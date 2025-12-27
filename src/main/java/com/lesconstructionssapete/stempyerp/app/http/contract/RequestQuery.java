@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.app.http;
+package com.lesconstructionssapete.stempyerp.app.http.contract;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
