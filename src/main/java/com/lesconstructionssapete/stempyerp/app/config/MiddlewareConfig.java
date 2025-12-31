@@ -19,7 +19,8 @@ public final class MiddlewareConfig {
     RequestOptionsMiddleware requestOptionsMiddleware = new RequestOptionsMiddleware();
     AuthorizationMiddleware authorizationMiddleware = new AuthorizationMiddleware(deps.userFacade);
 
-    app.before("/api/*", ctx -> {
+    // Middleware runs only if route exists
+    app.beforeMatched("/api/*", ctx -> {
       if (ctx.path().equals("/api/v1/auth/login") ||
           ctx.path().equals("/api/v1/auth/refresh")) {
 
