@@ -17,6 +17,7 @@ import com.lesconstructionssapete.stempyerp.core.jwt.JwtConfig;
 import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
 
 import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
 
 public class AuthController {
 
@@ -36,7 +37,7 @@ public class AuthController {
 
     User user = userFacade.validateCredentials(userCredential);
     if (user == null) {
-      Response.error(ctx, 401, "Invalid credentials");
+      Response.error(ctx, HttpStatus.UNAUTHORIZED, "Invalid credentials");
       return;
     }
 

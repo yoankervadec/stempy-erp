@@ -6,31 +6,14 @@ package com.lesconstructionssapete.stempyerp.core.exception;
  * For infrastructure, persistence, I/O, unexpected logic errors.
  * Wrap low-level exceptions (e.g., SQL, IO, etc).
  */
-public class InternalException extends BaseException {
+public abstract class InternalException extends BaseException {
 
-  protected InternalException(Throwable cause) {
-    this(ErrorCode.SYSTEM_ERROR, cause);
+  protected InternalException(ErrorCode fallback, String code, String message) {
+    super(fallback, code, message);
   }
 
-  protected InternalException(ErrorCode error) {
-    super(error.getDefaultMessage(), error.getCode());
-  }
-
-  protected InternalException(String message, String errorCode) {
-    super(
-        message != null ? message : ErrorCode.SYSTEM_ERROR.getDefaultMessage(),
-        errorCode != null ? errorCode : ErrorCode.SYSTEM_ERROR.getCode());
-  }
-
-  protected InternalException(ErrorCode error, Throwable cause) {
-    super(error.getDefaultMessage(), error.getCode(), cause);
-  }
-
-  protected InternalException(String message, String errorCode, Throwable cause) {
-    super(
-        message != null ? message : ErrorCode.SYSTEM_ERROR.getDefaultMessage(),
-        errorCode != null ? errorCode : ErrorCode.SYSTEM_ERROR.getCode(),
-        cause);
+  protected InternalException(ErrorCode fallback, String code, String message, Throwable cause) {
+    super(fallback, code, message, cause);
   }
 
 }

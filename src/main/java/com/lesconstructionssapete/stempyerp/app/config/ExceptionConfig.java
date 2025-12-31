@@ -1,31 +1,41 @@
 package com.lesconstructionssapete.stempyerp.app.config;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lesconstructionssapete.stempyerp.app.http.Response;
+
 import io.javalin.Javalin;
+import io.javalin.http.HttpStatus;
 
 public class ExceptionConfig {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionConfig.class);
 
   public static void configure(Javalin app) {
+
+    // API EXCEPTIONS
     app.exception(com.lesconstructionssapete.stempyerp.core.exception.ApiException.class, (e, ctx) -> {
       LOGGER.error("API Exception : {}", e.getMessage());
-      ctx.status(e.getHttpStatus());
-      ctx.json(Map.of("errorCode", e.getErrorCode(), "message", e.getMessage()));
+      Response.error(ctx, e.getStatus(), e.getCode() + ": " + e.getMessage());
     });
 
+    // DOMAIN EXCEPTIONS
+    app.exception(com.lesconstructionssapete.stempyerp.core.exception.DomainException.class, (e, ctx) -> {
+      LOGGER.error("Domain Exception : {}", e.getMessage());
+      Response.error(ctx, HttpStatus.BAD_REQUEST, e.getCode() + ": " + e.getMessage());
+    });
+
+    // INTERNAL EXCEPTIONS
     app.exception(com.lesconstructionssapete.stempyerp.core.exception.InternalException.class, (e, ctx) -> {
       LOGGER.error("Internal Exception", e);
-      ctx.status(500).json(Map.of("errorCode", "INTERNAL_SERVER_ERROR", "message", "An unexpected error occurred."));
+      Response.error(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR: An unexpected error occurred.");
     });
 
+    // UNCAUGHT EXCEPTIONS
     app.exception(Exception.class, (e, ctx) -> {
       LOGGER.error("Uncaught Exception", e);
-      ctx.status(500).json(Map.of("errorCode", "UNCAUGHT_EXCEPTION", "message", "Something went wrong."));
+      Response.error(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "UNCAUGHT_EXCEPTION: Something went wrong.");
     });
   }
 

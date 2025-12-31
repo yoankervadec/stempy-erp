@@ -3,12 +3,11 @@ package com.lesconstructionssapete.stempyerp.core.exception.api;
 import com.lesconstructionssapete.stempyerp.core.exception.ApiException;
 import com.lesconstructionssapete.stempyerp.core.exception.ErrorCode;
 
+import io.javalin.http.HttpStatus;
+
 public class UserNotFoundException extends ApiException {
 
-  public UserNotFoundException(String errorCode, String message) {
-    super(
-        message != null ? message : ErrorCode.NOT_FOUND.getDefaultMessage(),
-        errorCode != null ? errorCode : ErrorCode.NOT_FOUND.getCode(),
-        404);
+  public UserNotFoundException(String code, String message) {
+    super(ErrorCode.NOT_FOUND, code, message, HttpStatus.NOT_FOUND);
   }
 }

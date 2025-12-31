@@ -1,5 +1,11 @@
 package com.lesconstructionssapete.stempyerp.core.exception;
 
+/**
+ * Centralized error codes for the application.
+ * 
+ * Each error code has a unique string identifier and a default message.
+ */
+
 public enum ErrorCode {
 
   // API
@@ -16,7 +22,7 @@ public enum ErrorCode {
   QUERY_LOAD_EXCEPTION("QUERY_LOAD_EXCEPTION", "Failed to load SQL file"),
 
   // INTERNAL
-  SYSTEM_ERROR("SYSTEM_ERROR", "Unexpected internal system error"),
+  UNDEFINED_SYSTEM_ERROR("SYSTEM_ERROR", "Unexpected internal system error"),
   DATABASE_ERROR("DATABASE_ERROR", "A database error occurred"),
   CONFIGURATION_ERROR("CONFIGURATION_ERROR", "Invalid configuration"),
 
@@ -35,7 +41,7 @@ public enum ErrorCode {
   }
 
   public String getDefaultMessage() {
-    return defaultMessage + ": ";
+    return defaultMessage;
   }
 
 }

@@ -21,8 +21,8 @@ public final class Response {
     send(ctx, HttpStatus.CREATED, true, message, data);
   }
 
-  public static void error(Context ctx, int status, String message) {
-    send(ctx, HttpStatus.forStatus(status), false, message, null);
+  public static void error(Context ctx, HttpStatus status, String message) {
+    send(ctx, status, false, message, null);
   }
 
   private static <T> void send(

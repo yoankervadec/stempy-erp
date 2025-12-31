@@ -6,20 +6,47 @@ package com.lesconstructionssapete.stempyerp.core.exception;
  */
 abstract class BaseException extends RuntimeException {
 
-  protected final String errorCode;
+  protected final String code;
+  protected final String description;
 
-  protected BaseException(String message, String errorCode) {
-    super(message);
-    this.errorCode = errorCode;
+  protected BaseException(ErrorCode fallback, String code, String message) {
+    super(resolveMessage(message, fallback));
+    this.code = resolveCode(code, fallback);
+    this.description = null;
   }
 
-  protected BaseException(String message, String errorCode, Throwable cause) {
-    super(message, cause);
-    this.errorCode = errorCode;
+  protected BaseException(ErrorCode fallback, String code, String message, String description) {
+    super(resolveMessage(message, fallback));
+    this.code = resolveCode(code, fallback);
+    this.description = description;
   }
 
-  public String getErrorCode() {
-    return errorCode;
+  protected BaseException(ErrorCode fallback, String code, String message, Throwable cause) {
+    super(resolveMessage(message, fallback), cause);
+    this.code = resolveCode(code, fallback);
+    this.description = null;
+  }
+
+  protected BaseException(ErrorCode fallback, String code, String message, String description, Throwable cause) {
+    super(resolveMessage(message, fallback), cause);
+    this.code = resolveCode(code, fallback);
+    this.description = description;
+  }
+
+  public String getCode() {
+    return code;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  protected static String resolveMessage(String message, ErrorCode fallback) {
+    return message != null ? message : fallback.getDefaultMessage();
+  }
+
+  protected static String resolveCode(String code, ErrorCode fallback) {
+    return code != null ? code : fallback.getCode();
   }
 
 }
