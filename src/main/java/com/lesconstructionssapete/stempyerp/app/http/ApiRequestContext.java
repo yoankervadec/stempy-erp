@@ -11,7 +11,7 @@ public final class ApiRequestContext {
   public static ApiRequest get(Context ctx) {
     ApiRequest req = ctx.attribute(KEY);
     if (req == null) {
-      throw new IllegalStateException("API Request not found in context");
+      set(ctx, new ApiRequest());
     }
     return req;
   }

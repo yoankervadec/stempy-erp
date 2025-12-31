@@ -5,6 +5,11 @@ import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.AuthFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
+import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
+import com.lesconstructionssapete.stempyerp.app.http.Body;
+import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
+import com.lesconstructionssapete.stempyerp.app.http.Response;
+import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.UserCredential;
@@ -24,11 +29,14 @@ public class AuthController {
   }
 
   public void login(Context ctx) {
-    UserCredential userCredential = ctx.bodyAsClass(UserCredential.class);
+
+    ApiRequest request = ApiRequestContext.get(ctx);
+
+    var userCredential = RequestMapper.map(request.getBody(), UserCredential.class, Body.PAYLOAD);
 
     User user = userFacade.validateCredentials(userCredential);
     if (user == null) {
-      ctx.status(401).result("Invalid credentials");
+      Response.error(ctx, 401, "Invalid credentials");
       return;
     }
 
@@ -46,9 +54,10 @@ public class AuthController {
 
     authService.save(token);
 
-    ctx.json(Map.of(
+    Response.ok(ctx, null, Map.of(
         "accessToken", accessToken,
         "refreshToken", refreshToken));
+
   }
 
   public void refresh(Context ctx) {

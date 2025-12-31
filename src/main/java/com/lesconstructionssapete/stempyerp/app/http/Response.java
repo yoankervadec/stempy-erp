@@ -5,6 +5,7 @@ import com.lesconstructionssapete.stempyerp.app.http.contract.ApiResponse;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ResponseMetadata;
 
 import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
 
 public final class Response {
 
@@ -13,36 +14,63 @@ public final class Response {
   }
 
   public static <T> void ok(Context ctx, String message, T data) {
-    ctx.status(200).json(build(ctx, true, message, data));
+    send(ctx, HttpStatus.OK, true, message, data);
   }
 
   public static <T> void created(Context ctx, String message, T data) {
-    ctx.status(201).json(build(ctx, true, message, data));
+    send(ctx, HttpStatus.CREATED, true, message, data);
   }
 
   public static void error(Context ctx, int status, String message) {
-    ctx.status(status).json(build(ctx, false, message, null));
+    send(ctx, HttpStatus.forStatus(status), false, message, null);
   }
 
-  private static <T> ApiResponse<T> build(
+  private static <T> void send(
       Context ctx,
+      HttpStatus status,
       boolean success,
       String message,
       T data) {
 
-    ApiRequest request = ApiRequestContext.get(ctx);
+    ApiRequest req = ApiRequestContext.get(ctx);
 
-    ctx.header("Idempotency-Key", request.getOptions().getIdempotencyKey());
+    applyHeaders(ctx, req);
 
-    String reqId = request.getContext().getRequestId();
+    ApiResponse<T> res = build(ctx, req, success, message, data);
 
-    ResponseMetadata resMeta = new ResponseMetadata(
-        reqId,
+    ctx.status(status).json(res);
+
+  }
+
+  private static <T> ApiResponse<T> build(
+      Context ctx,
+      ApiRequest req,
+      boolean success,
+      String message,
+      T data) {
+
+    var context = req != null ? req.getContext() : null;
+
+    var metadata = new ResponseMetadata(
+        context != null ? context.getRequestId() : null,
         ctx.path());
 
     return success
-        ? ApiResponse.ofSuccess(message, resMeta, data)
-        : ApiResponse.ofFailure(message, resMeta);
+        ? ApiResponse.ofSuccess(message, metadata, null, null, null, data)
+        : ApiResponse.ofFailure(message, metadata);
+  }
+
+  // Helper method to set headers from ApiRequest options
+  private static void applyHeaders(Context ctx, ApiRequest req) {
+
+    if (req == null || req.getOptions() == null) {
+      return;
+    }
+
+    String idempotencyKey = req.getOptions().getIdempotencyKey();
+    if (idempotencyKey != null) {
+      ctx.header("Idempotency-Key", idempotencyKey);
+    }
   }
 
 }

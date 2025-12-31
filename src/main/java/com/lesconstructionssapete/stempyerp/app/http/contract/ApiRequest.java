@@ -14,6 +14,10 @@ public class ApiRequest {
     this.body = body;
   }
 
+  public ApiRequest() {
+    // Default constructor
+  }
+
   public boolean hasBody() {
     return body != null && !body.isNull();
   }
