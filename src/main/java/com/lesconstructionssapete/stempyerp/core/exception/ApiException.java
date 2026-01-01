@@ -6,7 +6,7 @@ import io.javalin.http.HttpStatus;
  * Use for client-facing errors (e.g., bad request, not found, etc).
  * No stack trace exposed to the client, serialize errorCode & message.
  */
-public abstract class ApiException extends BaseException {
+public abstract class ApiException extends BaseException implements ClientFacing {
 
   protected final HttpStatus status;
 
@@ -22,6 +22,11 @@ public abstract class ApiException extends BaseException {
 
   public HttpStatus getStatus() {
     return status;
+  }
+
+  @Override
+  public boolean exposeCause() {
+    return true;
   }
 
 }

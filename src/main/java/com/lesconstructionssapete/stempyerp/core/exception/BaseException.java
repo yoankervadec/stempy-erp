@@ -9,6 +9,7 @@ abstract class BaseException extends RuntimeException {
   protected final String code;
   protected final String description;
 
+  // Constructors with various combinations of parameters
   protected BaseException(ErrorCode fallback, String code, String message) {
     super(resolveMessage(message, fallback));
     this.code = resolveCode(code, fallback);
@@ -41,6 +42,7 @@ abstract class BaseException extends RuntimeException {
     return description;
   }
 
+  // Helper methods to safely resolve message and code
   protected static String resolveMessage(String message, ErrorCode fallback) {
     return message != null ? message : fallback.getDefaultMessage();
   }

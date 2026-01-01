@@ -1,5 +1,6 @@
 package com.lesconstructionssapete.stempyerp.app.http;
 
+import com.lesconstructionssapete.stempyerp.app.http.contract.ApiError;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiResponse;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ResponseMetadata;
@@ -14,15 +15,15 @@ public final class Response {
   }
 
   public static <T> void ok(Context ctx, String message, T data) {
-    send(ctx, HttpStatus.OK, true, message, data);
+    send(ctx, HttpStatus.OK, true, message, null, data);
   }
 
   public static <T> void created(Context ctx, String message, T data) {
-    send(ctx, HttpStatus.CREATED, true, message, data);
+    send(ctx, HttpStatus.CREATED, true, message, null, data);
   }
 
-  public static void error(Context ctx, HttpStatus status, String message) {
-    send(ctx, status, false, message, null);
+  public static void error(Context ctx, HttpStatus status, String message, ApiError error) {
+    send(ctx, status, false, message, error, null);
   }
 
   private static <T> void send(
@@ -30,13 +31,14 @@ public final class Response {
       HttpStatus status,
       boolean success,
       String message,
+      ApiError error,
       T data) {
 
     ApiRequest req = ApiRequestContext.get(ctx);
 
     applyHeaders(ctx, req);
 
-    ApiResponse<T> res = build(ctx, req, success, message, data);
+    ApiResponse<T> res = build(ctx, req, success, message, error, data);
 
     ctx.status(status).json(res);
 
@@ -47,6 +49,7 @@ public final class Response {
       ApiRequest req,
       boolean success,
       String message,
+      ApiError error,
       T data) {
 
     var context = req != null ? req.getContext() : null;
@@ -57,7 +60,7 @@ public final class Response {
 
     return success
         ? ApiResponse.ofSuccess(message, metadata, null, null, null, data)
-        : ApiResponse.ofFailure(message, metadata);
+        : ApiResponse.ofFailure(message, metadata, error);
   }
 
   // Helper method to set headers from ApiRequest options

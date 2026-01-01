@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.app.middleware;
 
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
-import com.lesconstructionssapete.stempyerp.app.http.Body;
+import com.lesconstructionssapete.stempyerp.app.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.app.http.contract.RequestOptions;
@@ -19,7 +19,7 @@ public class RequestOptionsMiddleware implements Handler {
     RequestOptions requestOptions = new RequestOptions();
 
     if (req != null && req.hasBody()) {
-      RequestMapper.map(req.getBody(), requestOptions.getClass(), Body.OPTIONS);
+      RequestMapper.map(req.getBody(), requestOptions.getClass(), BodyKey.OPTIONS);
     }
 
     requestOptions.setIdempotencyKey(ctx.header("Idempotency-Key"));

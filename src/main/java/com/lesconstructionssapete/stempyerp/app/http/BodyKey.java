@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.app.http;
 
-public enum Body {
+public enum BodyKey {
 
   OPTIONS("options"),
   QUERY("query"),
@@ -8,7 +8,7 @@ public enum Body {
 
   private final String key;
 
-  Body(String key) {
+  BodyKey(String key) {
     this.key = key;
   }
 

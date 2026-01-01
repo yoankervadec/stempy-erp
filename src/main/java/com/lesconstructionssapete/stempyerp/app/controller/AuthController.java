@@ -6,18 +6,19 @@ import java.util.Map;
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.AuthFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
-import com.lesconstructionssapete.stempyerp.app.http.Body;
+import com.lesconstructionssapete.stempyerp.app.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.app.http.Response;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.UserCredential;
+import com.lesconstructionssapete.stempyerp.core.exception.ErrorCode;
+import com.lesconstructionssapete.stempyerp.core.exception.api.UnauthorizedException;
 import com.lesconstructionssapete.stempyerp.core.jwt.JwtConfig;
 import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
 
 import io.javalin.http.Context;
-import io.javalin.http.HttpStatus;
 
 public class AuthController {
 
@@ -33,12 +34,11 @@ public class AuthController {
 
     ApiRequest request = ApiRequestContext.get(ctx);
 
-    var userCredential = RequestMapper.map(request.getBody(), UserCredential.class, Body.PAYLOAD);
+    var userCredential = RequestMapper.map(request.getBody(), UserCredential.class, BodyKey.PAYLOAD);
 
     User user = userFacade.validateCredentials(userCredential);
     if (user == null) {
-      Response.error(ctx, HttpStatus.UNAUTHORIZED, "Invalid credentials");
-      return;
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Invalid username or password.");
     }
 
     String accessToken = JwtUtil.generateAccessToken(user.getEntityNo(), user.getUserRole().getName());

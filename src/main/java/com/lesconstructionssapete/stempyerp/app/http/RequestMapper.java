@@ -14,7 +14,7 @@ public final class RequestMapper {
 
   private static final ObjectMapper MAPPER = JsonUtil.mapper();
 
-  public static <T> T map(JsonNode json, Class<T> type, Body bodyPart) {
+  public static <T> T map(JsonNode json, Class<T> type, BodyKey bodyPart) {
     if (json == null || json.isNull()) {
       return null;
     }
