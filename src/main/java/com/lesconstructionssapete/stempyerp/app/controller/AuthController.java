@@ -23,11 +23,11 @@ import io.javalin.http.Context;
 public class AuthController {
 
   private final UserFacade userFacade;
-  private final AuthFacade authService;
+  private final AuthFacade authFacade;
 
   public AuthController(UserFacade userService, AuthFacade authService) {
     this.userFacade = userService;
-    this.authService = authService;
+    this.authFacade = authService;
   }
 
   public void login(Context ctx) {
@@ -53,7 +53,7 @@ public class AuthController {
         LocalDateTime.now().plus(java.time.Duration.ofMillis(JwtConfig.REFRESH_TOKEN_EXPIRATION)),
         LocalDateTime.now());
 
-    authService.save(token);
+    authFacade.save(token);
 
     Response.ok(ctx, null, Map.of(
         "accessToken", accessToken,
@@ -64,17 +64,19 @@ public class AuthController {
   public void refresh(Context ctx) {
     String refreshToken = ctx.formParam("refreshToken");
 
+    if (refreshToken == null || refreshToken.isEmpty()) {
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token is required.");
+    }
+
     String userNo;
     try {
       userNo = JwtUtil.validateRefreshTokenAndGetUserNo(refreshToken);
     } catch (Exception e) {
-      ctx.status(401).result("Invalid refresh token");
-      return;
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Invalid refresh token.");
     }
 
-    if (!authService.exists(userNo, refreshToken)) {
-      ctx.status(401).result("Refresh token revoked");
-      return;
+    if (!authFacade.exists(userNo, refreshToken)) {
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token revoked");
     }
 
     User user = userFacade.findByUserNo(userNo);
@@ -82,7 +84,7 @@ public class AuthController {
 
     String newAccessToken = JwtUtil.generateAccessToken(userNo, role);
 
-    ctx.json(Map.of("accessToken", newAccessToken));
+    Response.ok(ctx, null, Map.of("accessToken", newAccessToken));
   }
 
 }

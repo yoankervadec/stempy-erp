@@ -3,6 +3,10 @@ package com.lesconstructionssapete.stempyerp.app.http;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiError;
 import com.lesconstructionssapete.stempyerp.core.exception.ClientFacing;
 
+/**
+ * Factory class for creating ApiError instances from exceptions.
+ */
+
 public final class ApiErrorFactory {
 
   private ApiErrorFactory() {

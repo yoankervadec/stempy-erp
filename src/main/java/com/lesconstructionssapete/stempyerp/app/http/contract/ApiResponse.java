@@ -6,7 +6,7 @@ public class ApiResponse<T> {
 
   private final boolean success;
   private final String message;
-  private final List<String> warnings; // TODO: create Warning class
+  private final List<String> warnings;
   private final ApiError error;
   private final ResponseMetadata metadata;
   private final Pagination page;
