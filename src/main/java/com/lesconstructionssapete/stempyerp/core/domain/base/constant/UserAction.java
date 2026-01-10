@@ -2,6 +2,10 @@ package com.lesconstructionssapete.stempyerp.core.domain.base.constant;
 
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
+/**
+ * Represents an action associated to a ressource.
+ */
+
 public class UserAction implements ConstantEntity {
 
   private final int id;

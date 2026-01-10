@@ -2,6 +2,10 @@ package com.lesconstructionssapete.stempyerp.core.domain.base.constant;
 
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
+/**
+ * Represents an action associated with a role.
+ */
+
 public class RoleAction implements ConstantEntity {
 
   private final int roleId;

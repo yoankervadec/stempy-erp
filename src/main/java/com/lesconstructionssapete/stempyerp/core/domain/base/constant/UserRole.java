@@ -2,6 +2,10 @@ package com.lesconstructionssapete.stempyerp.core.domain.base.constant;
 
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
+/**
+ * Represents a user role (assigned with pre-defined permissions).
+ */
+
 public class UserRole implements ConstantEntity {
 
   private final int id;
