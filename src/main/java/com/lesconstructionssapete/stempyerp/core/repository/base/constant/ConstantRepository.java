@@ -26,7 +26,7 @@ import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 public class ConstantRepository {
 
   // Entity Type
-  public static List<EntityType> loadEntityTypes(Connection con) throws SQLException {
+  public List<EntityType> loadEntityTypes(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_ENTITY_TYPE);
@@ -47,7 +47,7 @@ public class ConstantRepository {
   }
 
   // Tax Region
-  public static List<TaxRegion> loadTaxRegions(Connection con) throws SQLException {
+  public List<TaxRegion> loadTaxRegions(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_TAX_REGION);
@@ -69,7 +69,7 @@ public class ConstantRepository {
   }
 
   // Customer Order Header Status
-  public static List<CustomerOrderHeaderStatus> loadCustomerOrderHeaderStatuses(Connection con) throws SQLException {
+  public List<CustomerOrderHeaderStatus> loadCustomerOrderHeaderStatuses(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_CUSTOMER_ORDER_HEADER_STATUS);
@@ -89,7 +89,7 @@ public class ConstantRepository {
   }
 
   // Customer Order Line Status
-  public static List<CustomerOrderLineStatus> loadCustomerOrderLineStatuses(Connection con) throws SQLException {
+  public List<CustomerOrderLineStatus> loadCustomerOrderLineStatuses(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_CUSTOMER_ORDER_HEADER_STATUS);
@@ -110,7 +110,7 @@ public class ConstantRepository {
   }
 
   // Item Entry Type
-  public static List<ItemEntryType> loadItemEntryTypes(Connection con) throws SQLException {
+  public List<ItemEntryType> loadItemEntryTypes(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_ITEM_ENTRY_TYPES);
@@ -130,7 +130,7 @@ public class ConstantRepository {
   }
 
   // POS Transaction Type
-  public static List<PosTransactionType> loadPosTransactionTypes(Connection con) throws SQLException {
+  public List<PosTransactionType> loadPosTransactionTypes(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_POS_TRANSACTION_TYPES);
@@ -150,7 +150,7 @@ public class ConstantRepository {
   }
 
   // Retail Categories
-  public static List<RetailCategory> loadRetailCategories(Connection con) throws SQLException {
+  public List<RetailCategory> loadRetailCategories(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_RETAIL_CATEGORIES);
@@ -171,7 +171,7 @@ public class ConstantRepository {
   }
 
   // Retail Locations
-  public static List<RetailLocation> loadRetailLocations(Connection con) throws SQLException {
+  public List<RetailLocation> loadRetailLocations(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_RETAIL_LOCATIONS);
@@ -192,7 +192,7 @@ public class ConstantRepository {
   }
 
   // Role Actions
-  public static List<RoleAction> loadRoleActions(Connection con) throws SQLException {
+  public List<RoleAction> loadRoleActions(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_ROLE_ACTIONS);
@@ -213,7 +213,7 @@ public class ConstantRepository {
   }
 
   // User Actions
-  public static List<UserAction> loadUserActions(Connection con) throws SQLException {
+  public List<UserAction> loadUserActions(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_ROLE_ACTIONS);
@@ -233,7 +233,7 @@ public class ConstantRepository {
   }
 
   // User Role
-  public static List<UserRole> loadUserRoles(Connection con) throws SQLException {
+  public List<UserRole> loadUserRoles(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
         Query.SELECT_CONFIG_USER_ROLE);

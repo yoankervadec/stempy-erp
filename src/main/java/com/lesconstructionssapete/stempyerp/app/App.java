@@ -18,11 +18,11 @@ public class App {
 
   public static void main(String[] args) {
 
-    ConstantCacheInitializer.initialize();
-    AutomationInitializer.initialize();
-
     // Dependencies container
     Dependencies deps = new Dependencies();
+
+    ConstantCacheInitializer.initialize(deps);
+    AutomationInitializer.initialize();
 
     // Setup Javalin
     Javalin app = Javalin.create(config -> {

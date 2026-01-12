@@ -10,6 +10,7 @@ import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacadeImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepository;
@@ -18,6 +19,7 @@ import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserReposi
 public class Dependencies {
 
   // Repositories
+  public final ConstantRepository constantRepository;
   public final RetailProductRepository retailProductRepository;
   public final RefreshTokenRepository refreshTokenRepository;
   public final UserRepository userRepository;
@@ -33,6 +35,7 @@ public class Dependencies {
 
   public Dependencies() {
     // Repositories
+    this.constantRepository = new ConstantRepository();
     this.retailProductRepository = new RetailProductRepositoryImpl();
     this.refreshTokenRepository = new RefreshTokenRepositoryImpl();
     this.userRepository = new UserRepositoryImpl();
