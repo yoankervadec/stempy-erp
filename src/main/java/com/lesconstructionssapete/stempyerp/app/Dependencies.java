@@ -11,10 +11,13 @@ import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacadeImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantService;
+import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantServiceImpl;
 
 public class Dependencies {
 
@@ -25,7 +28,10 @@ public class Dependencies {
   public final UserRepository userRepository;
 
   // Services
-  public final RetailProductFacade retailProductService;
+  public final ConstantService constantService;
+
+  // Facades
+  public final RetailProductFacade retailProductFacade;
   public final AuthFacade authFacade;
   public final UserFacade userFacade;
 
@@ -35,18 +41,21 @@ public class Dependencies {
 
   public Dependencies() {
     // Repositories
-    this.constantRepository = new ConstantRepository();
+    this.constantRepository = new ConstantRepositoryImpl();
     this.retailProductRepository = new RetailProductRepositoryImpl();
     this.refreshTokenRepository = new RefreshTokenRepositoryImpl();
     this.userRepository = new UserRepositoryImpl();
 
     // Services
-    this.retailProductService = new RetailProductFacadeImpl(retailProductRepository);
+    this.constantService = new ConstantServiceImpl(constantRepository);
+
+    // Facades
+    this.retailProductFacade = new RetailProductFacadeImpl(retailProductRepository);
     this.authFacade = new AuthFacadeImpl(refreshTokenRepository);
     this.userFacade = new UserFacadeImpl(userRepository);
 
     // Controllers
-    this.retailProductController = new RetailProductController(retailProductService);
+    this.retailProductController = new RetailProductController(retailProductFacade);
     this.authController = new AuthController(userFacade, authFacade);
 
   }
