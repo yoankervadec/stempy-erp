@@ -62,7 +62,7 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
       LiveSequence liveSequence = SequenceRepository.generateNextSequence(
           con,
           ConstantUtil.findByName(
-              ConstantCache.getEntityTypes(), "RETAIL PRODUCT"),
+              ConstantCache.getInstance().getEntityTypes(), "RETAIL PRODUCT"),
           product.getCreatedByUserSeq());
 
       var rp = new RetailProduct(

@@ -6,12 +6,12 @@ public class CustomerOrderHeaderStatus implements ConstantEntity {
 
   private final int id;
   private final String name;
-  private final boolean isEnabled;
+  private final boolean enabled;
 
-  public CustomerOrderHeaderStatus(int id, String name, boolean isEnabled) {
+  public CustomerOrderHeaderStatus(int id, String name, boolean enabled) {
     this.id = id;
     this.name = name;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   @Override
@@ -26,7 +26,7 @@ public class CustomerOrderHeaderStatus implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
 }

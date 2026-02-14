@@ -9,15 +9,15 @@ public class TaxRegion implements ConstantEntity {
   private final String regionName;
   private final double gstRate;
   private final double pstRate;
-  private final boolean isEnabled;
+  private final boolean enabled;
 
-  public TaxRegion(int id, String taxRegion, String regionName, double gstRate, double pstRate, boolean isEnabled) {
+  public TaxRegion(int id, String taxRegion, String regionName, double gstRate, double pstRate, boolean enabled) {
     this.id = id;
     this.taxRegion = taxRegion;
     this.regionName = regionName;
     this.gstRate = gstRate;
     this.pstRate = pstRate;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   @Override
@@ -44,7 +44,7 @@ public class TaxRegion implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
   public double getTaxRate() {

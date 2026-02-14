@@ -7,13 +7,13 @@ public class RetailCategory implements ConstantEntity {
   private final int id;
   private final String name;
   private final String description;
-  private final boolean isEnabled;
+  private final boolean enabled;
 
-  public RetailCategory(int id, String name, String description, boolean isEnabled) {
+  public RetailCategory(int id, String name, String description, boolean enabled) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   @Override
@@ -32,7 +32,7 @@ public class RetailCategory implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
 }

@@ -1,7 +1,5 @@
 package com.lesconstructionssapete.stempyerp.core.domain.base.constant;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
 public class EntityType implements ConstantEntity {
@@ -10,20 +8,19 @@ public class EntityType implements ConstantEntity {
   private final String name;
   private final int padLength;
   private final String prefixString;
-  private final boolean isEnabled;
+  private final boolean enabled;
 
-  @JsonCreator
   public EntityType(
-      @JsonProperty("id") int id,
-      @JsonProperty("name") String name,
-      @JsonProperty("padLength") int padLength,
-      @JsonProperty("prefixString") String prefixString,
-      @JsonProperty("isEnabled") boolean isEnabled) {
+      int id,
+      String name,
+      int padLength,
+      String prefixString,
+      boolean enabled) {
     this.id = id;
     this.name = name;
     this.padLength = padLength;
     this.prefixString = prefixString;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   @Override
@@ -46,7 +43,7 @@ public class EntityType implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
 }

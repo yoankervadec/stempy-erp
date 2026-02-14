@@ -1,6 +1,5 @@
 package com.lesconstructionssapete.stempyerp.core.shared.constant;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.List;
@@ -9,9 +8,9 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
 import com.lesconstructionssapete.stempyerp.core.config.redis.RedisProvider;
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.CustomerOrderHeaderStatus;
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.CustomerOrderLineStatus;
@@ -24,13 +23,16 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.constant.RoleAction
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRegion;
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.UserAction;
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.UserRole;
-import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepository;
+import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.core.shared.util.JsonUtil;
 
 import io.lettuce.core.api.sync.RedisCommands;
 
 /*
  * Caches configuration constants into memory.
+ * This cache is intended to store constants that are frequently accessed and rarely changed, such as entity types, tax regions, order statuses, etc.
+ * This class is designed as a singleton to ensure that the cache is shared across the entire application.
+ * It uses Redis to store the cached constants, allowing for fast access and automatic expiration after a defined TTL (Time To Live). 
  */
 
 public class ConstantCache {
@@ -44,25 +46,12 @@ public class ConstantCache {
   // ---- Singleton handling ----
   private static ConstantCache instance;
 
-  private final ConstantRepository repository;
-
-  // Cached constant lists
-  private static List<EntityType> entityTypes;
-  private static List<TaxRegion> taxRegions;
-  private static List<CustomerOrderHeaderStatus> customerOrderHeaderStatuses;
-  private static List<CustomerOrderLineStatus> customerOrderLineStatuses;
-  private static List<ItemEntryType> itemEntryTypes;
-  private static List<PosTransactionType> posTransactionTypes;
-  private static List<RetailCategory> retailCategories;
-  private static List<RetailLocation> retailLocations;
-  private static List<RoleAction> roleActions;
-  private static List<UserAction> userActions;
-  private static List<UserRole> userRoles;
+  private final ConstantService service;
 
   // Create the singleton instance if it does not already exist.
-  public static synchronized ConstantCache create(ConstantRepository repository) throws SQLException {
+  public static synchronized ConstantCache create(ConstantService service) {
     if (instance == null) {
-      instance = new ConstantCache(repository);
+      instance = new ConstantCache(service);
     }
     return instance;
   }
@@ -76,8 +65,8 @@ public class ConstantCache {
   }
 
   // Private constructor
-  private ConstantCache(ConstantRepository repository) {
-    this.repository = repository;
+  private ConstantCache(ConstantService service) {
+    this.service = service;
   }
 
   // Generic method to get or load a list of constants from Redis cache
@@ -96,107 +85,137 @@ public class ConstantCache {
       redis.setex(key, CACHE_TTL.getSeconds(), MAPPER.writeValueAsString(loaded));
 
       return loaded;
-    } catch (Exception e) {
+    } catch (JsonProcessingException e) {
       throw new RuntimeException("Failed to get or load cache for key: " + key, e);
     }
   }
 
-  public List<EntityType> getOrLoadEntityTypes() {
-    return getOrLoad(
-        "constant:entity_types",
-        new TypeReference<List<EntityType>>() {
-        },
-        () -> {
-          try {
-            return repository.loadEntityTypes(ConnectionPool.getConnection());
-          } catch (SQLException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  public void warmUp(Connection con) throws SQLException {
+  public void warmUp() throws SQLException {
 
     LOGGER.info("Loading and caching configuration constants...");
 
-    entityTypes = repository.loadEntityTypes(con);
+    getEntityTypes();
     LOGGER.info("\t ...Cached Entity Type");
 
-    taxRegions = repository.loadTaxRegions(con);
+    getTaxRegions();
     LOGGER.info("\t ...Cached Tax Region");
 
-    customerOrderHeaderStatuses = repository.loadCustomerOrderHeaderStatuses(con);
+    getCustomerOrderHeaderStatuses();
     LOGGER.info("\t ...Cached Customer Order Header Status");
 
-    customerOrderLineStatuses = repository.loadCustomerOrderLineStatuses(con);
+    getCustomerOrderLineStatuses();
     LOGGER.info("\t ...Cached Customer Order Line Status");
 
-    itemEntryTypes = repository.loadItemEntryTypes(con);
+    getItemEntryTypes();
     LOGGER.info("\t ...Cached Item Entry Type");
 
-    posTransactionTypes = repository.loadPosTransactionTypes(con);
+    getPosTransactionTypes();
     LOGGER.info("\t ...Cached POS Transaction Type");
 
-    retailCategories = repository.loadRetailCategories(con);
+    getRetailCategories();
     LOGGER.info("\t ...Cached Retail Categories");
 
-    retailLocations = repository.loadRetailLocations(con);
+    getRetailLocations();
     LOGGER.info("\t ...Cached Retail Locations");
 
-    roleActions = repository.loadRoleActions(con);
+    getRoleActions();
     LOGGER.info("\t ...Cached Role Actions");
 
-    userActions = repository.loadUserActions(con);
+    getUserActions();
     LOGGER.info("\t ...Cached User Actions");
 
-    userRoles = repository.loadUserRoles(con);
+    getUserRoles();
     LOGGER.info("\t ...Cached User Roles");
 
     LOGGER.info("Finished caching configuration constants.\n");
   }
 
-  public static List<EntityType> getEntityTypes() {
-    return entityTypes;
+  public List<EntityType> getEntityTypes() {
+    return getOrLoad(
+        "constant:entity_types",
+        new TypeReference<List<EntityType>>() {
+        },
+        () -> service.getEntityTypes());
   }
 
-  public static List<TaxRegion> getTaxRegions() {
-    return taxRegions;
+  public List<TaxRegion> getTaxRegions() {
+    return getOrLoad(
+        "constant:tax_regions",
+        new TypeReference<List<TaxRegion>>() {
+        },
+        () -> service.getTaxRegions());
   }
 
-  public static List<CustomerOrderHeaderStatus> getCustomerOrderHeaderStatuses() {
-    return customerOrderHeaderStatuses;
+  public List<CustomerOrderHeaderStatus> getCustomerOrderHeaderStatuses() {
+    return getOrLoad(
+        "constant:customer_order_header_statuses",
+        new TypeReference<List<CustomerOrderHeaderStatus>>() {
+        },
+        () -> service.getCustomerOrderHeaderStatuses());
   }
 
-  public static List<CustomerOrderLineStatus> getCustomerOrderLineStatuses() {
-    return customerOrderLineStatuses;
+  public List<CustomerOrderLineStatus> getCustomerOrderLineStatuses() {
+    return getOrLoad(
+        "constant:customer_order_line_statuses",
+        new TypeReference<List<CustomerOrderLineStatus>>() {
+        },
+        () -> service.getCustomerOrderLineStatuses());
   }
 
-  public static List<ItemEntryType> getItemEntryTypes() {
-    return itemEntryTypes;
+  public List<ItemEntryType> getItemEntryTypes() {
+    return getOrLoad(
+        "constant:item_entry_types",
+        new TypeReference<List<ItemEntryType>>() {
+        },
+        () -> service.getItemEntryTypes());
   }
 
-  public static List<PosTransactionType> getPosTransactionTypes() {
-    return posTransactionTypes;
+  public List<PosTransactionType> getPosTransactionTypes() {
+    return getOrLoad(
+        "constant:pos_transaction_types",
+        new TypeReference<List<PosTransactionType>>() {
+        },
+        () -> service.getPosTransactionTypes());
   }
 
-  public static List<RetailCategory> getRetailCategories() {
-    return retailCategories;
+  public List<RetailCategory> getRetailCategories() {
+    return getOrLoad(
+        "constant:retail_categories",
+        new TypeReference<List<RetailCategory>>() {
+        },
+        () -> service.getRetailCategories());
   }
 
-  public static List<RetailLocation> getRetailLocations() {
-    return retailLocations;
+  public List<RetailLocation> getRetailLocations() {
+    return getOrLoad(
+        "constant:retail_locations",
+        new TypeReference<List<RetailLocation>>() {
+        },
+        () -> service.getRetailLocations());
   }
 
-  public static List<RoleAction> getRoleActions() {
-    return roleActions;
+  public List<RoleAction> getRoleActions() {
+    return getOrLoad(
+        "constant:role_actions",
+        new TypeReference<List<RoleAction>>() {
+        },
+        () -> service.getRoleActions());
   }
 
-  public static List<UserAction> getUserActions() {
-    return userActions;
+  public List<UserAction> getUserActions() {
+    return getOrLoad(
+        "constant:user_actions",
+        new TypeReference<List<UserAction>>() {
+        },
+        () -> service.getUserActions());
   }
 
-  public static List<UserRole> getUserRoles() {
-    return userRoles;
+  public List<UserRole> getUserRoles() {
+    return getOrLoad(
+        "constant:user_roles",
+        new TypeReference<List<UserRole>>() {
+        },
+        () -> service.getUserRoles());
   }
 
 }

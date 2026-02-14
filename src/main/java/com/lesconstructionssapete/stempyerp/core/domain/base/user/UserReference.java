@@ -20,7 +20,7 @@ public class UserReference extends GenericEntity {
       String usernameShort,
       long createdByUserSeq) {
     super(
-        ConstantUtil.findByName(ConstantCache.getEntityTypes(), USER_ENTITY_NAME),
+        ConstantUtil.findByName(ConstantCache.getInstance().getEntityTypes(), USER_ENTITY_NAME),
         userNo,
         userSeq,
         createdByUserSeq);

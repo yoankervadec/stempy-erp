@@ -38,7 +38,7 @@ public class RetailProduct extends GenericEntity {
       Long createdByUserSeq) {
     super(
         ConstantUtil.findByName(
-            ConstantCache.getEntityTypes(),
+            ConstantCache.getInstance().getEntityTypes(),
             RETAIL_PRODUCT_ENTITY_NAME),
         productNo,
         sequenceNo,

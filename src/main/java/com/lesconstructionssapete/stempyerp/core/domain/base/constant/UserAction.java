@@ -10,12 +10,12 @@ public class UserAction implements ConstantEntity {
 
   private final int id;
   private final String name;
-  private final boolean isEnabled;
+  private final boolean enabled;
 
-  public UserAction(int id, String name, boolean isEnabled) {
+  public UserAction(int id, String name, boolean enabled) {
     this.id = id;
     this.name = name;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   @Override
@@ -30,6 +30,6 @@ public class UserAction implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 }

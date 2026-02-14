@@ -1,20 +1,19 @@
 package com.lesconstructionssapete.stempyerp.app.bootstrap;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.app.Dependencies;
-import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
 
 public class ConstantCacheInitializer {
 
   public static void initialize(Dependencies dependencies) {
-    try (Connection con = ConnectionPool.getConnection()) {
+    try {
+      ConstantCache constantCache = ConstantCache.create(dependencies.constantService);
 
-      ConstantCache constantCache = ConstantCache.create(dependencies.constantRepository);
+      constantCache.warmUp();
 
-      constantCache.warmUp(con);
-    } catch (Exception e) {
+    } catch (SQLException e) {
       throw new RuntimeException("Failed to initialize Constant Cache :", e);
     }
   }

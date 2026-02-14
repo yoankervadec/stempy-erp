@@ -11,13 +11,13 @@ public class RoleAction implements ConstantEntity {
   private final int roleId;
   private final int actionId;
   private final String name;
-  private final boolean isEnabled;
+  private final boolean enabled;
 
-  public RoleAction(int roleId, int actionId, String name, boolean isEnabled) {
+  public RoleAction(int roleId, int actionId, String name, boolean enabled) {
     this.roleId = roleId;
     this.actionId = actionId;
     this.name = name;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   @Override
@@ -36,7 +36,7 @@ public class RoleAction implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
 }
