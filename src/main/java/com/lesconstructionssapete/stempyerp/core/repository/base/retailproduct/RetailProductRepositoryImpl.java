@@ -21,7 +21,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   @Override
   public List<RetailProduct> fetchAll(Connection connection, Boolean isEnabled) throws SQLException {
 
-    return null;
+    return retailProductFind.fetchAll(connection, isEnabled);
   }
 
   @Override

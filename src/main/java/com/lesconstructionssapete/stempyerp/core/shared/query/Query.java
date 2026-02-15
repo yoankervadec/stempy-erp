@@ -34,7 +34,7 @@ public enum Query {
   SELECT_NEXT_SEQUENCE_NO("app/sequence/select_next_sequence_no.sql", true),
 
   // Retail Product
-  SELECT_RETAIL_PRODUCT_BY_PRODUCT_NO("app/retail_product/select_by_product_no.sql", true),
+  SELECT_RETAIL_PRODUCTS("app/retail_product/select_retail_products.sql", true),
 
   // Auth/Refresh Tokens
   SELECT_AUTH_REFRESH_TOKENS("app/auth/select_auth_refresh_tokens.sql", true),

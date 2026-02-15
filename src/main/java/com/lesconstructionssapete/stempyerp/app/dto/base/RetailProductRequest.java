@@ -15,7 +15,7 @@ public class RetailProductRequest {
   public double productWidth;
   public double productThickness;
   public double productLength;
-  public boolean isEnabled;
+  public boolean enabled;
   public LocalDateTime createdAt;
   public Long createdByUserSeq;
 

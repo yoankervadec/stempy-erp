@@ -1,11 +1,10 @@
 package com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.config.db.ConnectionPool;
+import com.lesconstructionssapete.stempyerp.core.config.db.TransactionManager;
+import com.lesconstructionssapete.stempyerp.core.config.db.TransactionPropagation;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
@@ -24,81 +23,48 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
   @Override
   public List<RetailProduct> fetchAllProducts() {
 
-    Connection con = null;
+    return TransactionManager.execute(
+        TransactionPropagation.REQUIRED,
+        con -> {
+          return retailProductRepository.fetchAll(con, true);
+        });
 
-    try {
-      con = ConnectionPool.getConnection();
-      con.setAutoCommit(false);
-
-      var list = retailProductRepository.fetchAll(con, true);
-
-      con.commit();
-      return list;
-    } catch (SQLException e) {
-      if (con != null)
-        try {
-          con.rollback();
-        } catch (SQLException e1) {
-        }
-      throw new RuntimeException("Failed...", e);
-    } finally {
-      if (con != null)
-        try {
-          con.close();
-        } catch (SQLException e) {
-        }
-    }
   }
 
   @Override
   public RetailProduct insert(RetailProduct product) {
 
-    Connection con = null;
+    return TransactionManager.execute(
+        TransactionPropagation.REQUIRED,
+        con -> {
 
-    try {
-      con = ConnectionPool.getConnection();
-      con.setAutoCommit(false);
+          LiveSequence liveSequence = SequenceRepository.generateNextSequence(
+              con,
+              ConstantUtil.findByName(
+                  ConstantCache.getInstance().getEntityTypes(), "RETAIL PRODUCT"),
+              product.getCreatedByUserSeq());
 
-      LiveSequence liveSequence = SequenceRepository.generateNextSequence(
-          con,
-          ConstantUtil.findByName(
-              ConstantCache.getInstance().getEntityTypes(), "RETAIL PRODUCT"),
-          product.getCreatedByUserSeq());
+          var rp = new RetailProduct(
+              liveSequence.getSequenceNo(),
+              liveSequence.getEntityNo(),
+              product.getRetailPrice(),
+              product.getCost(),
+              product.getDescription(),
+              product.getRetailCategoryId(),
+              product.getWoodSpecyId(),
+              product.getProductWidth(),
+              product.getProductThickness(),
+              product.getProductLength(),
+              product.isEnabled(),
+              LocalDateTime.now(),
+              liveSequence.getCreatedByUserSeq());
 
-      var rp = new RetailProduct(
-          liveSequence.getSequenceNo(),
-          liveSequence.getEntityNo(),
-          product.getRetailPrice(),
-          product.getCost(),
-          product.getDescription(),
-          product.getRetailCategoryId(),
-          product.getWoodSpecyId(),
-          product.getProductWidth(),
-          product.getProductThickness(),
-          product.getProductLength(),
-          false,
-          LocalDateTime.now(),
-          liveSequence.getCreatedByUserSeq());
+          RetailProduct result = retailProductRepository
+              .insertRetailProduct(con, rp);
 
-      RetailProduct result = retailProductRepository
-          .insertRetailProduct(con, rp);
+          return result;
+        });
 
-      con.commit();
-      return result;
-    } catch (SQLException e) {
-      if (con != null)
-        try {
-          con.rollback();
-        } catch (SQLException e1) {
-        }
-      throw new RuntimeException("Failed...", e);
-    } finally {
-      if (con != null)
-        try {
-          con.close();
-        } catch (SQLException e) {
-        }
-    }
   }
 
 }
