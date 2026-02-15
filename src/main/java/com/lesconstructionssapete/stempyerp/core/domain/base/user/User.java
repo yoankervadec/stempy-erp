@@ -19,7 +19,7 @@ public class User extends UserReference {
   private String pin;
   private List<UserAction> userActions;
   private TaxRegion userTaxRegion;
-  private boolean isEnabled;
+  private boolean enabled;
 
   public User(
       Long userSeq,
@@ -31,7 +31,7 @@ public class User extends UserReference {
       String pin,
       List<UserAction> userActions,
       TaxRegion userTaxRegion,
-      boolean isEnabled,
+      boolean enabled,
       long createdByUserSeq,
       LocalDateTime createdAt) {
     super(
@@ -45,7 +45,7 @@ public class User extends UserReference {
     this.pin = pin;
     this.userActions = userActions;
     this.userTaxRegion = userTaxRegion;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
     this.setCreatedAt(createdAt);
   }
 
@@ -98,11 +98,11 @@ public class User extends UserReference {
   }
 
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
-  public void setEnabled(boolean isEnabled) {
-    this.isEnabled = isEnabled;
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
 }

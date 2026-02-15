@@ -17,7 +17,7 @@ public class RetailProductMapper {
         dto.productWidth,
         dto.productThickness,
         dto.productLength,
-        dto.isEnabled,
+        dto.enabled,
         dto.createdAt,
         dto.createdByUserSeq);
   }

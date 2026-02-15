@@ -20,7 +20,7 @@ public class RetailProduct extends GenericEntity {
   private double productWidth;
   private double productThickness;
   private double productLength;
-  private boolean isEnabled;
+  private boolean enabled;
 
   public RetailProduct(
       long sequenceNo,
@@ -33,7 +33,7 @@ public class RetailProduct extends GenericEntity {
       double productWidth,
       double productThickness,
       double productLength,
-      boolean isEnabled,
+      boolean enabled,
       LocalDateTime createdAt,
       Long createdByUserSeq) {
     super(
@@ -53,7 +53,7 @@ public class RetailProduct extends GenericEntity {
     this.productWidth = productWidth;
     this.productThickness = productThickness;
     this.productLength = productLength;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
   }
 
   public String getProductNo() {
@@ -129,11 +129,11 @@ public class RetailProduct extends GenericEntity {
   }
 
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
 
-  public void setEnabled(boolean isEnabled) {
-    this.isEnabled = isEnabled;
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
 }
