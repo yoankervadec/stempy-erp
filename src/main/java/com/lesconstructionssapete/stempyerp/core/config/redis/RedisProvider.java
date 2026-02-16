@@ -9,26 +9,22 @@ import io.lettuce.core.api.StatefulRedisConnection;
 
 public final class RedisProvider {
 
-  private static RedisClient client;
-  private static StatefulRedisConnection<String, String> connection;
+  private final StatefulRedisConnection<String, String> connection;
 
-  private RedisProvider() {
+  public RedisProvider() {
+    Dotenv dotenv = Dotenv.load();
+
+    RedisURI uri = RedisURI.builder()
+        .withHost(dotenv.get("REDIS_HOST"))
+        .withPort(Integer.parseInt(dotenv.get("REDIS_PORT")))
+        .withTimeout(Duration.ofSeconds(2))
+        .build();
+
+    RedisClient client = RedisClient.create(uri);
+    this.connection = client.connect();
   }
 
-  public static StatefulRedisConnection<String, String> getConnection() {
-    if (connection == null) {
-      Dotenv dotenv = Dotenv.load();
-
-      RedisURI uri = RedisURI.builder()
-          .withHost(dotenv.get("REDIS_HOST"))
-          .withPort(Integer.parseInt(dotenv.get("REDIS_PORT")))
-          .withTimeout(Duration.ofSeconds(2))
-          .build();
-
-      client = RedisClient.create(uri);
-      connection = client.connect();
-    }
-
+  public StatefulRedisConnection<String, String> getConnection() {
     return connection;
   }
 

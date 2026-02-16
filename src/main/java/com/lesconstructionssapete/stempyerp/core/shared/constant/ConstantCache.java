@@ -31,7 +31,6 @@ import io.lettuce.core.api.sync.RedisCommands;
 /*
  * Caches configuration constants into memory.
  * This cache is intended to store constants that are frequently accessed and rarely changed, such as entity types, tax regions, order statuses, etc.
- * This class is designed as a singleton to ensure that the cache is shared across the entire application.
  * It uses Redis to store the cached constants, allowing for fast access and automatic expiration after a defined TTL (Time To Live). 
  */
 
@@ -39,33 +38,14 @@ public class ConstantCache {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConstantCache.class);
   private final ObjectMapper MAPPER = JsonUtil.mapper();
-  private final RedisCommands<String, String> redis = RedisProvider.getConnection().sync();
 
   private static final Duration CACHE_TTL = Duration.ofHours(12);
 
-  // ---- Singleton handling ----
-  private static ConstantCache instance;
-
+  private final RedisCommands<String, String> redis;
   private final ConstantService service;
 
-  // Create the singleton instance if it does not already exist.
-  public static synchronized ConstantCache create(ConstantService service) {
-    if (instance == null) {
-      instance = new ConstantCache(service);
-    }
-    return instance;
-  }
-
-  // Get the singleton instance.
-  public static ConstantCache getInstance() {
-    if (instance == null) {
-      throw new IllegalStateException("ConstantCache has not been initialized. Call create() first.");
-    }
-    return instance;
-  }
-
-  // Private constructor
-  private ConstantCache(ConstantService service) {
+  public ConstantCache(RedisProvider redisProvider, ConstantService service) {
+    this.redis = redisProvider.getConnection().sync();
     this.service = service;
   }
 

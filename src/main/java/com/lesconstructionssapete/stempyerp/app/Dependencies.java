@@ -8,6 +8,7 @@ import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.Retail
 import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacadeImpl;
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacadeImpl;
+import com.lesconstructionssapete.stempyerp.core.config.redis.RedisProvider;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepository;
@@ -22,8 +23,12 @@ import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantS
 import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantServiceImpl;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceServiceImpl;
+import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
 
 public class Dependencies {
+
+  // Infrastructure
+  public final RedisProvider redisProvider;
 
   // Repositories
   public final ConstantRepository constantRepository;
@@ -34,6 +39,11 @@ public class Dependencies {
 
   // Services
   public final ConstantService constantService;
+
+  // Cache
+  public final ConstantCache constantCache;
+
+  // Other Services
   public final SequenceService sequenceService;
 
   // Facades
@@ -46,6 +56,10 @@ public class Dependencies {
   public final AuthController authController;
 
   public Dependencies() {
+
+    // Infrastructure
+    this.redisProvider = new RedisProvider();
+
     // Repositories
     this.constantRepository = new ConstantRepositoryImpl();
     this.retailProductRepository = new RetailProductRepositoryImpl();
@@ -55,7 +69,12 @@ public class Dependencies {
 
     // Services
     this.constantService = new ConstantServiceImpl(constantRepository);
-    this.sequenceService = new SequenceServiceImpl(sequenceRepository);
+
+    // Cache
+    this.constantCache = new ConstantCache(redisProvider, constantService);
+
+    // Other Services
+    this.sequenceService = new SequenceServiceImpl(sequenceRepository, constantCache);
 
     // Facades
     this.retailProductFacade = new RetailProductFacadeImpl(sequenceService, retailProductRepository);
@@ -65,6 +84,5 @@ public class Dependencies {
     // Controllers
     this.retailProductController = new RetailProductController(retailProductFacade);
     this.authController = new AuthController(userFacade, authFacade);
-
   }
 }

@@ -12,16 +12,18 @@ import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantUtil;
 public class SequenceServiceImpl implements SequenceService {
 
   private final SequenceRepository repository;
+  private final ConstantCache constantCache;
 
-  public SequenceServiceImpl(SequenceRepository repository) {
+  public SequenceServiceImpl(SequenceRepository repository, ConstantCache constantCache) {
     this.repository = repository;
+    this.constantCache = constantCache;
   }
 
   @Override
   public LiveSequence generateFor(Connection connection, String entityType, long createdByUserSeq) {
 
     EntityType entity = ConstantUtil.findByName(
-        ConstantCache.getInstance().getEntityTypes(), entityType);
+        constantCache.getEntityTypes(), entityType);
 
     try {
       LiveSequence liveSequence = repository.generateFor(connection, entity, createdByUserSeq);
