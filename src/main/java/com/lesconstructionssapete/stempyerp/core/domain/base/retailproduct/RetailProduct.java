@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
-import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
-import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantUtil;
 
 public class RetailProduct extends GenericEntity {
 
@@ -37,9 +35,7 @@ public class RetailProduct extends GenericEntity {
       LocalDateTime createdAt,
       Long createdByUserSeq) {
     super(
-        ConstantUtil.findByName(
-            ConstantCache.getInstance().getEntityTypes(),
-            RETAIL_PRODUCT_ENTITY_NAME),
+        RETAIL_PRODUCT_ENTITY_NAME,
         productNo,
         sequenceNo,
         createdAt,

@@ -1,8 +1,6 @@
 package com.lesconstructionssapete.stempyerp.core.domain.base.user;
 
 import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
-import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
-import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantUtil;
 
 /*
  * Lightweigth user reference 
@@ -20,7 +18,7 @@ public class UserReference extends GenericEntity {
       String usernameShort,
       long createdByUserSeq) {
     super(
-        ConstantUtil.findByName(ConstantCache.getInstance().getEntityTypes(), USER_ENTITY_NAME),
+        USER_ENTITY_NAME,
         userNo,
         userSeq,
         createdByUserSeq);
