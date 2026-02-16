@@ -14,10 +14,14 @@ import com.lesconstructionssapete.stempyerp.core.repository.base.constant.Consta
 import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.repository.base.sequence.SequenceRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.sequence.SequenceRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantServiceImpl;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceServiceImpl;
 
 public class Dependencies {
 
@@ -26,9 +30,11 @@ public class Dependencies {
   public final RetailProductRepository retailProductRepository;
   public final RefreshTokenRepository refreshTokenRepository;
   public final UserRepository userRepository;
+  public final SequenceRepository sequenceRepository;
 
   // Services
   public final ConstantService constantService;
+  public final SequenceService sequenceService;
 
   // Facades
   public final RetailProductFacade retailProductFacade;
@@ -45,12 +51,14 @@ public class Dependencies {
     this.retailProductRepository = new RetailProductRepositoryImpl();
     this.refreshTokenRepository = new RefreshTokenRepositoryImpl();
     this.userRepository = new UserRepositoryImpl();
+    this.sequenceRepository = new SequenceRepositoryImpl();
 
     // Services
     this.constantService = new ConstantServiceImpl(constantRepository);
+    this.sequenceService = new SequenceServiceImpl(sequenceRepository);
 
     // Facades
-    this.retailProductFacade = new RetailProductFacadeImpl(retailProductRepository);
+    this.retailProductFacade = new RetailProductFacadeImpl(sequenceService, retailProductRepository);
     this.authFacade = new AuthFacadeImpl(refreshTokenRepository);
     this.userFacade = new UserFacadeImpl(userRepository);
 

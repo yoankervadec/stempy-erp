@@ -8,15 +8,15 @@ import com.lesconstructionssapete.stempyerp.core.config.db.TransactionPropagatio
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
-import com.lesconstructionssapete.stempyerp.core.repository.base.sequence.SequenceRepository;
-import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
-import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantUtil;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
 
 public class RetailProductFacadeImpl implements RetailProductFacade {
 
+  private final SequenceService sequenceService;
   private final RetailProductRepository retailProductRepository;
 
-  public RetailProductFacadeImpl(RetailProductRepository retailProductRepository) {
+  public RetailProductFacadeImpl(SequenceService sequenceService, RetailProductRepository retailProductRepository) {
+    this.sequenceService = sequenceService;
     this.retailProductRepository = retailProductRepository;
   }
 
@@ -38,10 +38,9 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
         TransactionPropagation.REQUIRED,
         con -> {
 
-          LiveSequence liveSequence = SequenceRepository.generateNextSequence(
+          LiveSequence liveSequence = sequenceService.generateFor(
               con,
-              ConstantUtil.findByName(
-                  ConstantCache.getInstance().getEntityTypes(), "RETAIL PRODUCT"),
+              "RETAIL PRODUCT",
               product.getCreatedByUserSeq());
 
           var rp = new RetailProduct(
