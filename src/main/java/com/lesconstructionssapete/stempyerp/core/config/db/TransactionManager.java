@@ -62,7 +62,8 @@ public class TransactionManager {
         yield executeInsideExistingTransaction(current, callback);
       }
 
-      default -> throw new IllegalStateException("Unknown propagation type");
+      default -> throw new TransactionFailureException("Unknown propagation type",
+          new IllegalStateException("Unexpected propagation: " + propagation));
     };
   }
 

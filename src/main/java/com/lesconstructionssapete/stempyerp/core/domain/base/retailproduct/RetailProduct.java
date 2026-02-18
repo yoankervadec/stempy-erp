@@ -7,7 +7,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
 
 public class RetailProduct extends GenericEntity {
 
-  private static final String RETAIL_PRODUCT_ENTITY_NAME = "RETAIL PRODUCT";
+  public static final String RETAIL_PRODUCT_ENTITY_NAME = "RETAIL PRODUCT";
 
   private String productNo;
   private BigDecimal retailPrice;

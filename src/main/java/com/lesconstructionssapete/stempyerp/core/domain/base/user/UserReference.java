@@ -8,7 +8,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
 
 public class UserReference extends GenericEntity {
 
-  private static final String USER_ENTITY_NAME = "USER";
+  public static final String USER_ENTITY_NAME = "USER";
 
   private final String usernameShort;
 
@@ -21,6 +21,7 @@ public class UserReference extends GenericEntity {
         USER_ENTITY_NAME,
         userNo,
         userSeq,
+        null,
         createdByUserSeq);
     this.usernameShort = usernameShort;
   }
