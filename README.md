@@ -40,21 +40,63 @@ This is not meant to be a "magic framework" project. Most behavior is implemente
 
 The application is structured around:
 
-- **Routes** – define HTTP endpoints
-- **Controllers** – handle request/response mapping
-- **Domain layer** – core business logic and entities
-- **Infrastructure layer** – database, Redis, JWT, configuration
-- **Custom exception hierarchy** – clear distinction between API, domain and internal errors
+### Middleware (`app.middleware`)
 
-Database access uses:
+Responsible for:
 
-- MySQL
-- HikariCP for pooled connections
-- Explicit transaction handling
+- Authentication and authorization
+- Building the `ApiRequest` object
+- Preparing contextual data before the request reaches the controller
 
-Authentication is handled using JWT.
+This layer ensures every request is validated and enriched with the required security and contextual information.
 
-Redis is used for caching constants and frequently accessed data.
+### Routes (`app.routes`)
+
+Responsible for:
+
+- Defining HTTP endpoints
+- Mapping URLs and HTTP methods to controllers
+
+Routes contain no business logic, they only connect incoming requests to the appropriate controller.
+
+### Controllers (`app.controller`)
+
+Responsible for:
+
+- Handling request and response mapping
+- Consuming the `ApiRequest` object
+- Delegating execution to the appropriate facade
+
+Controllers act as the boundary between the HTTP layer and the application logic.
+
+### Facades (`app.facade`)
+
+Responsible for:
+
+- Coordinating high-level business workflows
+- Managing database connections and transactional boundaries
+- Performing context-aware validations
+- Orchestrating one or multiple services
+
+Facades represent complete business operations from the application’s perspective.
+
+### Services (`core.service`)
+
+Responsible for:
+
+- Implementing focused, single use-case business logic
+- Validating rules specific to one operation
+
+Services are reusable and independent units of domain behavior.
+
+### Repositories (`core.repository`)
+
+Responsible for:
+
+- Database interaction
+- Mapping database records to domain objects
+
+Repositories contain no business logic, only persistence concerns.
 
 ---
 
