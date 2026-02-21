@@ -9,7 +9,7 @@ public class RetailProduct extends GenericEntity {
 
   public static final String RETAIL_PRODUCT_ENTITY_NAME = "RETAIL PRODUCT";
 
-  private String productNo;
+  private String productNo; // Provided by caller, not generated
   private BigDecimal retailPrice;
   private BigDecimal cost;
   private String description;

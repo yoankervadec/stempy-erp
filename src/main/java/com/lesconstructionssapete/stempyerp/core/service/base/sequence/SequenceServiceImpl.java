@@ -20,13 +20,14 @@ public class SequenceServiceImpl implements SequenceService {
   }
 
   @Override
-  public LiveSequence generateFor(Connection connection, String entityType, long createdByUserSeq) {
+  public LiveSequence next(Connection connection, String entityType, long createdByUserSeq) {
 
     EntityType entity = ConstantUtil.findByName(
         constantCache.getEntityTypes(), entityType);
 
     try {
       LiveSequence liveSequence = repository.generateFor(connection, entity, createdByUserSeq);
+
       return liveSequence;
     } catch (SQLException e) {
       throw new RuntimeException("Failed to generate sequence for entity: " + entityType, e);

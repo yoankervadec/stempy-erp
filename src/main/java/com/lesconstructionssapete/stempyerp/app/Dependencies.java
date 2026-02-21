@@ -23,6 +23,8 @@ import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantS
 import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantServiceImpl;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceServiceImpl;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering.DefaultEntityNumberGeneratorRegistry;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering.EntityNumberGeneratorRegistry;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
 
 public class Dependencies {
@@ -38,6 +40,7 @@ public class Dependencies {
   public final SequenceRepository sequenceRepository;
 
   // Services
+  public final EntityNumberGeneratorRegistry entityNumberGeneratorRegistry;
   public final ConstantService constantService;
 
   // Cache
@@ -68,6 +71,7 @@ public class Dependencies {
     this.sequenceRepository = new SequenceRepositoryImpl();
 
     // Services
+    this.entityNumberGeneratorRegistry = new DefaultEntityNumberGeneratorRegistry();
     this.constantService = new ConstantServiceImpl(constantRepository);
 
     // Cache
@@ -77,7 +81,8 @@ public class Dependencies {
     this.sequenceService = new SequenceServiceImpl(sequenceRepository, constantCache);
 
     // Facades
-    this.retailProductFacade = new RetailProductFacadeImpl(sequenceService, retailProductRepository);
+    this.retailProductFacade = new RetailProductFacadeImpl(sequenceService, entityNumberGeneratorRegistry,
+        retailProductRepository);
     this.authFacade = new AuthFacadeImpl(refreshTokenRepository);
     this.userFacade = new UserFacadeImpl(userRepository);
 

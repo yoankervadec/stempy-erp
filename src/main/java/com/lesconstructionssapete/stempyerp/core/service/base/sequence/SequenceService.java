@@ -6,7 +6,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequen
 
 public interface SequenceService {
 
-  LiveSequence generateFor(
+  LiveSequence next(
       Connection connection,
       String entityType,
       long createdByUserSeq);

@@ -9,14 +9,19 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.Retai
 import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering.EntityNumberGenerator;
+import com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering.EntityNumberGeneratorRegistry;
 
 public class RetailProductFacadeImpl implements RetailProductFacade {
 
   private final SequenceService sequenceService;
   private final RetailProductRepository retailProductRepository;
+  private final EntityNumberGeneratorRegistry entityGenerators;
 
-  public RetailProductFacadeImpl(SequenceService sequenceService, RetailProductRepository retailProductRepository) {
+  public RetailProductFacadeImpl(SequenceService sequenceService,
+      EntityNumberGeneratorRegistry entityGenerators, RetailProductRepository retailProductRepository) {
     this.sequenceService = sequenceService;
+    this.entityGenerators = entityGenerators;
     this.retailProductRepository = retailProductRepository;
   }
 
@@ -38,14 +43,19 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
         TransactionPropagation.REQUIRED,
         con -> {
 
-          LiveSequence liveSequence = sequenceService.generateFor(
+          LiveSequence liveSequence = sequenceService.next(
               con,
-              "RETAIL PRODUCT",
+              product.getEntityName(),
               product.getCreatedByUserSeq());
+
+          EntityNumberGenerator<RetailProduct> RPGenerator = entityGenerators
+              .getFor(liveSequence.getEntityType());
+
+          String entityNo = RPGenerator.generate(product, liveSequence);
 
           var rp = new RetailProduct(
               liveSequence.getSequenceNo(),
-              liveSequence.getEntityNo(),
+              entityNo,
               product.getRetailPrice(),
               product.getCost(),
               product.getDescription(),

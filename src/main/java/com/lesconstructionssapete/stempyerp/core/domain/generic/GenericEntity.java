@@ -8,40 +8,32 @@ import java.time.LocalDateTime;
 
 public abstract class GenericEntity {
 
-  protected final String entityTypeName;
+  protected final String entityName;
   protected String entityNo;
   protected final long entitySeq;
   protected LocalDateTime createdAt;
-  protected final long createdByUserSeq;
+  protected final Long createdByUserSeq;
 
   // New GenericEntity generates createdAt
-  public GenericEntity(String entityTypeName, long entitySeq, long createdByUserSeq) {
-    this.entityTypeName = entityTypeName;
+  public GenericEntity(String entityName, long entitySeq, Long createdByUserSeq) {
+    this.entityName = entityName;
     this.entitySeq = entitySeq;
     this.createdAt = LocalDateTime.now();
     this.createdByUserSeq = createdByUserSeq;
   }
 
   // Existing GenericEntity gets entityNo & createdAt
-  public GenericEntity(String entityTypeName, String entityNo, long entitySeq, LocalDateTime createdAt,
-      long createdByUserSeq) {
-    this.entityTypeName = entityTypeName;
+  public GenericEntity(String entityName, String entityNo, long entitySeq, LocalDateTime createdAt,
+      Long createdByUserSeq) {
+    this.entityName = entityName;
     this.entityNo = entityNo;
     this.entitySeq = entitySeq;
     this.createdAt = createdAt;
     this.createdByUserSeq = createdByUserSeq;
   }
 
-  // Minimal existing GenericEntity without createdByUserSeq & createdAt
-  public GenericEntity(String entityTypeName, String entityNo, long entitySeq, long createdByUserSeq) {
-    this.entityTypeName = entityTypeName;
-    this.entityNo = entityNo;
-    this.entitySeq = entitySeq;
-    this.createdByUserSeq = createdByUserSeq;
-  }
-
-  public String getEntityTypeName() {
-    return entityTypeName;
+  public String getEntityName() {
+    return entityName;
   }
 
   public String getEntityNo() {
@@ -64,7 +56,7 @@ public abstract class GenericEntity {
     this.createdAt = createdAt;
   }
 
-  public long getCreatedByUserSeq() {
+  public Long getCreatedByUserSeq() {
     return createdByUserSeq;
   }
 
