@@ -13,10 +13,10 @@ import com.lesconstructionssapete.stempyerp.core.exception.internal.TransactionF
 /**
  * Manages database transactions with support for different propagation
  * behaviors.
+ * 
  * <p>
  * This class provides a simple API to execute code within transactional
- * boundaries,
- * handling connection management, commit/rollback, and exception
+ * boundaries, handling connection management, commit/rollback, and exception
  * classification.
  */
 

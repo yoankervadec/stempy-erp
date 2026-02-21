@@ -41,10 +41,10 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
 
     return TransactionManager.execute(
         TransactionPropagation.REQUIRED,
-        con -> {
+        connection -> {
 
           LiveSequence liveSequence = sequenceService.next(
-              con,
+              connection,
               product.getEntityName(),
               product.getCreatedByUserSeq());
 
@@ -69,7 +69,7 @@ public class RetailProductFacadeImpl implements RetailProductFacade {
               liveSequence.getCreatedByUserSeq());
 
           RetailProduct result = retailProductRepository
-              .insertRetailProduct(con, rp);
+              .insertRetailProduct(connection, rp);
 
           return result;
         });
