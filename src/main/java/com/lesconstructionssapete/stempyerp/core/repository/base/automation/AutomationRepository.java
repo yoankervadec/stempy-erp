@@ -9,7 +9,7 @@ import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
 
 public interface AutomationRepository {
 
-  public List<Job> findAll(Connection connection) throws SQLException;
+  public List<Job> fetchAll(Connection connection) throws SQLException;
 
   public void save(Connection connection, Job job) throws SQLException;
 

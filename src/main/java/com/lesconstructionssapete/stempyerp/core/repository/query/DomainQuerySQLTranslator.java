@@ -12,9 +12,15 @@ import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterGroup
 import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterNode;
 import com.lesconstructionssapete.stempyerp.core.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.core.exception.domain.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.core.shared.query.SqlBuilder;
 
-public class DomainQuerySQLTranslator {
+/**
+ * Translates a {@link DomainQuery} into SQL using {@link SqlBuilder}.
+ * - Uses a field map to convert logical field names to DB column names
+ * - Recursively builds WHERE clause from filter tree
+ * - Applies sorting and pagination
+ * - Throws {@link FieldNotFoundException} for invalid fields
+ */
+public final class DomainQuerySQLTranslator {
 
   private final Map<String, String> fieldMap;
 
@@ -25,17 +31,30 @@ public class DomainQuerySQLTranslator {
   record ConditionFragment(String sql, List<?> params) {
   }
 
-  public void apply(SqlBuilder sql, DomainQuery query) {
+  /**
+   * Main entry point to apply a DomainQuery to a SqlBuilder. Modifies the builder
+   * in place.
+   * Handles filters, sorting, and pagination.
+   * Throws FieldNotFoundException if any field in filters or sorting is not in
+   * the field map.
+   * 
+   * @param sqlBuilder The SqlBuilder to modify
+   * @param query      The DomainQuery containing filters, sorting, and pagination
+   *                   info
+   * @throws FieldNotFoundException if any field in filters or sorting is not
+   *                                found in the field map
+   */
+  public void apply(SqlBuilder sqlBuilder, DomainQuery query) {
 
     if (query.filters() != null) {
       ConditionFragment fragment = buildFragment(query.filters());
       if (!fragment.sql().isBlank()) {
-        sql.where(fragment.sql(), fragment.params().toArray());
+        sqlBuilder.where(fragment.sql(), fragment.params().toArray());
       }
     }
 
-    applySorting(sql, query);
-    applyPagination(sql, query);
+    applySorting(sqlBuilder, query);
+    applyPagination(sqlBuilder, query);
   }
 
   // =============================

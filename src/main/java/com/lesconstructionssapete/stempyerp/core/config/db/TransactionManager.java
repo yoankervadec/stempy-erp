@@ -170,7 +170,7 @@ public class TransactionManager {
 
     if (e instanceof SQLException sqlEx) {
       throw new DatabaseAccessException(
-          "Database error during transaction",
+          "The operation could not be completed due to a database error",
           sqlEx);
     }
 

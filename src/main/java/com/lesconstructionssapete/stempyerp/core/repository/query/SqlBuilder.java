@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.shared.query;
+package com.lesconstructionssapete.stempyerp.core.repository.query;
 
 import java.sql.Types;
 import java.util.ArrayList;

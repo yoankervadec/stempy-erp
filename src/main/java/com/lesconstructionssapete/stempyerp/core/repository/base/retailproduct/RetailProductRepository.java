@@ -12,7 +12,7 @@ public interface RetailProductRepository {
   List<RetailProduct> fetch(Connection connection, DomainQuery query)
       throws SQLException;
 
-  RetailProduct insertRetailProduct(Connection connection, RetailProduct retailProduct)
+  RetailProduct insert(Connection connection, RetailProduct retailProduct)
       throws SQLException;
 
   RetailProduct save(Connection connection, RetailProduct retailProduct) throws SQLException;

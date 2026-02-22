@@ -13,7 +13,7 @@ public class AutomationInitializer {
     try (Connection con = ConnectionPool.getConnection()) {
 
       AutomationRepository repo = new AutomationRepositoryImpl();
-      var jobs = repo.findAll(con);
+      var jobs = repo.fetchAll(con);
 
       AutomationManager.create(jobs);
       AutomationManager manager = AutomationManager.getInstance();

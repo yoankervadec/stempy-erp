@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
-import com.lesconstructionssapete.stempyerp.core.shared.query.SqlBuilder;
 
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
@@ -49,10 +49,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
       stmt.setString(2, token.getRefreshToken());
       stmt.setObject(3, token.getExpiresAt());
 
-      int rows = stmt.executeUpdate();
-      if (rows == 0) {
-        throw new SQLException("Insert failed, no rows affected.");
-      }
+      stmt.executeUpdate();
     }
 
   }

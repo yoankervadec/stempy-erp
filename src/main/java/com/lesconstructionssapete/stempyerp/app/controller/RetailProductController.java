@@ -35,7 +35,7 @@ public class RetailProductController {
 
   }
 
-  public void insertProduct(Context ctx) {
+  public void insert(Context ctx) {
 
     ApiRequest request = ApiRequestContext.get(ctx);
 

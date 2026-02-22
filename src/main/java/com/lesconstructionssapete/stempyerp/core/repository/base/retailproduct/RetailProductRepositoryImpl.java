@@ -11,9 +11,9 @@ import java.util.Map;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.core.repository.query.DomainQuerySQLTranslator;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
-import com.lesconstructionssapete.stempyerp.core.shared.query.SqlBuilder;
 
 public class RetailProductRepositoryImpl implements RetailProductRepository {
 
@@ -81,29 +81,37 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   }
 
   @Override
-  public RetailProduct insertRetailProduct(Connection connection, RetailProduct retailProduct) throws SQLException {
+  public RetailProduct insert(Connection connection, RetailProduct retailProduct) throws SQLException {
 
-    String sqlString = QueryCache.get(
+    String sqlBase = QueryCache.get(
         Query.INSERT_RETAIL_PRODUCT);
 
-    try (var stmt = connection.prepareStatement(sqlString)) {
-      stmt.setString(1, retailProduct.getProductNo());
-      stmt.setLong(2, retailProduct.getEntitySeq());
-      stmt.setBigDecimal(3, retailProduct.getRetailPrice());
-      stmt.setBigDecimal(4, retailProduct.getCost());
-      stmt.setString(5, retailProduct.getDescription());
-      stmt.setInt(6, retailProduct.getRetailCategoryId());
-      stmt.setInt(7, retailProduct.getWoodSpecyId());
-      stmt.setDouble(8, retailProduct.getProductWidth());
-      stmt.setDouble(9, retailProduct.getProductThickness());
-      stmt.setDouble(10, retailProduct.getProductLength());
-      stmt.setObject(11, retailProduct.getCreatedAt());
-      stmt.setLong(12, retailProduct.getCreatedByUserSeq());
+    SqlBuilder builder = new SqlBuilder(sqlBase)
+        .bindTyped(retailProduct.getProductNo(), Types.VARCHAR)
+        .bindTyped(retailProduct.getEntitySeq(), Types.BIGINT)
+        .bindTyped(retailProduct.getRetailPrice(), Types.DECIMAL)
+        .bindTyped(retailProduct.getCost(), Types.DECIMAL)
+        .bindTyped(retailProduct.getDescription(), Types.VARCHAR)
+        .bindTyped(retailProduct.getRetailCategoryId(), Types.INTEGER)
+        .bindTyped(retailProduct.getWoodSpecyId(), Types.INTEGER)
+        .bindTyped(retailProduct.getProductWidth(), Types.DECIMAL)
+        .bindTyped(retailProduct.getProductThickness(), Types.DECIMAL)
+        .bindTyped(retailProduct.getProductLength(), Types.DECIMAL)
+        .bindTyped(retailProduct.isEnabled(), Types.TINYINT)
+        .bindTyped(retailProduct.getCreatedAt(), Types.TIMESTAMP)
+        .bindTyped(retailProduct.getCreatedByUserSeq(), Types.BIGINT);
 
-      int rows = stmt.executeUpdate();
-      if (rows == 0) {
-        throw new SQLException("Insert failed, no rows affected.");
+    String sqlFinal = builder.build();
+    List<SqlBuilder.SqlParam> params = builder.getParams();
+
+    try (var stmt = connection.prepareStatement(sqlFinal)) {
+
+      int idx = 1;
+      for (SqlBuilder.SqlParam p : params) {
+        stmt.setObject(idx++, p.value(), p.sqlType());
       }
+
+      stmt.executeUpdate();
 
       return retailProduct;
     }
@@ -139,10 +147,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
-      int rows = stmt.executeUpdate();
-      if (rows == 0) {
-        throw new SQLException("Update failed, no rows affected");
-      }
+      stmt.executeUpdate();
 
       return retailProduct;
     }

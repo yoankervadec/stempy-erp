@@ -73,7 +73,7 @@ public class RetailProductFacadeImpl
               liveSequence.getCreatedByUserSeq());
 
           RetailProduct result = retailProductRepository
-              .insertRetailProduct(connection, rp);
+              .insert(connection, rp);
 
           return result;
         });

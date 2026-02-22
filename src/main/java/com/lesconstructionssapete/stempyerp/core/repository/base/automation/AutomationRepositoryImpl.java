@@ -11,15 +11,15 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
-import com.lesconstructionssapete.stempyerp.core.shared.query.SqlBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.util.DateTimeUtil;
 
 public class AutomationRepositoryImpl implements AutomationRepository {
 
   @Override
-  public List<Job> findAll(Connection connection) throws SQLException {
+  public List<Job> fetchAll(Connection connection) throws SQLException {
 
     List<Job> jobs = new ArrayList<>();
 

@@ -9,9 +9,9 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRegion;
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.UserRole;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.UserCredential;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
-import com.lesconstructionssapete.stempyerp.core.shared.query.SqlBuilder;
 
 public class UserRepositoryImpl implements UserRepository {
 
