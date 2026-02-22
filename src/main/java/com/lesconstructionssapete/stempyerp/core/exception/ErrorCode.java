@@ -20,6 +20,7 @@ public enum ErrorCode {
   // DOMAIN
   UNDEFINED_DOMAIN_EXCEPTION("UNDEFINED_DOMAIN_EXCEPTION", "Undefined domain exception"),
   QUERY_LOAD_EXCEPTION("QUERY_LOAD_EXCEPTION", "Failed to load SQL file"),
+  FIELD_NOT_FOUND("FIELD_NOT_FOUND", "Field not found in query"),
 
   // INTERNAL
   UNDEFINED_SYSTEM_ERROR("SYSTEM_ERROR", "Unexpected internal system error"),
