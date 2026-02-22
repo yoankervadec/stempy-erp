@@ -5,6 +5,7 @@ import com.lesconstructionssapete.stempyerp.app.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.AuthorizationMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtAuthenticationMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.RequestOptionsMiddleware;
+import com.lesconstructionssapete.stempyerp.app.middleware.RequestQueryMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.ServerContextMiddleware;
 
 import io.javalin.Javalin;
@@ -17,6 +18,7 @@ public final class MiddlewareConfig {
     ApiRequestMiddleware apiRequestMiddleware = new ApiRequestMiddleware();
     ServerContextMiddleware serverContextMiddleware = new ServerContextMiddleware();
     RequestOptionsMiddleware requestOptionsMiddleware = new RequestOptionsMiddleware();
+    RequestQueryMiddleware requestQueryMiddleware = new RequestQueryMiddleware();
     AuthorizationMiddleware authorizationMiddleware = new AuthorizationMiddleware(deps.userFacade);
 
     // Middleware runs only if route exists
@@ -41,6 +43,7 @@ public final class MiddlewareConfig {
       apiRequestMiddleware.handle(ctx);
       serverContextMiddleware.handle(ctx);
       requestOptionsMiddleware.handle(ctx);
+      requestQueryMiddleware.handle(ctx);
 
       // Authorization
       authorizationMiddleware.handle(ctx);

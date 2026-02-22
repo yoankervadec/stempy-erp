@@ -3,6 +3,12 @@ package com.lesconstructionssapete.stempyerp.app.http.contract;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 
+/**
+ * API Request contract:
+ * - Encapsulates request context, options, query params, and JSON body
+ * - Provides helper methods for common patterns (e.g. hasBody)
+ * - Designed for flexible mapping from HTTP requests to service layer
+ */
 public class ApiRequest {
 
   private RequestContext context;
@@ -25,6 +31,8 @@ public class ApiRequest {
   public void setContextUser(User user) {
     if (this.context != null) {
       this.context.setUser(user);
+    } else {
+      throw new IllegalStateException("RequestContext must be set before setting user");
     }
   }
 
