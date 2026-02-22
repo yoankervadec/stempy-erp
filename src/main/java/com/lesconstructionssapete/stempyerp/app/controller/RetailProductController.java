@@ -9,6 +9,7 @@ import com.lesconstructionssapete.stempyerp.app.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.app.http.Response;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
+import com.lesconstructionssapete.stempyerp.app.http.query.RequestQueryMapper;
 import com.lesconstructionssapete.stempyerp.app.mapper.base.RetailProductMapper;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 
@@ -22,8 +23,13 @@ public class RetailProductController {
     this.retailProductFacade = retailProductService;
   }
 
-  public void fetchAllProducts(Context ctx) {
-    List<RetailProduct> list = retailProductFacade.fetchAllProducts();
+  public void fetch(Context ctx) {
+
+    ApiRequest request = ApiRequestContext.get(ctx);
+
+    var query = RequestQueryMapper.map(request.getQuery());
+
+    List<RetailProduct> list = retailProductFacade.fetch(query);
 
     Response.ok(ctx, null, list);
 
@@ -33,9 +39,11 @@ public class RetailProductController {
 
     ApiRequest request = ApiRequestContext.get(ctx);
 
-    var payload = RequestMapper.map(request.getBody(), RetailProductRequest.class, BodyKey.PAYLOAD);
+    var payload = RequestMapper.map(
+        request.getBody(), RetailProductRequest.class, BodyKey.PAYLOAD);
 
-    RetailProduct result = retailProductFacade.insert(RetailProductMapper.toDomain(payload));
+    RetailProduct result = retailProductFacade.insert(
+        RetailProductMapper.toDomain(payload));
 
     Response.created(ctx, "Product created", result);
 

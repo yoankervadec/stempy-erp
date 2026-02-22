@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.core.repository.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.core.shared.query.SqlBuilder;
@@ -31,20 +33,23 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
       Map.entry("createdBy", "rp.created_by"));
 
   @Override
-  public List<RetailProduct> fetchAll(Connection connection, Boolean isEnabled) throws SQLException {
+  public List<RetailProduct> fetch(Connection connection, DomainQuery query) throws SQLException {
 
     List<RetailProduct> retailProducts;
 
-    String sqlBase = QueryCache.get(
+    String sql = QueryCache.get(
         Query.SELECT_RETAIL_PRODUCTS);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
-        .where("rp.is_enabled = :isEnabled", isEnabled);
+    SqlBuilder builder = new SqlBuilder(sql);
 
-    String sqlString = builder.build();
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(FIELD_MAP);
+
+    translator.apply(builder, query);
+
+    String sqlFinal = builder.build();
     List<SqlBuilder.SqlParam> params = builder.getParams();
 
-    try (var stmt = connection.prepareStatement(sqlString)) {
+    try (var stmt = connection.prepareStatement(sqlFinal)) {
 
       int idx = 1;
       for (SqlBuilder.SqlParam p : params) {

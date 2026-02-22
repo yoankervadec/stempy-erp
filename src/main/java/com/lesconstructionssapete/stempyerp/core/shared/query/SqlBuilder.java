@@ -187,10 +187,25 @@ public class SqlBuilder {
   public String toDebugSql() {
     String sql = build();
     List<SqlParam> ps = getParams();
+
     for (SqlParam p : ps) {
-      String replacement = "'" + String.valueOf(p.value()) + "'";
+
+      Object value = p.value();
+      String replacement;
+
+      if (value == null) {
+        replacement = "NULL";
+      } else if (value instanceof Number) {
+        replacement = value.toString();
+      } else if (value instanceof Boolean) {
+        replacement = value.toString(); // true / false (no quotes)
+      } else {
+        replacement = "'" + value + "'";
+      }
+
       sql = sql.replaceFirst("\\?", Matcher.quoteReplacement(replacement));
     }
+
     return sql;
   }
 

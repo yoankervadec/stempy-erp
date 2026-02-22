@@ -17,7 +17,7 @@ public class RetailProductRoutesV1 implements RouteGroup {
   @Override
   public void register(Javalin app) {
 
-    Routes.get(app, BASE_PATH, retailProductController::fetchAllProducts);
+    Routes.get(app, BASE_PATH, retailProductController::fetch);
     Routes.post(app, BASE_PATH, retailProductController::insertProduct);
 
   }
