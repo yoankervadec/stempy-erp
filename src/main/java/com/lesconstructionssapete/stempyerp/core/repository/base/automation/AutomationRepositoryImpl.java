@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.core.automation.definition.Job;
 import com.lesconstructionssapete.stempyerp.core.automation.definition.JobLog;
-import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.core.shared.util.DateTimeUtil;
@@ -26,14 +26,14 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     String sqlBase = QueryCache.get(
         Query.SELECT_JOBS);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase);
+    SQLBuilder builder = new SQLBuilder(sqlBase);
 
     String sqlString = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
@@ -91,7 +91,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
     String sqlBase = QueryCache.get(Query.UPDATE_JOB);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
+    SQLBuilder builder = new SQLBuilder(sqlBase)
         .bindTyped(job.getJobDescription(), Types.VARCHAR)
         .bindTyped(job.getHandlerAsString(), Types.VARCHAR)
         .bindTyped(job.isActive(), Types.TINYINT)
@@ -106,12 +106,12 @@ public class AutomationRepositoryImpl implements AutomationRepository {
         .where("id = :jobid", job.getJobId());
 
     String sqlString = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx, p.value(), p.sqlType());
       }
 

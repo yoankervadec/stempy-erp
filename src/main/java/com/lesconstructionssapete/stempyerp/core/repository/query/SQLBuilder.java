@@ -19,11 +19,11 @@ import com.lesconstructionssapete.stempyerp.core.shared.util.StringUtil;
  * - Extensible for custom clauses
  */
 
-public class SqlBuilder {
+public class SQLBuilder {
 
   /** Internal wrapper for typed params */
-  public static record SqlParam(Object value, int sqlType) {
-    public SqlParam(Object value) {
+  public static record SQLParam(Object value, int sqlType) {
+    public SQLParam(Object value) {
       this(value, guessSqlType(value));
     }
 
@@ -58,75 +58,75 @@ public class SqlBuilder {
   private Integer offset;
 
   // Params seperated into buckets
-  private final List<SqlParam> bindParams = new ArrayList<>(); // SET / INSERT values
-  private final List<SqlParam> whereParams = new ArrayList<>(); // WHERE values
+  private final List<SQLParam> bindParams = new ArrayList<>(); // SET / INSERT values
+  private final List<SQLParam> whereParams = new ArrayList<>(); // WHERE values
 
   // Named param support
   private static final Pattern NAMED_PARAM_PATTERN = Pattern.compile(":(\\w+)");
 
-  public SqlBuilder(String base) {
+  public SQLBuilder(String base) {
     this.base = base.trim();
   }
 
   // --- Bind values (SET, INSERT, etc.) ---
-  public SqlBuilder bind(Object... values) {
+  public SQLBuilder bind(Object... values) {
     for (Object v : values) {
-      bindParams.add(new SqlParam(v));
+      bindParams.add(new SQLParam(v));
     }
     return this;
   }
 
-  public SqlBuilder bindTyped(Object value, int sqlType) {
-    bindParams.add(new SqlParam(value, sqlType));
+  public SQLBuilder bindTyped(Object value, int sqlType) {
+    bindParams.add(new SQLParam(value, sqlType));
     return this;
   }
 
   // --- WHERE with params (supports named params) ---
-  public SqlBuilder where(String condition, Object... values) {
+  public SQLBuilder where(String condition, Object... values) {
     if (values == null || Arrays.stream(values).anyMatch(Objects::isNull)) {
       return this; // skip nulls
     }
     whereClauses.add(condition);
     for (Object v : values) {
-      whereParams.add(new SqlParam(v));
+      whereParams.add(new SQLParam(v));
     }
     return this;
   }
 
-  public SqlBuilder and(String condition, Object... values) {
+  public SQLBuilder and(String condition, Object... values) {
     return where(condition, values);
   }
 
   // --- JOIN ---
-  public SqlBuilder join(String joinClause) {
+  public SQLBuilder join(String joinClause) {
     joinClauses.add(joinClause);
     return this;
   }
 
   // --- GROUP BY / HAVING ---
-  public SqlBuilder groupBy(String groupBy) {
+  public SQLBuilder groupBy(String groupBy) {
     this.groupByClause = groupBy;
     return this;
   }
 
-  public SqlBuilder having(String having) {
+  public SQLBuilder having(String having) {
     this.havingClause = having;
     return this;
   }
 
   // --- ORDER BY ---
-  public SqlBuilder orderBy(String orderBy) {
+  public SQLBuilder orderBy(String orderBy) {
     orderByClauses.add(orderBy);
     return this;
   }
 
   // --- LIMIT / OFFSET ---
-  public SqlBuilder limit(int limit) {
+  public SQLBuilder limit(int limit) {
     this.limit = limit;
     return this;
   }
 
-  public SqlBuilder offset(int offset) {
+  public SQLBuilder offset(int offset) {
     this.offset = offset;
     return this;
   }
@@ -173,8 +173,8 @@ public class SqlBuilder {
   }
 
   // --- Get params in execution order ---
-  public List<SqlParam> getParams() {
-    List<SqlParam> all = new ArrayList<>();
+  public List<SQLParam> getParams() {
+    List<SQLParam> all = new ArrayList<>();
     all.addAll(bindParams);
     all.addAll(whereParams);
     return all;
@@ -186,9 +186,9 @@ public class SqlBuilder {
    */
   public String toDebugSql() {
     String sql = build();
-    List<SqlParam> ps = getParams();
+    List<SQLParam> ps = getParams();
 
-    for (SqlParam p : ps) {
+    for (SQLParam p : ps) {
 
       Object value = p.value();
       String replacement;

@@ -11,7 +11,7 @@ import java.util.Map;
 import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.core.repository.query.DomainQuerySQLTranslator;
-import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 
@@ -40,19 +40,19 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     String sql = QueryCache.get(
         Query.SELECT_RETAIL_PRODUCTS);
 
-    SqlBuilder builder = new SqlBuilder(sql);
+    SQLBuilder builder = new SQLBuilder(sql);
 
     DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(FIELD_MAP);
 
     translator.apply(builder, query);
 
     String sqlFinal = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlFinal)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
@@ -86,7 +86,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     String sqlBase = QueryCache.get(
         Query.INSERT_RETAIL_PRODUCT);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
+    SQLBuilder builder = new SQLBuilder(sqlBase)
         .bindTyped(retailProduct.getProductNo(), Types.VARCHAR)
         .bindTyped(retailProduct.getEntitySeq(), Types.BIGINT)
         .bindTyped(retailProduct.getRetailPrice(), Types.DECIMAL)
@@ -102,12 +102,12 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         .bindTyped(retailProduct.getCreatedByUserSeq(), Types.BIGINT);
 
     String sqlFinal = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlFinal)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
@@ -123,7 +123,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     String sqlBase = QueryCache.get(
         Query.UPDATE_RETAIL_PRODUCT);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
+    SQLBuilder builder = new SQLBuilder(sqlBase)
         .bindTyped(retailProduct.getProductNo(), Types.VARCHAR)
         .bindTyped(retailProduct.getEntitySeq(), Types.BIGINT)
         .bindTyped(retailProduct.getRetailPrice(), Types.DECIMAL)
@@ -138,12 +138,12 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         .where("rp.product_no = :productNo", retailProduct.getProductNo());
 
     String sqlString = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 

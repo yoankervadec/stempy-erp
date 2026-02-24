@@ -9,7 +9,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRegion;
 import com.lesconstructionssapete.stempyerp.core.domain.base.constant.UserRole;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.UserCredential;
-import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 
@@ -21,17 +21,17 @@ public class UserRepositoryImpl implements UserRepository {
 
     String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
+    SQLBuilder builder = new SQLBuilder(sqlBase)
         .where("us.username_long = :usernameLong", userCredential.getUsernameLong())
         .and("us.user_password = :password", userCredential.getPassword());
 
     String sqlString = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 
@@ -75,16 +75,16 @@ public class UserRepositoryImpl implements UserRepository {
 
     String sqlBase = QueryCache.get(Query.SELECT_FULL_USER);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
+    SQLBuilder builder = new SQLBuilder(sqlBase)
         .where("us.user_no = :userNo", userNo);
 
     String sqlString = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 

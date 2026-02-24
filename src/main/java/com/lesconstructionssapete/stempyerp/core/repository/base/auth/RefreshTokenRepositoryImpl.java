@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.core.repository.query.SqlBuilder;
+import com.lesconstructionssapete.stempyerp.core.repository.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 
@@ -16,17 +16,17 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     String sqlBase = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
 
-    SqlBuilder builder = new SqlBuilder(sqlBase)
+    SQLBuilder builder = new SQLBuilder(sqlBase)
         .where("us.user_no = :userNo", userNo)
         .and("ort.token = :refreshToken", refreshToken);
 
     String sqlString = builder.build();
-    List<SqlBuilder.SqlParam> params = builder.getParams();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
       int idx = 1;
-      for (SqlBuilder.SqlParam p : params) {
+      for (SQLBuilder.SQLParam p : params) {
         stmt.setObject(idx++, p.value(), p.sqlType());
       }
 

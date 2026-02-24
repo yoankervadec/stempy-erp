@@ -14,7 +14,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.core.exception.domain.FieldNotFoundException;
 
 /**
- * Translates a {@link DomainQuery} into SQL using {@link SqlBuilder}.
+ * Translates a {@link DomainQuery} into SQL using {@link SQLBuilder}.
  * - Uses a field map to convert logical field names to DB column names
  * - Recursively builds WHERE clause from filter tree
  * - Applies sorting and pagination
@@ -38,23 +38,23 @@ public final class DomainQuerySQLTranslator {
    * Throws FieldNotFoundException if any field in filters or sorting is not in
    * the field map.
    * 
-   * @param sqlBuilder The SqlBuilder to modify
-   * @param query      The DomainQuery containing filters, sorting, and pagination
-   *                   info
+   * @param builder The SqlBuilder to modify
+   * @param query   The DomainQuery containing filters, sorting, and pagination
+   *                info
    * @throws FieldNotFoundException if any field in filters or sorting is not
    *                                found in the field map
    */
-  public void apply(SqlBuilder sqlBuilder, DomainQuery query) {
+  public void apply(SQLBuilder builder, DomainQuery query) {
 
     if (query.filters() != null) {
       ConditionFragment fragment = buildFragment(query.filters());
       if (!fragment.sql().isBlank()) {
-        sqlBuilder.where(fragment.sql(), fragment.params().toArray());
+        builder.where(fragment.sql(), fragment.params().toArray());
       }
     }
 
-    applySorting(sqlBuilder, query);
-    applyPagination(sqlBuilder, query);
+    applySorting(builder, query);
+    applyPagination(builder, query);
   }
 
   // =============================
@@ -168,7 +168,7 @@ public final class DomainQuerySQLTranslator {
   // Sorting
   // =============================
 
-  private void applySorting(SqlBuilder sql, DomainQuery query) {
+  private void applySorting(SQLBuilder builder, DomainQuery query) {
 
     if (query.sortSpec() == null)
       return;
@@ -180,7 +180,7 @@ public final class DomainQuerySQLTranslator {
         throw new FieldNotFoundException("Invalid sort field: " + sort.field());
       }
 
-      sql.orderBy(column + (sort.ascending() ? " ASC" : " DESC"));
+      builder.orderBy(column + (sort.ascending() ? " ASC" : " DESC"));
     }
   }
 
@@ -188,7 +188,7 @@ public final class DomainQuerySQLTranslator {
   // Pagination
   // =============================
 
-  private void applyPagination(SqlBuilder sql, DomainQuery query) {
+  private void applyPagination(SQLBuilder builder, DomainQuery query) {
 
     if (query.pageSpec() == null)
       return;
@@ -201,7 +201,7 @@ public final class DomainQuerySQLTranslator {
 
     int offset = page * size;
 
-    sql.limit(size);
-    sql.offset(offset);
+    builder.limit(size);
+    builder.offset(offset);
   }
 }
