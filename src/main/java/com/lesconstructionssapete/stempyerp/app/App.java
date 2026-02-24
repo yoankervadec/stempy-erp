@@ -8,6 +8,7 @@ import com.lesconstructionssapete.stempyerp.app.config.JsonConfig;
 import com.lesconstructionssapete.stempyerp.app.config.MiddlewareConfig;
 import com.lesconstructionssapete.stempyerp.app.routes.RouteRegistrar;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 
 /**
@@ -17,6 +18,10 @@ import io.javalin.Javalin;
 public class App {
 
   public static void main(String[] args) {
+
+    // Load environment variables
+    Dotenv dotenv = Dotenv.load();
+    int APP_PORT = Integer.parseInt(dotenv.get("APP_PORT", "7070"));
 
     // Dependencies container
     Dependencies deps = new Dependencies();
@@ -28,7 +33,7 @@ public class App {
     Javalin app = Javalin.create(config -> {
       config.bundledPlugins.enableDevLogging();
       config.jsonMapper(JsonConfig.get());
-    }).start(7070);
+    }).start(APP_PORT);
 
     // Middleware
     MiddlewareConfig.configure(app, deps);
