@@ -9,5 +9,5 @@ public interface RetailProductFacade {
 
   List<RetailProduct> fetch(DomainQuery query);
 
-  RetailProduct insert(RetailProduct newProduct);
+  RetailProduct insert(RetailProduct retailProduct);
 }

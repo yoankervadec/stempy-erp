@@ -11,6 +11,7 @@ public enum ErrorCode {
   // API
   UNDEFINED_API_EXCEPTION("UNDEFINED_API_EXCEPTION", "Something went wrong"),
   BAD_REQUEST("BAD_REQUEST", "The request is invalid"),
+  UNAUTHENTICATED("UNAUTHENTICATED", "You need to authenticate"),
   UNAUTHORIZED("UNAUTHORIZED", "You are not authorized"),
   FORBIDDEN("FORBIDDEN", "You do not have permission"),
   NOT_FOUND("NOT_FOUND", "Resource not found"),

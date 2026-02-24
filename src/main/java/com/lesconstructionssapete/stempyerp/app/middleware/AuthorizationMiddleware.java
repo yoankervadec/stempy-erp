@@ -4,6 +4,8 @@ import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructionssapete.stempyerp.core.exception.api.AuthenticationException;
+import com.lesconstructionssapete.stempyerp.core.exception.api.UserNotFoundException;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -23,13 +25,13 @@ public class AuthorizationMiddleware implements Handler {
 
     String userNo = req.getContext().getUserNo();
     if (userNo == null) {
-      throw new RuntimeException("Missing authenticated user number during authorization");
+      throw new AuthenticationException(null, "No authenticated user found in the request context");
     }
 
     User user = userFacade.findByUserNo(userNo);
 
     if (user == null) {
-      throw new RuntimeException("User not found during authorization");
+      throw new UserNotFoundException(null, "Authenticated user not found in the system");
     }
 
     req.setContextUser(user);

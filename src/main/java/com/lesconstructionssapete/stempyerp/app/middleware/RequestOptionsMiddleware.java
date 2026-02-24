@@ -16,26 +16,15 @@ public class RequestOptionsMiddleware implements Handler {
 
     ApiRequest req = ApiRequestContext.get(ctx);
 
-    // RequestOptions requestOptions = null;
-
-    // if (req != null && req.hasBody()) {
-    // requestOptions = RequestMapper.map(req.getBody(), RequestOptions.class,
-    // BodyKey.OPTIONS);
-    // }
-
-    // requestOptions.setIdempotencyKey(ctx.header("Idempotency-Key"));
-    // requestOptions.setUserAgent(ctx.header("User-Agent"));
-
-    // if (null != req) {
-    // req.setOptions(requestOptions);
-    // }
-
     if (req != null) {
-      RequestOptions requestOptions;
+      RequestOptions requestOptions = null;
 
       if (req.hasBody()) {
         requestOptions = RequestMapper.map(req.getBody(), RequestOptions.class, BodyKey.OPTIONS);
-      } else {
+      }
+
+      // If no options provided in body, create an empty one to hold headers
+      if (requestOptions == null) {
         requestOptions = new RequestOptions();
       }
 
