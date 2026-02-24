@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.core.config.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Duration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -18,6 +19,8 @@ public class ConnectionPool {
 
       HikariConfig config = new HikariConfig();
 
+      config.setPoolName("StempyERPConnectionPool");
+
       config.setJdbcUrl(dotenv.get("DB_URL"));
       config.setUsername(dotenv.get("DB_USER"));
       config.setPassword(dotenv.get("DB_PASSWORD"));
@@ -25,12 +28,13 @@ public class ConnectionPool {
       String poolSize = dotenv.get("DB_MAX_POOL_SIZE", "6");
       config.setMaximumPoolSize(Integer.parseInt(poolSize));
       config.setMinimumIdle(2);
-      config.setConnectionTimeout(30000); // 30 seconds
-      config.setIdleTimeout(600000); // 10 minutes
-      config.setMaxLifetime(1800000); // 30 minutes
+      config.setConnectionTimeout(Duration.ofSeconds(30).toMillis());
+      config.setIdleTimeout(Duration.ofMinutes(10).toMillis());
+      config.setMaxLifetime(Duration.ofMinutes(30).toMillis());
 
       config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
+      // MySQL specific optimizations
       config.addDataSourceProperty("cachePrepStmts", "true"); // enable prepared statement caching
       config.addDataSourceProperty("prepStmtCacheSize", "100"); // number of prepared statements to cache
       config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048"); // character limit for cached SQL
