@@ -27,7 +27,7 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     // 1. SELECT ... FOR UPDATE (locks row until commit/rollback)
     String selectSql = QueryCache.get(Query.SELECT_NEXT_SEQUENCE_NO);
     try (var stmt = connection.prepareStatement(selectSql)) {
-      stmt.setInt(1, entityType.getId());
+      stmt.setLong(1, entityType.getId());
       try (var rs = stmt.executeQuery()) {
         if (!rs.next()) {
           throw new SequenceNotFoundException(entityType.getName());
@@ -42,7 +42,7 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     // 2. UPDATE next_value
     String updateSql = QueryCache.get(Query.UPDATE_NEXT_SEQUENCE_NO);
     try (var stmt = connection.prepareStatement(updateSql)) {
-      stmt.setInt(1, entityType.getId());
+      stmt.setLong(1, entityType.getId());
       int rows = stmt.executeUpdate();
       if (rows == 0) {
         throw new SequenceUpdateException(entityType.getName(), new SQLException());

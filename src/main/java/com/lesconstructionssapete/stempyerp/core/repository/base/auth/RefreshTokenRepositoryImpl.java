@@ -45,9 +45,9 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
-      stmt.setLong(1, token.getUserSeq());
+      stmt.setLong(1, token.getUserId());
       stmt.setString(2, token.getRefreshToken());
-      stmt.setObject(3, token.getExpiresAt());
+      stmt.setObject(3, token.getRefreshTokenExpiresAt());
 
       stmt.executeUpdate();
     }
