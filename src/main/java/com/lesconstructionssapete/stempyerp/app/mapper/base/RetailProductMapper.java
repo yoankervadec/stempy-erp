@@ -7,18 +7,16 @@ public class RetailProductMapper {
 
   public static RetailProduct toDomain(RetailProductRequest dto) {
     return new RetailProduct(
-        dto.sequenceNo,
-        dto.productNo,
-        dto.retailPrice,
-        dto.cost,
+        dto.retailProductId,
+        dto.retailProductMasterId,
+        dto.retailProductNo,
+        dto.retailProductVariantNo,
+        dto.name,
         dto.description,
-        dto.retailCategoryId,
-        dto.woodSpecyId,
-        dto.productWidth,
-        dto.productThickness,
-        dto.productLength,
         dto.enabled,
         dto.createdAt,
-        dto.createdByUserSeq);
+        dto.createdByUserId,
+        dto.updatedAt,
+        dto.updatedByUserId);
   }
 }

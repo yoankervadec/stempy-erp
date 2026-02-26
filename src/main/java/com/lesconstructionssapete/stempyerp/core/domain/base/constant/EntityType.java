@@ -4,14 +4,14 @@ import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
 public class EntityType implements ConstantEntity {
 
-  private final int id;
+  private final long id;
   private final String name;
   private final int padLength;
   private final String prefixString;
   private final boolean enabled;
 
   public EntityType(
-      int id,
+      long id,
       String name,
       int padLength,
       String prefixString,
@@ -24,7 +24,7 @@ public class EntityType implements ConstantEntity {
   }
 
   @Override
-  public int getId() {
+  public long getId() {
     return id;
   }
 

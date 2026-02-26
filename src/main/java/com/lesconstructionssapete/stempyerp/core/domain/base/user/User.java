@@ -1,108 +1,77 @@
 package com.lesconstructionssapete.stempyerp.core.domain.base.user;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRegion;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.UserAction;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.UserRole;
+import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
 
 /*
  * Full user object
  */
 
-public class User extends UserReference {
+public class User extends GenericEntity {
 
-  private String usernameLong;
-  private UserRole userRole;
-  private String password;
-  private String pin;
-  private List<UserAction> userActions;
-  private TaxRegion userTaxRegion;
-  private boolean enabled;
+  public static final String USER_ENTITY_NAME = "USER";
+
+  private String userName;
+  private Boolean enabled;
+  private LocalDateTime updatedAt;
+  private Long updatedByUserId;
 
   public User(
-      Long userSeq,
+      Long userId,
       String userNo,
-      String usernameShort,
-      String usernameLong,
-      UserRole userRole,
-      String password,
-      String pin,
-      List<UserAction> userActions,
-      TaxRegion userTaxRegion,
-      boolean enabled,
-      long createdByUserSeq,
-      LocalDateTime createdAt) {
+      String userName,
+      Boolean enabled,
+      LocalDateTime createdAt,
+      Long createdByUserId,
+      LocalDateTime updatedAt,
+      Long updatedByUserId) {
     super(
-        userSeq,
+        USER_ENTITY_NAME,
         userNo,
-        usernameShort,
-        createdByUserSeq);
-    this.usernameLong = usernameLong;
-    this.userRole = userRole;
-    this.password = password;
-    this.pin = pin;
-    this.userActions = userActions;
-    this.userTaxRegion = userTaxRegion;
+        userId,
+        createdAt,
+        createdByUserId);
     this.enabled = enabled;
-    this.setCreatedAt(createdAt);
+    this.userName = userName;
+    this.updatedAt = updatedAt;
+    this.updatedByUserId = updatedByUserId;
   }
 
-  public String getUsernameLong() {
-    return usernameLong;
+  public static String getUserEntityName() {
+    return USER_ENTITY_NAME;
   }
 
-  public void setUsernameLong(String usernameLong) {
-    this.usernameLong = usernameLong;
+  public String getUserName() {
+    return userName;
   }
 
-  public UserRole getUserRole() {
-    return userRole;
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
-  public void setUserRole(UserRole userRole) {
-    this.userRole = userRole;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getPin() {
-    return pin;
-  }
-
-  public void setPin(String pin) {
-    this.pin = pin;
-  }
-
-  public List<UserAction> getUserActions() {
-    return userActions;
-  }
-
-  public void setUserActions(List<UserAction> userActions) {
-    this.userActions = userActions;
-  }
-
-  public TaxRegion getUserTaxRegion() {
-    return userTaxRegion;
-  }
-
-  public void setUserTaxRegion(TaxRegion userTaxRegion) {
-    this.userTaxRegion = userTaxRegion;
-  }
-
-  public boolean isEnabled() {
+  public Boolean getEnabled() {
     return enabled;
   }
 
-  public void setEnabled(boolean enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public Long getUpdatedByUserId() {
+    return updatedByUserId;
+  }
+
+  public void setUpdatedByUserId(Long updatedByUserId) {
+    this.updatedByUserId = updatedByUserId;
   }
 
 }

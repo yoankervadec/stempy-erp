@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.core.shared.constant;
 
 public interface ConstantEntity {
 
-  int getId();
+  long getId();
 
   String getName();
 

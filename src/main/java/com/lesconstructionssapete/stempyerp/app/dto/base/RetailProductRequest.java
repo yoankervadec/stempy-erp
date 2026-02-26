@@ -1,22 +1,23 @@
 package com.lesconstructionssapete.stempyerp.app.dto.base;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class RetailProductRequest {
 
-  public long sequenceNo;
-  public String productNo;
-  public BigDecimal retailPrice;
-  public BigDecimal cost;
+  public Long retailProductId;
+  public Long retailProductMasterId;
+
+  public String retailProductNo;
+  public String retailProductVariantNo;
+
+  public String name;
   public String description;
-  public int retailCategoryId;
-  public int woodSpecyId;
-  public double productWidth;
-  public double productThickness;
-  public double productLength;
+
   public boolean enabled;
+
   public LocalDateTime createdAt;
-  public Long createdByUserSeq;
+  public Long createdByUserId;
+  public LocalDateTime updatedAt;
+  public Long updatedByUserId;
 
 }

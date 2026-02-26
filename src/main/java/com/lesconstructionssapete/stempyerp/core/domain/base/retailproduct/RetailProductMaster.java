@@ -1,66 +1,54 @@
 package com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
+public class RetailProductMaster {
 
-public class RetailProduct extends GenericEntity {
-
-  public static final String RETAIL_PRODUCT_ENTITY_NAME = "RETAIL PRODUCT";
-
-  private Long retailProductId;
   private Long retailProductMasterId;
-
-  private String retailProductNo;
-  private String retailProductVariantNo;
+  private String retailProductMasterNo;
 
   private String name;
   private String description;
 
   private boolean enabled;
 
+  private final LocalDateTime createdAt;
+  private final Long createdByUserId;
   private LocalDateTime updatedAt;
   private Long updatedByUserId;
 
-  public RetailProduct(
-      Long retailProductId,
+  private Long retailCategoryId;
+
+  private BigDecimal defaultPrice;
+
+  private RetailProductMasterPolicy policy;
+
+  public RetailProductMaster(
       Long retailProductMasterId,
-      String retailProductNo,
-      String retailProductVariantNo,
+      String retailProductMasterNo,
       String name,
       String description,
       boolean enabled,
       LocalDateTime createdAt,
       Long createdByUserId,
       LocalDateTime updatedAt,
-      Long updatedByUserId) {
-    super(
-        RETAIL_PRODUCT_ENTITY_NAME,
-        retailProductNo,
-        retailProductId,
-        createdAt,
-        createdByUserId);
-    this.retailProductId = retailProductId;
+      Long updatedByUserId,
+      Long retailCategoryId,
+      BigDecimal defaultPrice,
+      RetailProductMasterPolicy policy) {
     this.retailProductMasterId = retailProductMasterId;
-    this.retailProductNo = retailProductNo;
-    this.retailProductVariantNo = retailProductVariantNo;
+    this.retailProductMasterNo = retailProductMasterNo;
     this.name = name;
     this.description = description;
     this.enabled = enabled;
+    this.createdAt = createdAt;
+    this.createdByUserId = createdByUserId;
     this.updatedAt = updatedAt;
     this.updatedByUserId = updatedByUserId;
-  }
-
-  public static String getRetailProductEntityName() {
-    return RETAIL_PRODUCT_ENTITY_NAME;
-  }
-
-  public Long getRetailProductId() {
-    return retailProductId;
-  }
-
-  public void setRetailProductId(Long retailProductId) {
-    this.retailProductId = retailProductId;
+    this.retailCategoryId = retailCategoryId;
+    this.defaultPrice = defaultPrice;
+    this.policy = policy;
   }
 
   public Long getRetailProductMasterId() {
@@ -71,20 +59,12 @@ public class RetailProduct extends GenericEntity {
     this.retailProductMasterId = retailProductMasterId;
   }
 
-  public String getRetailProductNo() {
-    return retailProductNo;
+  public String getRetailProductMasterNo() {
+    return retailProductMasterNo;
   }
 
-  public void setRetailProductNo(String retailProductNo) {
-    this.retailProductNo = retailProductNo;
-  }
-
-  public String getRetailProductVariantNo() {
-    return retailProductVariantNo;
-  }
-
-  public void setRetailProductVariantNo(String retailProductVariantNo) {
-    this.retailProductVariantNo = retailProductVariantNo;
+  public void setRetailProductMasterNo(String retailProductMasterNo) {
+    this.retailProductMasterNo = retailProductMasterNo;
   }
 
   public String getName() {
@@ -111,6 +91,14 @@ public class RetailProduct extends GenericEntity {
     this.enabled = enabled;
   }
 
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public Long getCreatedByUserId() {
+    return createdByUserId;
+  }
+
   public LocalDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -125,6 +113,30 @@ public class RetailProduct extends GenericEntity {
 
   public void setUpdatedByUserId(Long updatedByUserId) {
     this.updatedByUserId = updatedByUserId;
+  }
+
+  public Long getRetailCategoryId() {
+    return retailCategoryId;
+  }
+
+  public void setRetailCategoryId(Long retailCategoryId) {
+    this.retailCategoryId = retailCategoryId;
+  }
+
+  public BigDecimal getDefaultPrice() {
+    return defaultPrice;
+  }
+
+  public void setDefaultPrice(BigDecimal defaultPrice) {
+    this.defaultPrice = defaultPrice;
+  }
+
+  public RetailProductMasterPolicy getPolicy() {
+    return policy;
+  }
+
+  public void setPolicy(RetailProductMasterPolicy policy) {
+    this.policy = policy;
   }
 
 }

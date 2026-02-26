@@ -4,18 +4,18 @@ import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
 public class PaymentMethod implements ConstantEntity {
 
-  private final int id;
+  private final long id;
   private final String name;
   private final boolean isEnabled;
 
-  public PaymentMethod(int id, String name, boolean isEnabled) {
+  public PaymentMethod(long id, String name, boolean isEnabled) {
     this.id = id;
     this.name = name;
     this.isEnabled = isEnabled;
   }
 
   @Override
-  public int getId() {
+  public long getId() {
     return id;
   }
 

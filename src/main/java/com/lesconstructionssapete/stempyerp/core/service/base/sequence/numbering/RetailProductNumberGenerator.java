@@ -9,6 +9,6 @@ public final class RetailProductNumberGenerator
   @Override
   public String generate(RetailProduct product, LiveSequence liveSequence) {
 
-    return product.getProductNo();
+    return product.getRetailProductNo();
   }
 }

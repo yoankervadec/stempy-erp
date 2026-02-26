@@ -4,12 +4,12 @@ import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
 public class RetailCategory implements ConstantEntity {
 
-  private final int id;
+  private final long id;
   private final String name;
   private final String description;
   private final boolean enabled;
 
-  public RetailCategory(int id, String name, String description, boolean enabled) {
+  public RetailCategory(long id, String name, String description, boolean enabled) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -17,7 +17,7 @@ public class RetailCategory implements ConstantEntity {
   }
 
   @Override
-  public int getId() {
+  public long getId() {
     return id;
   }
 

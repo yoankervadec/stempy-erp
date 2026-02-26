@@ -4,47 +4,42 @@ import java.time.LocalDateTime;
 
 public class AuthToken {
 
-  private Long refreshTokenSeq;
-  private Long userSeq;
-  private String userNo;
+  private Long id;
+  private Long userId;
   private String token;
   private String refreshToken;
-  private LocalDateTime expiresAt;
+  private LocalDateTime refreshTokenExpiresAt;
   private LocalDateTime createdAt;
 
-  public AuthToken(Long refreshTokenSeq, Long userSeq, String userNo, String token, String refreshToken,
-      LocalDateTime expiresAt, LocalDateTime createdAt) {
-    this.refreshTokenSeq = refreshTokenSeq;
-    this.userSeq = userSeq;
-    this.userNo = userNo;
+  public AuthToken(
+      Long id,
+      Long userId,
+      String token,
+      String refreshToken,
+      LocalDateTime refreshTokenExpiresAt,
+      LocalDateTime createdAt) {
+    this.id = id;
+    this.userId = userId;
     this.token = token;
     this.refreshToken = refreshToken;
-    this.expiresAt = expiresAt;
+    this.refreshTokenExpiresAt = refreshTokenExpiresAt;
     this.createdAt = createdAt;
   }
 
-  public long getRefreshTokenSeq() {
-    return refreshTokenSeq;
+  public long getId() {
+    return id;
   }
 
   public void setRefreshTokenSeq(long refreshTokenSeq) {
-    this.refreshTokenSeq = refreshTokenSeq;
+    this.id = refreshTokenSeq;
   }
 
-  public long getUserSeq() {
-    return userSeq;
+  public long getUserId() {
+    return userId;
   }
 
   public void setUserSeq(long userSeq) {
-    this.userSeq = userSeq;
-  }
-
-  public String getUserNo() {
-    return userNo;
-  }
-
-  public void setUserNo(String userNo) {
-    this.userNo = userNo;
+    this.userId = userSeq;
   }
 
   public String getToken() {
@@ -63,12 +58,12 @@ public class AuthToken {
     this.refreshToken = refreshToken;
   }
 
-  public LocalDateTime getExpiresAt() {
-    return expiresAt;
+  public LocalDateTime getRefreshTokenExpiresAt() {
+    return refreshTokenExpiresAt;
   }
 
-  public void setExpiresAt(LocalDateTime expiresAt) {
-    this.expiresAt = expiresAt;
+  public void setRefreshTokenExpiresAt(LocalDateTime expiresAt) {
+    this.refreshTokenExpiresAt = expiresAt;
   }
 
   public LocalDateTime getCreatedAt() {

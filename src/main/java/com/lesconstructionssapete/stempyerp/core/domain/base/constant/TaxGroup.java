@@ -7,7 +7,7 @@ import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
 public class TaxGroup implements ConstantEntity {
 
-  private final int id;
+  private final long id;
   private final String name;
   private final String description;
   private final boolean enabled;
@@ -15,7 +15,7 @@ public class TaxGroup implements ConstantEntity {
   private final List<TaxRate> taxRates;
 
   public TaxGroup(
-      int id,
+      long id,
       String name,
       String description,
       boolean enabled,
@@ -30,7 +30,7 @@ public class TaxGroup implements ConstantEntity {
   }
 
   @Override
-  public int getId() {
+  public long getId() {
     return id;
   }
 

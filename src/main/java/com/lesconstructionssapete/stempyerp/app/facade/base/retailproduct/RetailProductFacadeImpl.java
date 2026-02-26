@@ -50,7 +50,7 @@ public class RetailProductFacadeImpl
           LiveSequence liveSequence = sequenceService.next(
               connection,
               product.getEntityName(),
-              product.getCreatedByUserSeq());
+              product.getCreatedByUserId());
 
           EntityNumberGenerator<RetailProduct> RPGenerator = entityGenerators
               .getFor(liveSequence.getEntityType());
@@ -58,19 +58,17 @@ public class RetailProductFacadeImpl
           String entityNo = RPGenerator.generate(product, liveSequence);
 
           var rp = new RetailProduct(
-              liveSequence.getSequenceNo(),
+              product.getRetailProductId(),
+              product.getRetailProductMasterId(),
               entityNo,
-              product.getRetailPrice(),
-              product.getCost(),
+              product.getRetailProductVariantNo(),
+              product.getName(),
               product.getDescription(),
-              product.getRetailCategoryId(),
-              product.getWoodSpecyId(),
-              product.getProductWidth(),
-              product.getProductThickness(),
-              product.getProductLength(),
               product.isEnabled(),
               LocalDateTime.now(),
-              liveSequence.getCreatedByUserSeq());
+              liveSequence.getCreatedByUserSeq(),
+              null,
+              null);
 
           RetailProduct result = retailProductRepository
               .insert(connection, rp);

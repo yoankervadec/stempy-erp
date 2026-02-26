@@ -7,7 +7,7 @@ import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantEntity;
 
 public class TaxRate implements ConstantEntity {
 
-  private final int id;
+  private final long id;
   private final String name;
   private final String description;
   private final boolean enabled;
@@ -19,7 +19,7 @@ public class TaxRate implements ConstantEntity {
   private final LocalDate validTo;
 
   public TaxRate(
-      int id,
+      long id,
       String name,
       String description,
       boolean enabled,
@@ -42,7 +42,7 @@ public class TaxRate implements ConstantEntity {
   }
 
   @Override
-  public int getId() {
+  public long getId() {
     return id;
   }
 

@@ -3,33 +3,40 @@ package com.lesconstructionssapete.stempyerp.core.domain.generic;
 import java.time.LocalDateTime;
 
 /*
- * GenericEntity extended by entities like RetailProduct, CustomerOrder Header, etc...
+ * GenericEntity extended by entities like RetailProduct, CustomerOrderHeader, etc...
  */
 
 public abstract class GenericEntity {
 
   protected final String entityName;
+  protected Long entityId;
   protected String entityNo;
-  protected final long entitySeq;
-  protected LocalDateTime createdAt;
-  protected final Long createdByUserSeq;
+  protected final LocalDateTime createdAt;
+  protected final Long createdByUserId;
 
   // New GenericEntity generates createdAt
-  public GenericEntity(String entityName, long entitySeq, Long createdByUserSeq) {
+  public GenericEntity(
+      String entityName,
+      Long entityId,
+      Long createdByUserId) {
     this.entityName = entityName;
-    this.entitySeq = entitySeq;
+    this.entityId = entityId;
     this.createdAt = LocalDateTime.now();
-    this.createdByUserSeq = createdByUserSeq;
+    this.createdByUserId = createdByUserId;
   }
 
   // Existing GenericEntity gets entityNo & createdAt
-  public GenericEntity(String entityName, String entityNo, long entitySeq, LocalDateTime createdAt,
-      Long createdByUserSeq) {
+  public GenericEntity(
+      String entityName,
+      String entityNo,
+      Long entityId,
+      LocalDateTime createdAt,
+      Long createdByUserId) {
     this.entityName = entityName;
     this.entityNo = entityNo;
-    this.entitySeq = entitySeq;
+    this.entityId = entityId;
     this.createdAt = createdAt;
-    this.createdByUserSeq = createdByUserSeq;
+    this.createdByUserId = createdByUserId;
   }
 
   public String getEntityName() {
@@ -44,20 +51,20 @@ public abstract class GenericEntity {
     this.entityNo = entityNo;
   }
 
-  public long getEntitySeq() {
-    return entitySeq;
+  public Long getEntityId() {
+    return entityId;
+  }
+
+  public void setEntityId(Long entityId) {
+    this.entityId = entityId;
   }
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Long getCreatedByUserSeq() {
-    return createdByUserSeq;
+  public Long getCreatedByUserId() {
+    return createdByUserId;
   }
 
 }
