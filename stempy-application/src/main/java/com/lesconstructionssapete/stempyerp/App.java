@@ -1,13 +1,13 @@
 
 package com.lesconstructionssapete.stempyerp;
 
-import com.lesconstructionssapete.stempyerp.app.config.ExceptionConfig;
-import com.lesconstructionssapete.stempyerp.app.config.MiddlewareConfig;
-import com.lesconstructionssapete.stempyerp.app.routes.RouteRegistrar;
 import com.lesconstructionssapete.stempyerp.bootstrap.AutomationInitializer;
 import com.lesconstructionssapete.stempyerp.bootstrap.ConstantCacheInitializer;
 import com.lesconstructionssapete.stempyerp.bootstrap.Dependencies;
+import com.lesconstructionssapete.stempyerp.config.ExceptionConfig;
 import com.lesconstructionssapete.stempyerp.config.JsonConfig;
+import com.lesconstructionssapete.stempyerp.config.MiddlewareConfig;
+import com.lesconstructionssapete.stempyerp.routes.RouteRegistrar;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;

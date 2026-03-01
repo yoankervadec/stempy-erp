@@ -1,9 +1,9 @@
 package com.lesconstructionssapete.stempyerp.bootstrap;
 
-import com.lesconstructionssapete.stempyerp.app.controller.AuthController;
-import com.lesconstructionssapete.stempyerp.app.controller.RetailProductController;
 import com.lesconstructionssapete.stempyerp.config.redis.RedisProvider;
 import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
+import com.lesconstructionssapete.stempyerp.controller.AuthController;
+import com.lesconstructionssapete.stempyerp.controller.RetailProductController;
 import com.lesconstructionssapete.stempyerp.facade.base.auth.AuthFacade;
 import com.lesconstructionssapete.stempyerp.facade.base.auth.AuthFacadeImpl;
 import com.lesconstructionssapete.stempyerp.facade.base.auth.UserFacade;
