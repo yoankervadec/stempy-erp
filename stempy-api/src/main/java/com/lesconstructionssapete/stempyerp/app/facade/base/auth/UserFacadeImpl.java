@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.core.config.db.TransactionManager;
 import com.lesconstructionssapete.stempyerp.core.config.db.TransactionPropagation;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.UserRepository;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public class UserFacadeImpl implements UserFacade {
 

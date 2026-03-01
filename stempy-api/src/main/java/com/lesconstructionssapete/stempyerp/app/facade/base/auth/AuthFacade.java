@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.app.facade.base.auth;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.UserCredential;
 
 public interface AuthFacade {
 

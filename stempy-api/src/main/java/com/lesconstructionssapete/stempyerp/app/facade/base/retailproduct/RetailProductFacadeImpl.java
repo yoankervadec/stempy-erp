@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.core.config.db.TransactionManager;
 import com.lesconstructionssapete.stempyerp.core.config.db.TransactionPropagation;
-import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering.EntityNumberGenerator;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering.EntityNumberGeneratorRegistry;
+import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public class RetailProductFacadeImpl
     implements RetailProductFacade {

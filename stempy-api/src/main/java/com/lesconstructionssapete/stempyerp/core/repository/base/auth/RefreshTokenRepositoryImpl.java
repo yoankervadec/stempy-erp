@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.core.repository.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
 
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 

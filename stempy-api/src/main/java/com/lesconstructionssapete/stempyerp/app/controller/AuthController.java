@@ -10,15 +10,15 @@ import com.lesconstructionssapete.stempyerp.app.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.app.http.Response;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.ComparisonOperator;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.core.exception.ErrorCode;
 import com.lesconstructionssapete.stempyerp.core.exception.api.UnauthorizedException;
 import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 
 import io.javalin.http.Context;
 

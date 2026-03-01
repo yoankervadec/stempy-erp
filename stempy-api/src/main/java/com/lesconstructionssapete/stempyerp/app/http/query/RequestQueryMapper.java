@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.lesconstructionssapete.stempyerp.app.http.contract.RequestQuery;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.ComparisonOperator;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterCondition;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterGroup;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterNode;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.LogicalOperator;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.PageSpec;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.SortSpec;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterNode;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.PageSpec;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
 
 public final class RequestQueryMapper {
 

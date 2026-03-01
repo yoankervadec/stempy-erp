@@ -2,8 +2,8 @@ package com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public interface RetailProductFacade {
 

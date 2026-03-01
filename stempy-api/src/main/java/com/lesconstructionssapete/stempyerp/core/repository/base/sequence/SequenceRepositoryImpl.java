@@ -3,12 +3,12 @@ package com.lesconstructionssapete.stempyerp.core.repository.base.sequence;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.EntityType;
-import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.core.exception.domain.SequenceNotFoundException;
 import com.lesconstructionssapete.stempyerp.core.exception.internal.SequenceUpdateException;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
 
 /*
  * Returns LiveSequence and it's next value for a given EntityType then updates it (++1).

@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.core.service.base.auth;
 
 import java.sql.Connection;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
 
 public interface AuthService {
 

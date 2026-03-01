@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.core.service.base.sequence;
 
 import java.sql.Connection;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
 
 public interface SequenceService {
 

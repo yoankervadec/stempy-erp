@@ -3,11 +3,11 @@ package com.lesconstructionssapete.stempyerp.core.service.base.sequence;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.EntityType;
-import com.lesconstructionssapete.stempyerp.core.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.core.repository.base.sequence.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantCache;
 import com.lesconstructionssapete.stempyerp.core.shared.constant.ConstantUtil;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
 
 public class SequenceServiceImpl implements SequenceService {
 

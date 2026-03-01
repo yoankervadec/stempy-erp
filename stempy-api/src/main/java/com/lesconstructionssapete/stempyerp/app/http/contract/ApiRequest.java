@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.app.http.contract;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
 
 /**
  * API Request contract:

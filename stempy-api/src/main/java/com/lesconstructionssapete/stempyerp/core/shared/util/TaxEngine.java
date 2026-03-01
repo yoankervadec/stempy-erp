@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxGroup;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRate;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxRate;
 
 /*
  * Receives a List of subtotals and une TaxGroup

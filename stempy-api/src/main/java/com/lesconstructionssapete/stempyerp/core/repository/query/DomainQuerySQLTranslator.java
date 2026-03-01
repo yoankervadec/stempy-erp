@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterCondition;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterGroup;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterNode;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.core.exception.domain.FieldNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterNode;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
 
 /**
  * Translates a {@link DomainQuery} into SQL using {@link SQLBuilder}.

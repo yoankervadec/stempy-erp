@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public interface RetailProductRepository {
 

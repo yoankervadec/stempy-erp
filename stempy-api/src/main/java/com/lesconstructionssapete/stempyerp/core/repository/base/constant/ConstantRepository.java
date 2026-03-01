@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.EntityType;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.PaymentMethod;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.RetailCategory;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxGroup;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.PaymentMethod;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.RetailCategory;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
 
 public interface ConstantRepository {
 

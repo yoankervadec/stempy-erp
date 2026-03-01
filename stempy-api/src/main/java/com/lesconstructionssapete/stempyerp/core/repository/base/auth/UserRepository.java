@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public interface UserRepository {
 

@@ -11,7 +11,7 @@ import com.lesconstructionssapete.stempyerp.app.http.Response;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.app.http.query.RequestQueryMapper;
 import com.lesconstructionssapete.stempyerp.app.mapper.base.RetailProductMapper;
-import com.lesconstructionssapete.stempyerp.core.domain.base.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
 
 import io.javalin.http.Context;
 

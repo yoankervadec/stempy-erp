@@ -5,12 +5,12 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.ComparisonOperator;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.core.exception.api.AuthenticationException;
 import com.lesconstructionssapete.stempyerp.core.exception.api.UserNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

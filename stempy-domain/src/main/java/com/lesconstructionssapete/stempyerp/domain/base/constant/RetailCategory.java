@@ -1,0 +1,36 @@
+package com.lesconstructionssapete.stempyerp.domain.base.constant;
+
+public class RetailCategory implements ConstantEntity {
+
+  private final long id;
+  private final String name;
+  private final String description;
+  private final boolean enabled;
+
+  public RetailCategory(long id, String name, String description, boolean enabled) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.enabled = enabled;
+  }
+
+  @Override
+  public long getId() {
+    return id;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+}

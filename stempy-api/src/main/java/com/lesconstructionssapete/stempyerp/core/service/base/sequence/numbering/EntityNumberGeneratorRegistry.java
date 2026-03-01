@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.core.service.base.sequence.numbering;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.EntityType;
-import com.lesconstructionssapete.stempyerp.core.domain.generic.GenericEntity;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
 /**
  * Registry to manage EntityNumberGenerators for different EntityTypes.

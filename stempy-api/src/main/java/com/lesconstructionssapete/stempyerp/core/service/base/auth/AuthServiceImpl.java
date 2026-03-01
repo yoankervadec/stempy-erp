@@ -3,9 +3,9 @@ package com.lesconstructionssapete.stempyerp.core.service.base.auth;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.UserRepository;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
 
 public class AuthServiceImpl implements AuthService {
 

@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.core.repository.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.core.repository.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public class UserRepositoryImpl implements UserRepository {
 

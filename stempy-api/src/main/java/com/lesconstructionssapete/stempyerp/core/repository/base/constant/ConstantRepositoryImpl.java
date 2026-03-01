@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.EntityType;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.PaymentMethod;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.RetailCategory;
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxGroup;
 import com.lesconstructionssapete.stempyerp.core.shared.query.Query;
 import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.PaymentMethod;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.RetailCategory;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
 
 /*
  * Load configuration constants from the database.

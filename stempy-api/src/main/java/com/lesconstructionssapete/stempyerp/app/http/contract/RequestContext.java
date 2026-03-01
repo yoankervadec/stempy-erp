@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.app.http.contract;
 
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
 
 /**
  * Context information about the current request (server owned).
