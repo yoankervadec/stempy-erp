@@ -1,7 +1,5 @@
 package com.lesconstructionssapete.stempyerp.exception;
 
-import com.lesconstructionssapete.stempyerp.exception.ErrorCode;
-
 import io.javalin.http.HttpStatus;
 
 public class UnauthorizedException extends ApiException {
