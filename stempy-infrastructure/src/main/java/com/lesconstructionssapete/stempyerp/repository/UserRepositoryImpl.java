@@ -29,11 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
 
       // auth_user_credential table
       Map.entry("userCredentialId", "auth_user_credential.id"),
-      Map.entry("userId", "auth_user_credential.user_id"),
-      Map.entry("password", "auth_user_credential.password"),
-      Map.entry("enabled", "auth_user_credential.enabled"),
-      Map.entry("createdAt", "auth_user_credential.created_at"),
-      Map.entry("createdByUserId", "auth_user_credential.created_by_user_id"));
+      Map.entry("password", "auth_user_credential.password"));
 
   @Override
   public List<User> fetch(Connection connection, DomainQuery query) throws SQLException {
