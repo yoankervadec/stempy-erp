@@ -7,7 +7,7 @@ import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
 
 public interface RefreshTokenRepository {
 
-  void save(Connection connection, AuthToken token) throws SQLException;
+  long save(Connection connection, AuthToken token) throws SQLException;
 
-  boolean exists(Connection connection, String userNo, String refreshToken) throws SQLException;
+  boolean exists(Connection connection, long userId, String refreshToken) throws SQLException;
 }

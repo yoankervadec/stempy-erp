@@ -1,30 +1,30 @@
-package com.lesconstructionssapete.stempyerp.core.domain.base.user;
+package com.lesconstructionssapete.stempyerp.core.domain.base.auth;
 
 import java.time.LocalDateTime;
 
 public class UserCredential {
 
-  private final long credentialId;
+  private final long userCredentialId;
   private final long userId;
   private String password;
   private boolean enabled;
   private final LocalDateTime createdAt;
 
   public UserCredential(
-      long credentialId,
+      long userCredentialId,
       long userId,
       String password,
       boolean enabled,
       LocalDateTime createdAt) {
-    this.credentialId = credentialId;
+    this.userCredentialId = userCredentialId;
     this.userId = userId;
     this.password = password;
     this.enabled = enabled;
     this.createdAt = createdAt;
   }
 
-  public long getCredentialId() {
-    return credentialId;
+  public long getUserCredentialId() {
+    return userCredentialId;
   }
 
   public long getUserId() {

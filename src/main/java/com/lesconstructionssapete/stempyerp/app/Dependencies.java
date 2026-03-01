@@ -4,21 +4,23 @@ import com.lesconstructionssapete.stempyerp.app.controller.AuthController;
 import com.lesconstructionssapete.stempyerp.app.controller.RetailProductController;
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.AuthFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.AuthFacadeImpl;
+import com.lesconstructionssapete.stempyerp.app.facade.base.auth.UserFacade;
+import com.lesconstructionssapete.stempyerp.app.facade.base.auth.UserFacadeImpl;
 import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacadeImpl;
-import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
-import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacadeImpl;
 import com.lesconstructionssapete.stempyerp.core.config.redis.RedisProvider;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.auth.RefreshTokenRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.repository.base.auth.UserRepository;
+import com.lesconstructionssapete.stempyerp.core.repository.base.auth.UserRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.constant.ConstantRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.retailproduct.RetailProductRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.core.repository.base.sequence.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.core.repository.base.sequence.SequenceRepositoryImpl;
-import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepository;
-import com.lesconstructionssapete.stempyerp.core.repository.base.user.UserRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.core.service.base.auth.AuthService;
+import com.lesconstructionssapete.stempyerp.core.service.base.auth.AuthServiceImpl;
 import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.core.service.base.constant.ConstantServiceImpl;
 import com.lesconstructionssapete.stempyerp.core.service.base.sequence.SequenceService;
@@ -42,6 +44,7 @@ public class Dependencies {
   // Services
   public final EntityNumberGeneratorRegistry entityNumberGeneratorRegistry;
   public final ConstantService constantService;
+  public final AuthService authService;
 
   // Cache
   public final ConstantCache constantCache;
@@ -73,7 +76,7 @@ public class Dependencies {
     // Services
     this.entityNumberGeneratorRegistry = new DefaultEntityNumberGeneratorRegistry();
     this.constantService = new ConstantServiceImpl(constantRepository);
-
+    this.authService = new AuthServiceImpl(refreshTokenRepository, userRepository);
     // Cache
     this.constantCache = new ConstantCache(redisProvider, constantService);
 
@@ -83,7 +86,7 @@ public class Dependencies {
     // Facades
     this.retailProductFacade = new RetailProductFacadeImpl(sequenceService, entityNumberGeneratorRegistry,
         retailProductRepository);
-    this.authFacade = new AuthFacadeImpl(refreshTokenRepository);
+    this.authFacade = new AuthFacadeImpl(refreshTokenRepository, userRepository, authService);
     this.userFacade = new UserFacadeImpl(userRepository);
 
     // Controllers

@@ -1,9 +1,14 @@
 package com.lesconstructionssapete.stempyerp.app.middleware;
 
-import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
+import java.util.List;
+
+import com.lesconstructionssapete.stempyerp.app.facade.base.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
-import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
+import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.ComparisonOperator;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.core.exception.api.AuthenticationException;
 import com.lesconstructionssapete.stempyerp.core.exception.api.UserNotFoundException;
 
@@ -28,12 +33,21 @@ public class AuthorizationMiddleware implements Handler {
       throw new AuthenticationException(null, "No authenticated user found in the request context");
     }
 
-    User user = userFacade.findByUserNo(userNo);
+    DomainQuery userQuery = new DomainQuery(
+        new FilterCondition(
+            "userNo",
+            ComparisonOperator.EQUALS,
+            userNo),
+        null,
+        null);
 
-    if (user == null) {
+    List<User> users = userFacade.fetch(userQuery);
+
+    if (users.isEmpty()) {
       throw new UserNotFoundException(null, "Authenticated user not found in the system");
     }
 
+    User user = users.get(0);
     req.setContextUser(user);
 
     // Further authorization logic will be added later

@@ -12,13 +12,13 @@ import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
   @Override
-  public boolean exists(Connection connection, String userNo, String refreshToken) throws SQLException {
+  public boolean exists(Connection connection, long userId, String refreshToken) throws SQLException {
 
     String sqlBase = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
 
     SQLBuilder builder = new SQLBuilder(sqlBase)
-        .where("us.user_no = :userNo", userNo)
-        .and("ort.token = :refreshToken", refreshToken);
+        .where("auth_refresh_token.user_id = :userId", userId)
+        .and("auth_refresh_token.token = :refreshToken", refreshToken);
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
@@ -39,7 +39,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
   }
 
   @Override
-  public void save(Connection connection, AuthToken token) throws SQLException {
+  public long save(Connection connection, AuthToken token) throws SQLException {
 
     String sqlString = QueryCache.get(Query.INSERT_AUTH_REFRESH_TOKEN);
 
@@ -50,6 +50,13 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
       stmt.setObject(3, token.getRefreshTokenExpiresAt());
 
       stmt.executeUpdate();
+
+      try (var rs = stmt.getGeneratedKeys()) {
+        if (rs.next()) {
+          return rs.getLong(1);
+        }
+        return 0;
+      }
     }
 
   }

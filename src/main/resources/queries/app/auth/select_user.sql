@@ -1,0 +1,11 @@
+SELECT
+  auth_user.id,
+  auth_user.user_no,
+  auth_user.user_name,
+  auth_user.enabled,
+  auth_user.created_at,
+  auth_user.created_by_user_id,
+  auth_user.updated_at,
+  auth_user.updated_by_user_id
+FROM
+  auth_user

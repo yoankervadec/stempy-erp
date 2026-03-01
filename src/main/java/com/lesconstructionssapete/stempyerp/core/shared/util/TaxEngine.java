@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRegion;
+import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxGroup;
+import com.lesconstructionssapete.stempyerp.core.domain.base.constant.TaxRate;
 
 /*
- * Receives a List of subtotals and une TaxRegion
+ * Receives a List of subtotals and une TaxGroup
  * Returns a List of taxAmount and one total TaxAmount
  */
 
@@ -25,64 +26,96 @@ public class TaxEngine {
     }
   }
 
-  public static TaxResult applyTaxes(List<BigDecimal> subtotals, TaxRegion taxRegion) {
-    // 14.975 -> 0.14975
-    BigDecimal rate = BigDecimal.valueOf(taxRegion.getTaxRate())
-        .divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
+  public static TaxResult applyTaxes(List<BigDecimal> subtotals, TaxGroup taxGroup) {
 
-    // Expected total tax amount
-    BigDecimal subtotalSum = subtotals.stream()
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
-    BigDecimal expectedTotalTax = subtotalSum
-        .multiply(rate).setScale(2, RoundingMode.HALF_UP);
-
-    class Line {
-      BigDecimal ideal;
-      BigDecimal rounded;
-      BigDecimal remainder;
+    if (subtotals == null || subtotals.isEmpty()) {
+      return new TaxResult(List.of(), BigDecimal.ZERO.setScale(2));
     }
 
-    List<Line> lines = new ArrayList<>();
-    BigDecimal lineTaxSum = BigDecimal.ZERO;
-
-    // Step 1: calculate per-line ideal, rounded and remainder
-    for (BigDecimal subtotal : subtotals) {
-      Line line = new Line();
-      line.ideal = subtotal.multiply(rate);
-      line.rounded = line.ideal.setScale(2, RoundingMode.HALF_UP);
-      line.remainder = line.ideal.remainder(BigDecimal.ONE); // fractional part
-      lines.add(line);
-      lineTaxSum = lineTaxSum.add(line.rounded);
+    List<BigDecimal> totalLineTaxes = new ArrayList<>();
+    for (int i = 0; i < subtotals.size(); i++) {
+      totalLineTaxes.add(BigDecimal.ZERO.setScale(2));
     }
 
-    // Step 2: adjustment
-    BigDecimal diff = expectedTotalTax.subtract(lineTaxSum);
-    if (diff.compareTo(BigDecimal.ZERO) != 0) {
-      BigDecimal penny = new BigDecimal("0.01");
-      int steps = diff.abs().divideToIntegralValue(penny).intValue();
+    BigDecimal totalTaxSum = BigDecimal.ZERO.setScale(2);
 
-      // Sort lines by remainder (descending if we need to add, ascending if subtract)
-      Comparator<Line> comparator = Comparator.comparing(l -> l.remainder);
-      if (diff.signum() > 0) {
-        comparator = comparator.reversed();
+    for (TaxRate taxRate : taxGroup.getTaxRates()) {
+
+      BigDecimal rate = BigDecimal.valueOf(taxRate.getRate())
+          .divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
+
+      BigDecimal subtotalSum = subtotals.stream()
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      BigDecimal expectedTotalTax = subtotalSum
+          .multiply(rate)
+          .setScale(2, RoundingMode.HALF_UP);
+
+      class Line {
+        BigDecimal ideal;
+        BigDecimal rounded;
+        BigDecimal remainder;
+        int index;
       }
-      lines.sort(comparator);
 
-      for (int i = 0; i < steps && i < lines.size(); i++) {
-        Line target = lines.get(i);
-        target.rounded = diff.signum() > 0
-            ? target.rounded.add(penny)
-            : target.rounded.subtract(penny);
+      List<Line> lines = new ArrayList<>();
+      BigDecimal lineTaxSum = BigDecimal.ZERO;
+
+      // Step 1: calculate per-line values
+      for (int i = 0; i < subtotals.size(); i++) {
+        BigDecimal subtotal = subtotals.get(i);
+
+        Line line = new Line();
+        line.index = i;
+
+        line.ideal = subtotal.multiply(rate);
+        line.rounded = line.ideal.setScale(2, RoundingMode.HALF_UP);
+
+        // Fractional cents part
+        line.remainder = line.ideal
+            .subtract(line.ideal.setScale(2, RoundingMode.DOWN));
+
+        lines.add(line);
+        lineTaxSum = lineTaxSum.add(line.rounded);
       }
-      lineTaxSum = lineTaxSum.add(diff);
+
+      // Step 2: distribute rounding difference
+      BigDecimal diff = expectedTotalTax.subtract(lineTaxSum);
+
+      if (diff.compareTo(BigDecimal.ZERO) != 0) {
+        BigDecimal penny = new BigDecimal("0.01");
+        int steps = diff.abs()
+            .divideToIntegralValue(penny)
+            .intValue();
+
+        Comparator<Line> comparator = Comparator.comparing(l -> l.remainder);
+
+        if (diff.signum() > 0) {
+          comparator = comparator.reversed();
+        }
+
+        lines.sort(comparator);
+
+        for (int i = 0; i < steps && i < lines.size(); i++) {
+          Line target = lines.get(i);
+          target.rounded = diff.signum() > 0
+              ? target.rounded.add(penny)
+              : target.rounded.subtract(penny);
+        }
+
+        lineTaxSum = lineTaxSum.add(diff);
+      }
+
+      // Step 3: accumulate results per line
+      for (Line l : lines) {
+        totalLineTaxes.set(
+            l.index,
+            totalLineTaxes.get(l.index).add(l.rounded));
+      }
+
+      totalTaxSum = totalTaxSum.add(lineTaxSum);
     }
 
-    // Step 3: collect results
-    List<BigDecimal> lineTaxes = new ArrayList<>();
-    for (Line l : lines) {
-      lineTaxes.add(l.rounded);
-    }
-
-    return new TaxResult(lineTaxes, lineTaxSum);
+    return new TaxResult(totalLineTaxes, totalTaxSum);
   }
 }

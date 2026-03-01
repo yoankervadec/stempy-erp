@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.core.domain.base.user;
+package com.lesconstructionssapete.stempyerp.core.domain.base.auth;
 
 import java.time.LocalDateTime;
 

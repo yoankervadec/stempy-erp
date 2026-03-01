@@ -34,13 +34,14 @@ public enum Query {
   SELECT_NEXT_SEQUENCE_NO("app/sequence/select_next_sequence_no.sql", true),
 
   // Retail Product
-  SELECT_RETAIL_PRODUCTS("app/retail_product/select_retail_products.sql", true),
+  SELECT_RETAIL_PRODUCT_VARIANT("app/retail_product/select_retail_product_variant.sql", true),
 
   // Auth/Refresh Tokens
   SELECT_AUTH_REFRESH_TOKENS("app/auth/select_auth_refresh_tokens.sql", true),
 
-  // Users
-  SELECT_FULL_USER("app/user/select_full_user.sql", true),
+  // Auth / Users
+  SELECT_USER("app/auth/select_user.sql", true),
+  SELECT_USER_CREDENTIAL("app/auth/select_user_credential.sql", true),
 
   /**
    * ==========================
@@ -49,7 +50,7 @@ public enum Query {
    */
 
   // Retail Product
-  INSERT_RETAIL_PRODUCT("app/retail_product/insert_retail_product.sql", true),
+  INSERT_RETAIL_PRODUCT_VARIANT("app/retail_product/insert_retail_product_variant.sql", true),
 
   // Auth/Refresh Tokens
   INSERT_AUTH_REFRESH_TOKEN("app/auth/insert_auth_refresh_token.sql", true),
@@ -64,7 +65,7 @@ public enum Query {
    */
 
   // Retail Product
-  UPDATE_RETAIL_PRODUCT("app/retail_product/update_retail_product.sql", true),
+  UPDATE_RETAIL_PRODUCT_VARIANT("app/retail_product/update_retail_product_variant.sql", true),
 
   // Entity Sequence
   UPDATE_NEXT_SEQUENCE_NO("app/sequence/update_next_sequence_no.sql", true),

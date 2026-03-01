@@ -18,19 +18,17 @@ import com.lesconstructionssapete.stempyerp.core.shared.query.QueryCache;
 public class RetailProductRepositoryImpl implements RetailProductRepository {
 
   private static final Map<String, String> FIELD_MAP = Map.ofEntries(
-      Map.entry("productNo", "rp.product_no"),
-      Map.entry("sequenceNo", "rp.product_seq"),
-      Map.entry("retailPrice", "rp.retail_price"),
-      Map.entry("cost", "rp.cost"),
-      Map.entry("description", "rp.description"),
-      Map.entry("retailCategoryId", "rp.retail_category_id"),
-      Map.entry("woodSpecyId", "rp.wood_specy_id"),
-      Map.entry("productWidth", "rp.product_width"),
-      Map.entry("productThickness", "rp.product_thickness"),
-      Map.entry("productLength", "rp.product_length"),
-      Map.entry("enabled", "rp.is_enabled"),
-      Map.entry("createdAt", "rp.created_at"),
-      Map.entry("createdBy", "rp.created_by"));
+      Map.entry("retailProductId", "retail_product_variant.id"),
+      Map.entry("retailProductMasterId", "retail_product_variant.retail_product_master_id"),
+      Map.entry("retailProductNo", "retail_product_variant.retail_product_no"),
+      Map.entry("retailProductVariantNo", "retail_product_variant.retail_product_variant_no"),
+      Map.entry("name", "retail_product_variant.name"),
+      Map.entry("description", "retail_product_variant.description"),
+      Map.entry("enabled", "retail_product_variant.enabled"),
+      Map.entry("createdAt", "retail_product_variant.created_at"),
+      Map.entry("createdByUserId", "retail_product_variant.created_by_user_id"),
+      Map.entry("updatedAt", "retail_product_variant.updated_at"),
+      Map.entry("updatedByUserId", "retail_product_variant.updated_by_user_id"));
 
   @Override
   public List<RetailProduct> fetch(Connection connection, DomainQuery query) throws SQLException {
@@ -38,7 +36,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     List<RetailProduct> retailProducts;
 
     String sql = QueryCache.get(
-        Query.SELECT_RETAIL_PRODUCTS);
+        Query.SELECT_RETAIL_PRODUCT_VARIANT);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
@@ -60,19 +58,17 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         retailProducts = new ArrayList<>();
         while (rs.next()) {
           retailProducts.add(new RetailProduct(
-              rs.getLong("product_seq"),
-              rs.getString("product_no"),
-              rs.getBigDecimal("retail_price"),
-              rs.getBigDecimal("cost"),
+              rs.getLong("id"),
+              rs.getLong("retail_product_master_id"),
+              rs.getString("retail_product_no"),
+              rs.getString("retail_product_variant_no"),
+              rs.getString("name"),
               rs.getString("description"),
-              rs.getInt("retail_category_id"),
-              rs.getInt("wood_specy_id"),
-              rs.getDouble("product_width"),
-              rs.getDouble("product_thickness"),
-              rs.getDouble("product_length"),
-              rs.getBoolean("is_enabled"),
-              rs.getObject("created_at", LocalDateTime.class),
-              rs.getLong("created_by")));
+              rs.getBoolean("enabled"),
+              rs.getTimestamp("created_at").toLocalDateTime(),
+              rs.getLong("created_by_user_id"),
+              rs.getTimestamp("updated_at").toLocalDateTime(),
+              rs.getLong("updated_by_user_id")));
         }
       }
     }
@@ -84,22 +80,19 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   public RetailProduct insert(Connection connection, RetailProduct retailProduct) throws SQLException {
 
     String sqlBase = QueryCache.get(
-        Query.INSERT_RETAIL_PRODUCT);
+        Query.INSERT_RETAIL_PRODUCT_VARIANT);
 
     SQLBuilder builder = new SQLBuilder(sqlBase)
-        .bindTyped(retailProduct.getProductNo(), Types.VARCHAR)
-        .bindTyped(retailProduct.getEntitySeq(), Types.BIGINT)
-        .bindTyped(retailProduct.getRetailPrice(), Types.DECIMAL)
-        .bindTyped(retailProduct.getCost(), Types.DECIMAL)
+        .bindTyped(retailProduct.getRetailProductMasterId(), Types.BIGINT)
+        .bindTyped(retailProduct.getRetailProductNo(), Types.VARCHAR)
+        .bindTyped(retailProduct.getRetailProductVariantNo(), Types.VARCHAR)
+        .bindTyped(retailProduct.getName(), Types.VARCHAR)
         .bindTyped(retailProduct.getDescription(), Types.VARCHAR)
-        .bindTyped(retailProduct.getRetailCategoryId(), Types.INTEGER)
-        .bindTyped(retailProduct.getWoodSpecyId(), Types.INTEGER)
-        .bindTyped(retailProduct.getProductWidth(), Types.DECIMAL)
-        .bindTyped(retailProduct.getProductThickness(), Types.DECIMAL)
-        .bindTyped(retailProduct.getProductLength(), Types.DECIMAL)
         .bindTyped(retailProduct.isEnabled(), Types.TINYINT)
+        .bindTyped(retailProduct.getCreatedByUserId(), Types.BIGINT)
         .bindTyped(retailProduct.getCreatedAt(), Types.TIMESTAMP)
-        .bindTyped(retailProduct.getCreatedByUserSeq(), Types.BIGINT);
+        .bindTyped(retailProduct.getUpdatedByUserId(), Types.BIGINT)
+        .bindTyped(retailProduct.getUpdatedAt(), Types.TIMESTAMP);
 
     String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
@@ -121,21 +114,19 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   public RetailProduct save(Connection connection, RetailProduct retailProduct) throws SQLException {
 
     String sqlBase = QueryCache.get(
-        Query.UPDATE_RETAIL_PRODUCT);
+        Query.UPDATE_RETAIL_PRODUCT_VARIANT);
 
     SQLBuilder builder = new SQLBuilder(sqlBase)
-        .bindTyped(retailProduct.getProductNo(), Types.VARCHAR)
-        .bindTyped(retailProduct.getEntitySeq(), Types.BIGINT)
-        .bindTyped(retailProduct.getRetailPrice(), Types.DECIMAL)
-        .bindTyped(retailProduct.getCost(), Types.DECIMAL)
+        .bindTyped(retailProduct.getRetailProductMasterId(), Types.BIGINT)
+        .bindTyped(retailProduct.getRetailProductNo(), Types.VARCHAR)
+        .bindTyped(retailProduct.getRetailProductVariantNo(), Types.VARCHAR)
+        .bindTyped(retailProduct.getName(), Types.VARCHAR)
         .bindTyped(retailProduct.getDescription(), Types.VARCHAR)
-        .bindTyped(retailProduct.getRetailCategoryId(), Types.INTEGER)
-        .bindTyped(retailProduct.getWoodSpecyId(), Types.INTEGER)
-        .bindTyped(retailProduct.getProductWidth(), Types.DECIMAL)
-        .bindTyped(retailProduct.getProductThickness(), Types.DECIMAL)
-        .bindTyped(retailProduct.getProductLength(), Types.DECIMAL)
         .bindTyped(retailProduct.isEnabled(), Types.TINYINT)
-        .where("rp.product_no = :productNo", retailProduct.getProductNo());
+        .bindTyped(retailProduct.getUpdatedByUserId(), Types.BIGINT)
+        .bindTyped(LocalDateTime.now(), Types.TIMESTAMP)
+        .bindTyped(retailProduct.getRetailProductId(), Types.BIGINT)
+        .where("retail_product_variant.id = :id", retailProduct.getRetailProductId(), Types.BIGINT);
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();

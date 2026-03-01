@@ -1,21 +1,23 @@
 package com.lesconstructionssapete.stempyerp.app.controller;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.app.facade.base.auth.AuthFacade;
-import com.lesconstructionssapete.stempyerp.app.facade.base.user.UserFacade;
+import com.lesconstructionssapete.stempyerp.app.facade.base.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.app.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.app.http.Response;
 import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.core.domain.base.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.core.domain.base.user.User;
-import com.lesconstructionssapete.stempyerp.core.domain.base.user.UserCredential;
+import com.lesconstructionssapete.stempyerp.core.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.core.domain.base.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.ComparisonOperator;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.core.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.core.exception.ErrorCode;
 import com.lesconstructionssapete.stempyerp.core.exception.api.UnauthorizedException;
-import com.lesconstructionssapete.stempyerp.core.jwt.JwtConfig;
 import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
 
 import io.javalin.http.Context;
@@ -25,9 +27,9 @@ public class AuthController {
   private final UserFacade userFacade;
   private final AuthFacade authFacade;
 
-  public AuthController(UserFacade userService, AuthFacade authService) {
-    this.userFacade = userService;
-    this.authFacade = authService;
+  public AuthController(UserFacade userFacade, AuthFacade authFacade) {
+    this.userFacade = userFacade;
+    this.authFacade = authFacade;
   }
 
   public void login(Context ctx) {
@@ -36,28 +38,11 @@ public class AuthController {
 
     var userCredential = RequestMapper.map(request.getBody(), UserCredential.class, BodyKey.PAYLOAD);
 
-    User user = userFacade.validateCredentials(userCredential);
-    if (user == null) {
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Invalid username or password.");
-    }
-
-    String accessToken = JwtUtil.generateAccessToken(user.getEntityNo(), user.getUserRole().getName());
-    String refreshToken = JwtUtil.generateRefreshToken(user.getEntityNo());
-
-    AuthToken token = new AuthToken(
-        null,
-        user.getEntitySeq(),
-        user.getEntityNo(),
-        accessToken,
-        refreshToken,
-        LocalDateTime.now().plus(java.time.Duration.ofMillis(JwtConfig.REFRESH_TOKEN_EXPIRATION)),
-        LocalDateTime.now());
-
-    authFacade.save(token);
+    AuthToken token = authFacade.login(userCredential);
 
     Response.ok(ctx, null, Map.of(
-        "accessToken", accessToken,
-        "refreshToken", refreshToken));
+        "accessToken", token.getToken(),
+        "refreshToken", token.getRefreshToken()));
 
   }
 
@@ -79,10 +64,23 @@ public class AuthController {
       throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token revoked");
     }
 
-    User user = userFacade.findByUserNo(userNo);
-    String role = user.getUserRole().getName();
+    DomainQuery userQuery = new DomainQuery(
+        new FilterCondition(
+            "userNo",
+            ComparisonOperator.EQUALS,
+            userNo),
+        null,
+        null);
 
-    String newAccessToken = JwtUtil.generateAccessToken(userNo, role);
+    List<User> users = userFacade.fetch(userQuery);
+
+    if (users.isEmpty()) {
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "User not found.");
+    }
+
+    User user = users.get(0);
+
+    String newAccessToken = JwtUtil.generateAccessToken(user.getEntityNo());
 
     Response.ok(ctx, null, Map.of("accessToken", newAccessToken));
   }

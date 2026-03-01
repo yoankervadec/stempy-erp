@@ -16,11 +16,10 @@ public final class JwtUtil {
   private JwtUtil() {
   }
 
-  public static String generateAccessToken(String userNo, String roleName) {
+  public static String generateAccessToken(String userNo) {
     return Jwts.builder()
         .setSubject(userNo)
         .claim("type", "access")
-        .claim("role", roleName)
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + JwtConfig.ACCESS_TOKEN_EXPIRATION))
         .signWith(KEY, SignatureAlgorithm.HS256)
