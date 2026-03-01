@@ -3,7 +3,6 @@ package com.lesconstructionssapete.stempyerp.app.controller;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.app.dto.base.RetailProductRequest;
-import com.lesconstructionssapete.stempyerp.app.facade.base.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.app.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.app.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.app.http.RequestMapper;
@@ -12,6 +11,7 @@ import com.lesconstructionssapete.stempyerp.app.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.app.http.query.RequestQueryMapper;
 import com.lesconstructionssapete.stempyerp.app.mapper.base.RetailProductMapper;
 import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.facade.base.retailproduct.RetailProductFacade;
 
 import io.javalin.http.Context;
 

@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.app.middleware;
 
-import com.lesconstructionssapete.stempyerp.core.exception.api.UnauthorizedException;
-import com.lesconstructionssapete.stempyerp.core.jwt.JwtUtil;
+import com.lesconstructionssapete.stempyerp.exception.UnauthorizedException;
+import com.lesconstructionssapete.stempyerp.security.JwtUtil;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

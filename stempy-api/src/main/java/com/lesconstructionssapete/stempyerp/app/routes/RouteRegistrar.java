@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.app.routes;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.app.Dependencies;
+import com.lesconstructionssapete.stempyerp.Dependencies;
 
 import io.javalin.Javalin;
 

@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.app.http;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lesconstructionssapete.stempyerp.core.exception.api.InvalidBodyException;
-import com.lesconstructionssapete.stempyerp.core.shared.util.JsonUtil;
+import com.lesconstructionssapete.stempyerp.exception.InvalidBodyException;
+import com.lesconstructionssapete.stempyerp.util.JsonUtil;
 
 /**
  * Request Mapper:

@@ -16,7 +16,7 @@ public class ExceptionConfig {
   public static void configure(Javalin app) {
 
     // API EXCEPTIONS
-    app.exception(com.lesconstructionssapete.stempyerp.core.exception.ApiException.class, (e, ctx) -> {
+    app.exception(com.lesconstructionssapete.stempyerp.exception.ApiException.class, (e, ctx) -> {
       LOGGER.error("API Exception : {}", e.getMessage());
       Response.error(
           ctx,
@@ -26,7 +26,7 @@ public class ExceptionConfig {
     });
 
     // DOMAIN EXCEPTIONS
-    app.exception(com.lesconstructionssapete.stempyerp.core.exception.DomainException.class, (e, ctx) -> {
+    app.exception(com.lesconstructionssapete.stempyerp.exception.DomainException.class, (e, ctx) -> {
       LOGGER.error("Domain Exception : {}", e.getMessage());
       Response.error(
           ctx,
@@ -36,7 +36,7 @@ public class ExceptionConfig {
     });
 
     // INTERNAL EXCEPTIONS
-    app.exception(com.lesconstructionssapete.stempyerp.core.exception.InternalException.class, (e, ctx) -> {
+    app.exception(com.lesconstructionssapete.stempyerp.exception.InternalException.class, (e, ctx) -> {
       LOGGER.error("Internal Exception", e);
       Response.error(
           ctx,

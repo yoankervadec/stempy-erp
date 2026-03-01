@@ -9,16 +9,51 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <!-- stempy-infrastructure -->
     <groupId>com.lesconstructionssapete.stempyerp</groupId>
     <artifactId>stempy-infrastructure</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+
+        <!-- stempy-shared -->
+        <dependency>
+            <groupId>com.lesconstructionssapete.stempyerp</groupId>
+            <artifactId>stempy-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- stempy-domain -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- MySQL JDBC driver -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+
+        <!-- Dotenv -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+        </dependency>
+
+        <!-- Redis client -->
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+        </dependency>
+
+        <!-- JWT -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+        </dependency>
+        
     </dependencies>
 
 

@@ -14,10 +14,24 @@
 
     <dependencies>
 
+        <!-- stempy-shared -->
+        <dependency>
+            <groupId>com.lesconstructionssapete.stempyerp</groupId>
+            <artifactId>stempy-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- stempy-domain -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- stempy-automation -->
+        <dependency>
+            <groupId>com.lesconstructionssapete.stempyerp</groupId>
+            <artifactId>stempy-automation</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -28,12 +42,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- stempy-api -->
-        <dependency>
-            <groupId>com.lesconstructionssapete.stempyerp</groupId>
-            <artifactId>stempy-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
     </dependencies>
 

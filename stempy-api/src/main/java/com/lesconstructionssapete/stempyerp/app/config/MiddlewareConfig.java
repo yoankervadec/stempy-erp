@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.app.config;
 
-import com.lesconstructionssapete.stempyerp.app.Dependencies;
+import com.lesconstructionssapete.stempyerp.Dependencies;
 import com.lesconstructionssapete.stempyerp.app.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.AuthorizationMiddleware;
 import com.lesconstructionssapete.stempyerp.app.middleware.JwtAuthenticationMiddleware;
