@@ -2,8 +2,6 @@ package com.lesconstructionssapete.stempyerp.bootstrap;
 
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.Dependencies;
-
 public class ConstantCacheInitializer {
 
   public static void initialize(Dependencies dependencies) {

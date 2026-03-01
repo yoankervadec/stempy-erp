@@ -35,14 +35,63 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- stempy-infrastructure -->
+        <!-- stempy-bootstrap -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
-            <artifactId>stempy-infrastructure</artifactId>
+            <artifactId>stempy-bootstrap</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
         </dependency>
 
 
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <!-- Fat JAR only here -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>
+                                com.lesconstructionssapete.stempyerp.app.App
+                            </mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

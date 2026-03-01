@@ -10,9 +10,7 @@
     </parent>
 
     <!-- stempy-infrastructure -->
-    <groupId>com.lesconstructionssapete.stempyerp</groupId>
     <artifactId>stempy-infrastructure</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <dependencies>
 

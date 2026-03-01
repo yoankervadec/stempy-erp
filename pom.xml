@@ -9,7 +9,7 @@
     <groupId>com.lesconstructionssapete.stempyerp</groupId>
     <artifactId>stempy-erp</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>pom</packaging> 
 
     <modules>
         <module>stempy-domain</module>
@@ -19,6 +19,7 @@
         <module>stempy-shared</module>
         <module>stempy-service</module>
         <module>stempy-automation</module>
+        <module>stempy-bootstrap</module>
     </modules>
 
     <properties>

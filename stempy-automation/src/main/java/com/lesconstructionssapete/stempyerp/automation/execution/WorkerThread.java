@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.automation.execution;
 
 import java.time.LocalDateTime;
 
+import com.lesconstructionssapete.stempyerp.automation.handler.LogJobRuns;
 import com.lesconstructionssapete.stempyerp.domain.base.automation.JobExecutable;
 import com.lesconstructionssapete.stempyerp.domain.base.automation.JobLog;
 
@@ -82,6 +83,7 @@ public class WorkerThread implements Runnable {
       } finally {
         log.setEndedAt(LocalDateTime.now());
         log.save();
+        LogJobRuns.enqueueLog(log);
       }
     }
   }

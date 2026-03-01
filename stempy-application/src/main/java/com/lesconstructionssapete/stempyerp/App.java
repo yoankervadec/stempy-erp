@@ -6,6 +6,7 @@ import com.lesconstructionssapete.stempyerp.app.config.MiddlewareConfig;
 import com.lesconstructionssapete.stempyerp.app.routes.RouteRegistrar;
 import com.lesconstructionssapete.stempyerp.bootstrap.AutomationInitializer;
 import com.lesconstructionssapete.stempyerp.bootstrap.ConstantCacheInitializer;
+import com.lesconstructionssapete.stempyerp.bootstrap.Dependencies;
 import com.lesconstructionssapete.stempyerp.config.JsonConfig;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -36,13 +37,13 @@ public class App {
     }).start(APP_PORT);
 
     // Middleware
-    MiddlewareConfig.configure(app, deps);
+    MiddlewareConfig.configure(app, deps.userFacade);
 
     // Exception handling
     ExceptionConfig.configure(app);
 
     // Routes
-    RouteRegistrar.register(app, deps);
+    RouteRegistrar.register(app, deps.retailProductController, deps.authController);
 
   }
 }

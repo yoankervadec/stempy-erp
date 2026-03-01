@@ -30,20 +30,13 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- stempy-infrastructure -->
+        <!-- stempy-service -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
-            <artifactId>stempy-infrastructure</artifactId>
+            <artifactId>stempy-service</artifactId>
             <version>${project.version}</version>
         </dependency>
 
-        <!-- stempy-application -->
-        <dependency>
-            <groupId>com.lesconstructionssapete.stempyerp</groupId>
-            <artifactId>stempy-application</artifactId>
-            <version>${project.version}</version>
-        </dependency>
- 
         <!-- MySQL JDBC driver -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -117,44 +110,5 @@
 
 
     </dependencies>
-
-    <build>
-        <plugins>
-
-            <!-- Compiler -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
-            <!-- Fat JAR only here -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>
-                                com.lesconstructionssapete.stempyerp.app.App
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
 
 </project>

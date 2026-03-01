@@ -17,7 +17,6 @@ public class JobLog {
 
   public void save() {
     appendMessage("Execution time: " + getDurationMs() + "ms");
-    LogJobRuns.enqueueLog(this);
   }
 
   // --- Message Helpers ---

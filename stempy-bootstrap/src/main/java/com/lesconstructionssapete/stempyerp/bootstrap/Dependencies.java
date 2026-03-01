@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp;
+package com.lesconstructionssapete.stempyerp.bootstrap;
 
 import com.lesconstructionssapete.stempyerp.app.controller.AuthController;
 import com.lesconstructionssapete.stempyerp.app.controller.RetailProductController;
@@ -30,7 +30,6 @@ import com.lesconstructionssapete.stempyerp.service.base.sequence.numbering.Defa
 import com.lesconstructionssapete.stempyerp.service.base.sequence.numbering.EntityNumberGeneratorRegistry;
 
 public class Dependencies {
-
   // Infrastructure
   public final RedisProvider redisProvider;
 

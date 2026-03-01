@@ -9,9 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.lesconstructionssapete.stempyerp</groupId>
     <artifactId>stempy-domain</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <dependencies>
 
