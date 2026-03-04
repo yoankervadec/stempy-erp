@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.config.db.TransactionManager;
 import com.lesconstructionssapete.stempyerp.config.db.TransactionPropagation;
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
@@ -41,7 +42,7 @@ public class RetailProductFacadeImpl
   }
 
   @Override
-  public RetailProduct insert(RetailProduct product) {
+  public RetailProduct insert(User user, RetailProduct product) {
 
     return TransactionManager.execute(
         TransactionPropagation.REQUIRED,
@@ -50,7 +51,7 @@ public class RetailProductFacadeImpl
           LiveSequence liveSequence = sequenceService.next(
               connection,
               product.getEntityName(),
-              product.getCreatedByUserId());
+              user.getEntityId());
 
           EntityNumberGenerator<RetailProduct> RPGenerator = entityGenerators
               .getFor(liveSequence.getEntityType());

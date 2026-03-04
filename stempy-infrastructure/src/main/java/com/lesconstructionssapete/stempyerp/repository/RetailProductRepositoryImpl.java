@@ -18,17 +18,17 @@ import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 public class RetailProductRepositoryImpl implements RetailProductRepository {
 
   private static final Map<String, String> FIELD_MAP = Map.ofEntries(
-      Map.entry("retailProductId", "retail_product_variant.id"),
-      Map.entry("retailProductMasterId", "retail_product_variant.retail_product_master_id"),
-      Map.entry("retailProductNo", "retail_product_variant.retail_product_no"),
-      Map.entry("retailProductVariantNo", "retail_product_variant.retail_product_variant_no"),
-      Map.entry("name", "retail_product_variant.name"),
-      Map.entry("description", "retail_product_variant.description"),
-      Map.entry("enabled", "retail_product_variant.enabled"),
-      Map.entry("createdAt", "retail_product_variant.created_at"),
-      Map.entry("createdByUserId", "retail_product_variant.created_by_user_id"),
-      Map.entry("updatedAt", "retail_product_variant.updated_at"),
-      Map.entry("updatedByUserId", "retail_product_variant.updated_by_user_id"));
+      Map.entry("retailProductId", "dom_retail_product_variant.id"),
+      Map.entry("retailProductMasterId", "dom_retail_product_variant.retail_product_master_id"),
+      Map.entry("retailProductNo", "dom_retail_product_variant.retail_product_no"),
+      Map.entry("retailProductVariantNo", "dom_retail_product_variant.dom_retail_product_variant_no"),
+      Map.entry("name", "dom_retail_product_variant.name"),
+      Map.entry("description", "dom_retail_product_variant.description"),
+      Map.entry("enabled", "dom_retail_product_variant.enabled"),
+      Map.entry("createdAt", "dom_retail_product_variant.created_at"),
+      Map.entry("createdByUserId", "dom_retail_product_variant.created_by_user_id"),
+      Map.entry("updatedAt", "dom_retail_product_variant.updated_at"),
+      Map.entry("updatedByUserId", "dom_retail_product_variant.updated_by_user_id"));
 
   @Override
   public List<RetailProduct> fetch(Connection connection, DomainQuery query) throws SQLException {

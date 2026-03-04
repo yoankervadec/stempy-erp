@@ -43,6 +43,7 @@ public class RetailProductController {
         request.getBody(), RetailProductRequest.class, BodyKey.PAYLOAD);
 
     RetailProduct result = retailProductFacade.insert(
+        request.getContext().getUser(),
         RetailProductMapper.toDomain(payload));
 
     Response.created(ctx, "Product created", result);

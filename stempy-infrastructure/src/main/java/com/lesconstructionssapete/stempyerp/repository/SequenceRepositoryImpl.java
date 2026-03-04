@@ -30,7 +30,7 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     String sql = QueryCache.get(Query.SELECT_FOR_UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder selectBuilder = new SQLBuilder(sql)
-        .where("core_domain_entity_sequence.entity_type_id = :entityTypeId", entityType.getId())
+        .where("core_domain_entity_sequence.domain_entity_id = :entityTypeId", entityType.getId())
         .and("core_domain_entity_sequence.enabled = :enabled", true);
 
     String sqlFinal = selectBuilder.build();
@@ -56,7 +56,7 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     sql = QueryCache.get(Query.UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder updateBuilder = new SQLBuilder(sql)
-        .where("core_domain_entity_sequence.entity_type_id = :entityTypeId", entityType.getId())
+        .where("core_domain_entity_sequence.domain_entity_id = :entityTypeId", entityType.getId())
         .and("core_domain_entity_sequence.enabled = :enabled", true);
 
     sqlFinal = updateBuilder.build();

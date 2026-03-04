@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.facade.base.retailproduct;
 
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
@@ -9,5 +10,5 @@ public interface RetailProductFacade {
 
   List<RetailProduct> fetch(DomainQuery query);
 
-  RetailProduct insert(RetailProduct retailProduct);
+  RetailProduct insert(User user, RetailProduct retailProduct);
 }
