@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     List<Job> jobs = new ArrayList<>();
 
     String sqlBase = QueryCache.get(
-        Query.SELECT_JOBS);
+        Query.SELECT_AUTO_JOB);
 
     SQLBuilder builder = new SQLBuilder(sqlBase);
 
@@ -40,24 +39,25 @@ public class AutomationRepositoryImpl implements AutomationRepository {
       try (var rs = stmt.executeQuery()) {
         while (rs.next()) {
 
-          String runTimesString = rs.getString("run_times");
-          List<LocalTime> runTimes = DateTimeUtil.parseRunTimes(runTimesString);
+          String runTimesUTCString = rs.getString("run_times_utc");
+          List<LocalTime> runTimes = DateTimeUtil.parseRunTimes(runTimesUTCString);
 
           jobs.add(
               new Job(
-                  rs.getInt("id"),
+                  rs.getLong("id"),
                   rs.getString("name"),
+                  rs.getBoolean("enabled"),
+                  rs.getTimestamp("created_at").toLocalDateTime(),
                   rs.getString("description"),
                   rs.getString("handler"),
-                  rs.getBoolean("is_active"),
+                  rs.getLong("run_before_job_id"),
+                  rs.getLong("run_after_job_id"),
+                  rs.getBoolean("active"),
                   rs.getBoolean("deactivate_on_failure"),
-                  rs.getInt("retries_on_failure"),
+                  rs.getInt("max_retries"),
                   rs.getDouble("interval_minutes"),
                   runTimes,
-                  rs.getObject("last_run", LocalDateTime.class),
-                  rs.getObject("next_run", LocalDateTime.class),
-                  rs.getInt("priority"),
-                  rs.getBoolean("is_enabled")));
+                  null)); // TODO: map String of days of week to List<DayOfWeek>
         }
       }
       return jobs;
@@ -72,7 +72,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     try (var stmt = connection.prepareStatement(sqlString)) {
       for (JobLog log : jobLogs) {
         stmt.clearParameters();
-        stmt.setInt(1, log.getJobId());
+        stmt.setLong(1, log.getJobId());
         stmt.setTimestamp(2, Timestamp.valueOf(log.getStartedAt()));
         stmt.setTimestamp(3, Timestamp.valueOf(log.getEndedAt()));
         stmt.setInt(4, log.getDurationMs());
@@ -89,21 +89,22 @@ public class AutomationRepositoryImpl implements AutomationRepository {
   @Override
   public void save(Connection connection, Job job) throws SQLException {
 
-    String sqlBase = QueryCache.get(Query.UPDATE_JOB);
+    String sqlBase = QueryCache.get(Query.UPDATE_AUTO_JOB);
 
     SQLBuilder builder = new SQLBuilder(sqlBase)
-        .bindTyped(job.getJobDescription(), Types.VARCHAR)
+        .bindTyped(job.isEnabled(), Types.TINYINT)
+        .bind(job.getCreatedAt())
+        .bindTyped(job.getDescription(), Types.VARCHAR)
         .bindTyped(job.getHandlerAsString(), Types.VARCHAR)
+        .bindTyped(job.getRunBeforeJobId(), Types.BIGINT)
+        .bindTyped(job.getRunAfterJobId(), Types.BIGINT)
         .bindTyped(job.isActive(), Types.TINYINT)
         .bindTyped(job.isDeactivateOnFailure(), Types.TINYINT)
-        .bindTyped(job.getRetriesOnFailure(), Types.INTEGER)
+        .bindTyped(job.getMaxRetries(), Types.INTEGER)
         .bindTyped(job.getIntervalMinutes(), Types.DOUBLE)
-        .bindTyped(DateTimeUtil.toRunTimesJson(job.getRunTimes()), Types.VARCHAR)
-        .bind(job.getLastRun())
-        .bind(job.getNextRun())
-        .bindTyped(job.getPriority(), Types.INTEGER)
-        .bindTyped(job.isEnabled(), Types.TINYINT)
-        .where("id = :jobid", job.getJobId());
+        .bindTyped(DateTimeUtil.toRunTimesJson(job.getRunTimesUTC()), Types.VARCHAR)
+        .bindTyped("", Types.VARCHAR)
+        .where("id = :jobid", job.getId());
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();

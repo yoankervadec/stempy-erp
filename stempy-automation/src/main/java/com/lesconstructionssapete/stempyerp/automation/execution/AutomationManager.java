@@ -175,19 +175,19 @@ public class AutomationManager {
    */
   public synchronized void refresh(List<Job> newJobs) {
 
-    Map<Integer, Job> oldJobsMap = jobs.stream()
-        .collect(Collectors.toMap(Job::getJobId, j -> j));
+    Map<Long, Job> oldJobsMap = jobs.stream()
+        .collect(Collectors.toMap(Job::getId, j -> j));
 
-    Map<Integer, Job> newJobsMap = newJobs.stream()
-        .collect(Collectors.toMap(Job::getJobId, j -> j));
+    Map<Long, Job> newJobsMap = newJobs.stream()
+        .collect(Collectors.toMap(Job::getId, j -> j));
 
     this.jobs = newJobs; // update after extracting old map
 
     // 1. Cancel jobs that were removed or disabled
     for (Job oldJob : oldJobsMap.values()) {
-      Job updated = newJobsMap.get(oldJob.getJobId());
+      Job updated = newJobsMap.get(oldJob.getId());
       if (updated == null || !updated.isEnabled()) {
-        scheduler.cancelByJobId(oldJob.getJobId());
+        scheduler.cancelByJobId(oldJob.getId());
       }
     }
 
@@ -196,12 +196,12 @@ public class AutomationManager {
       if (!newJob.isEnabled())
         continue;
 
-      Job oldJob = oldJobsMap.get(newJob.getJobId());
-      boolean shouldSchedule = !scheduler.isScheduled(newJob.getJobId())
+      Job oldJob = oldJobsMap.get(newJob.getId());
+      boolean shouldSchedule = !scheduler.isScheduled(newJob.getId())
           || hasRelevantChanges(oldJob, newJob);
 
       if (shouldSchedule) {
-        scheduler.cancelByJobId(newJob.getJobId());
+        scheduler.cancelByJobId(newJob.getId());
         scheduler.schedule(factory.create(newJob));
       }
     }
@@ -223,9 +223,9 @@ public class AutomationManager {
     return oldJob.isEnabled() != newJob.isEnabled()
         || oldJob.isActive() != newJob.isActive()
         || !Objects.equals(oldJob.getIntervalMinutes(), newJob.getIntervalMinutes())
-        || !Objects.equals(oldJob.getRunTimes(), newJob.getRunTimes())
+        || !Objects.equals(oldJob.getRunTimesUTC(), newJob.getRunTimesUTC())
         || oldJob.isDeactivateOnFailure() != newJob.isDeactivateOnFailure()
-        || oldJob.getRetriesOnFailure() != newJob.getRetriesOnFailure()
+        || oldJob.getMaxRetries() != newJob.getMaxRetries()
         || oldJob.isDeactivateOnFailure() != newJob.isDeactivateOnFailure();
 
   }

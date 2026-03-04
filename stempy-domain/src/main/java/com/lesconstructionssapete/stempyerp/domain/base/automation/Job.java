@@ -1,5 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.base.automation;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,68 +21,76 @@ import java.util.List;
 public class Job {
 
   // --- Core job metadata ---
-  private final int jobId;
-  private final String jobName;
-  private final String jobDescription;
+  private final long id;
+  private final String name;
+  private final boolean enabled;
+  private final LocalDateTime createdAt;
+  private final String description;
   private final String handlerAsString;
 
   // --- Scheduling and execution ---
-  private boolean isActive;
+  private final Long runBeforeJobId; // Optional: for job chaining
+  private final Long runAfterJobId; // Optional: for job chaining
+  private boolean active;
   private final boolean deactivateOnFailure;
-  private final int retriesOnFailure;
-  private final Double intervalMinutes;
-  private final List<LocalTime> runTimes;
+  private final int maxRetries;
+  private final Double intervalMinutes; // If null or 0, this is a fixed-time job; otherwise interval-based
+  private final List<LocalTime> runTimesUTC; // For fixed-time jobs, the times of day to run (in UTC)
+  private final List<DayOfWeek> runDaysOfWeek; // Optional: for fixed-time jobs, which days to run on
   private LocalDateTime lastRun;
   private LocalDateTime nextRun;
-  private final int priority;
-  private final boolean isEnabled;
 
   /**
    * Creates a new Job definition.
    */
   public Job(
-      int jobId,
-      String jobName,
-      String jobDescription,
+      long id,
+      String name,
+      boolean enabled,
+      LocalDateTime createdAt,
+      String description,
       String handlerAsString,
-      boolean isActive,
+      Long runBeforeJobId,
+      Long runAfterJobId,
+      boolean active,
       boolean deactivateOnFailure,
-      int retriesOnFailure,
+      int maxRetries,
       Double intervalMinutes,
-      List<LocalTime> runTimes,
-      LocalDateTime lastRun,
-      LocalDateTime nextRun,
-      int priority,
-      boolean isEnabled) {
-    this.jobId = jobId;
-    this.jobName = jobName;
-    this.jobDescription = jobDescription;
+      List<LocalTime> runTimesUTC,
+      List<DayOfWeek> runDaysOfWeek) {
+    this.id = id;
+    this.name = name;
+    this.enabled = enabled;
+    this.createdAt = createdAt;
+    this.description = description;
     this.handlerAsString = handlerAsString;
-    this.isActive = isActive;
+    this.runBeforeJobId = runBeforeJobId;
+    this.runAfterJobId = runAfterJobId;
+    this.active = active;
     this.deactivateOnFailure = deactivateOnFailure;
-    this.retriesOnFailure = retriesOnFailure;
+    this.maxRetries = maxRetries;
     this.intervalMinutes = intervalMinutes;
-    this.runTimes = runTimes != null ? runTimes : new ArrayList<>();
-    this.lastRun = lastRun;
-    this.nextRun = nextRun;
-    this.priority = priority;
-    this.isEnabled = isEnabled;
+    this.runTimesUTC = runTimesUTC != null ? runTimesUTC : new ArrayList<>();
+    this.runDaysOfWeek = runDaysOfWeek != null ? runDaysOfWeek : new ArrayList<>();
   }
 
   public Job(Job job) {
-    this.jobId = job.getJobId();
-    this.jobName = job.getJobName();
-    this.jobDescription = job.getJobDescription();
+    this.id = job.getId();
+    this.name = job.getName();
+    this.enabled = job.isEnabled();
+    this.createdAt = job.getCreatedAt();
+    this.description = job.getDescription();
     this.handlerAsString = job.getHandlerAsString();
-    this.isActive = job.isActive();
+    this.runBeforeJobId = job.getRunBeforeJobId();
+    this.runAfterJobId = job.getRunAfterJobId();
+    this.active = job.isActive();
     this.deactivateOnFailure = job.isDeactivateOnFailure();
-    this.retriesOnFailure = job.getRetriesOnFailure();
+    this.maxRetries = job.getMaxRetries();
     this.intervalMinutes = job.getIntervalMinutes();
-    this.runTimes = job.getRunTimes();
+    this.runTimesUTC = job.getRunTimesUTC();
+    this.runDaysOfWeek = job.getRunDaysOfWeek();
     this.lastRun = job.getLastRun();
     this.nextRun = job.calculateNextRun();
-    this.priority = job.getPriority();
-    this.isEnabled = job.isEnabled();
   }
 
   // =====================================================
@@ -127,8 +136,8 @@ public class Job {
     }
 
     // Fixed-time scheduling
-    if (!isIntervalBasedJob() && !runTimes.isEmpty()) {
-      var todayCandidate = runTimes.stream()
+    if (!isIntervalBasedJob() && !runTimesUTC.isEmpty()) {
+      var todayCandidate = runTimesUTC.stream()
           .map(t -> LocalDateTime.of(now.toLocalDate(), t))
           .filter(dt -> dt.isAfter(now))
           .findFirst()
@@ -139,7 +148,7 @@ public class Job {
       }
 
       // Otherwise roll to the next day
-      return LocalDateTime.of(now.toLocalDate().plusDays(1), runTimes.get(0));
+      return LocalDateTime.of(now.toLocalDate().plusDays(1), runTimesUTC.get(0));
     }
 
     return null; // No scheduling data
@@ -158,7 +167,7 @@ public class Job {
    * @return true if enabled, active, and nextRun <= now
    */
   public boolean isDueToRun() {
-    return isEnabled && isActive && nextRun != null && !nextRun.isAfter(LocalDateTime.now());
+    return enabled && active && nextRun != null && !nextRun.isAfter(LocalDateTime.now());
   }
 
   /**
@@ -192,44 +201,64 @@ public class Job {
   // Getters & Setters
   // =====================================================
 
-  public int getJobId() {
-    return jobId;
+  public long getId() {
+    return id;
   }
 
-  public String getJobName() {
-    return jobName;
+  public String getName() {
+    return name;
   }
 
-  public String getJobDescription() {
-    return jobDescription;
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public String getDescription() {
+    return description;
   }
 
   public String getHandlerAsString() {
     return handlerAsString;
   }
 
+  public Long getRunBeforeJobId() {
+    return runBeforeJobId;
+  }
+
+  public Long getRunAfterJobId() {
+    return runAfterJobId;
+  }
+
   public boolean isActive() {
-    return isActive;
+    return active;
   }
 
   public void setActive(boolean isActive) {
-    this.isActive = isActive;
+    this.active = isActive;
   }
 
   public boolean isDeactivateOnFailure() {
     return deactivateOnFailure;
   }
 
-  public int getRetriesOnFailure() {
-    return retriesOnFailure;
+  public int getMaxRetries() {
+    return maxRetries;
   }
 
   public Double getIntervalMinutes() {
     return intervalMinutes;
   }
 
-  public List<LocalTime> getRunTimes() {
-    return runTimes;
+  public List<LocalTime> getRunTimesUTC() {
+    return runTimesUTC;
+  }
+
+  public List<DayOfWeek> getRunDaysOfWeek() {
+    return runDaysOfWeek;
   }
 
   public LocalDateTime getLastRun() {
@@ -240,11 +269,4 @@ public class Job {
     return nextRun;
   }
 
-  public int getPriority() {
-    return priority;
-  }
-
-  public boolean isEnabled() {
-    return isEnabled;
-  }
 }

@@ -26,7 +26,7 @@ public enum Query {
   SELECT_REF_TAX_RATE("config/select_ref_tax_rate.sql", false),
 
   // Scheduler/Job
-  SELECT_JOBS("app/scheduler/select_jobs.sql", false),
+  SELECT_AUTO_JOB("app/scheduler/select_auto_job.sql", false),
 
   // Entity Sequence
   SELECT_NEXT_SEQUENCE_NO("app/sequence/select_next_sequence_no.sql", true),
@@ -69,7 +69,7 @@ public enum Query {
   UPDATE_NEXT_SEQUENCE_NO("app/sequence/update_next_sequence_no.sql", true),
 
   // Automation
-  UPDATE_JOB("app/automation/update_job.sql", true);
+  UPDATE_AUTO_JOB("app/automation/update_auto_job.sql", true);
 
   /**
    * ==========================

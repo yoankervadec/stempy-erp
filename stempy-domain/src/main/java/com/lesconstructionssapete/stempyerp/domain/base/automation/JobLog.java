@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 
 public class JobLog {
 
-  private final int jobId;
+  private final long jobId;
   private final LocalDateTime startedAt = LocalDateTime.now();
   private LocalDateTime endedAt;
   private boolean isError = false;
   private StringBuilder message = new StringBuilder();
 
-  public JobLog(int jobId) {
+  public JobLog(long jobId) {
     this.jobId = jobId;
   }
 
@@ -65,7 +65,7 @@ public class JobLog {
 
   // --- Getters & Setters ---
 
-  public int getJobId() {
+  public long getJobId() {
     return jobId;
   }
 

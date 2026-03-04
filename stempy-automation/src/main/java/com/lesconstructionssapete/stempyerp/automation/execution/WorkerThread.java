@@ -25,8 +25,8 @@ public class WorkerThread implements Runnable {
       try {
         JobExecutable executable = queue.take(); // blocks until a job arrives
 
-        System.out.println("Worker picked up job ID " + executable.meta().getJobId() + " ("
-            + executable.meta().getJobName() + ") at " + LocalDateTime.now());
+        System.out.println("Worker picked up job ID " + executable.meta().getId() + " ("
+            + executable.meta().getName() + ") at " + LocalDateTime.now());
 
         executeAndLog(executable);
 
@@ -54,27 +54,27 @@ public class WorkerThread implements Runnable {
   private void executeAndLog(JobExecutable executable) throws InterruptedException {
 
     int attempt = 0;
-    final int maxAttempts = executable.meta().getRetriesOnFailure(); // 0 = only one try
+    final int maxAttempts = executable.meta().getMaxRetries(); // 0 = only one try
 
     while (attempt <= maxAttempts) {
-      var log = new JobLog(executable.meta().getJobId());
+      var log = new JobLog(executable.meta().getId());
 
       try {
-        log.setMessage("Executing: " + executable.meta().getJobName() + "...");
+        log.setMessage("Executing: " + executable.meta().getName() + "...");
 
         log = executable.execute(log);
 
-        log.markSuccess(executable.meta().getJobName());
+        log.markSuccess(executable.meta().getName());
 
         return;
       } catch (Exception e1) {
 
-        log.markFailure(executable.meta().getJobName(), e1, attempt, maxAttempts);
+        log.markFailure(executable.meta().getName(), e1, attempt, maxAttempts);
 
         attempt++;
         if (attempt >= maxAttempts) {
           executable.meta().setActive(false); // Deactivate job after final failure
-          log.markFinalFailure(executable.meta().getJobName(), e1);
+          log.markFinalFailure(executable.meta().getName(), e1);
           return;
         }
 

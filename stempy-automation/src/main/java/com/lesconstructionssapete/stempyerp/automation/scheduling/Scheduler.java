@@ -19,7 +19,7 @@ public class Scheduler {
   private final JobQueue queue;
   private final ScheduledExecutorService execScheduler = Executors
       .newScheduledThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors() / 2));
-  private final Map<Integer, ScheduledJob> futures = new ConcurrentHashMap<>();
+  private final Map<Long, ScheduledJob> futures = new ConcurrentHashMap<>();
 
   public Scheduler(JobQueue queue) {
     this.queue = queue;
@@ -62,10 +62,10 @@ public class Scheduler {
   private void scheduleSelf(JobExecutable executable) {
     Job job = executable.meta();
 
-    cancelByJobId(job.getJobId()); // Avoid double-scheduling
+    cancelByJobId(job.getId()); // Avoid double-scheduling
 
     if (job.timeSinceLastRun() != null && job.timeSinceLastRun().toMillis() < MIN_DELAY) {
-      throw new IllegalArgumentException("Job ID " + job.getJobId() + " (" + job.getJobName()
+      throw new IllegalArgumentException("Job ID " + job.getId() + " (" + job.getName()
           + ") was run less than " + (MIN_DELAY / 1000) + " seconds ago. Cannot reschedule so soon.");
     }
 
@@ -92,7 +92,7 @@ public class Scheduler {
         delay,
         TimeUnit.MILLISECONDS);
 
-    futures.put(job.getJobId(), new ScheduledJob(executable, future));
+    futures.put(job.getId(), new ScheduledJob(executable, future));
   }
 
   /**
@@ -103,7 +103,7 @@ public class Scheduler {
    * 
    * @param jobId
    */
-  public void cancelByJobId(int jobId) {
+  public void cancelByJobId(long jobId) {
     ScheduledJob scheduledJob = futures.remove(jobId);
     if (scheduledJob != null && scheduledJob.future != null) {
       scheduledJob.future.cancel(false);
@@ -116,7 +116,7 @@ public class Scheduler {
    * @param jobId
    * @return true if scheduled, false otherwise
    */
-  public boolean isScheduled(int jobId) {
+  public boolean isScheduled(long jobId) {
     return futures.containsKey(jobId);
   }
 
@@ -150,8 +150,8 @@ public class Scheduler {
       ScheduledFuture<?> future = entry.future;
 
       StringBuilder sb = new StringBuilder();
-      sb.append("Job ID: ").append(job.getJobId())
-          .append(" | Name: ").append(job.getJobName());
+      sb.append("Job ID: ").append(job.getId())
+          .append(" | Name: ").append(job.getName());
 
       if (job.isIntervalBasedJob()) {
         sb.append(" | Type: Interval")
