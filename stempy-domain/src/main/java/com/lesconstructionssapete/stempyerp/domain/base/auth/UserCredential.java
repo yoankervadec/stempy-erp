@@ -6,6 +6,7 @@ public class UserCredential {
 
   private final long userCredentialId;
   private final long userId;
+  private String userNo;
   private String password;
   private boolean enabled;
   private final LocalDateTime createdAt;
@@ -49,6 +50,14 @@ public class UserCredential {
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
+  }
+
+  public String getUserNo() {
+    return userNo;
+  }
+
+  public void setUserNo(String userNo) {
+    this.userNo = userNo;
   }
 
 }

@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.facade.base.auth;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.config.db.TransactionManager;
 import com.lesconstructionssapete.stempyerp.config.db.TransactionPropagation;
@@ -11,6 +12,8 @@ import com.lesconstructionssapete.stempyerp.domain.base.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.repository.UserRepository;
 import com.lesconstructionssapete.stempyerp.security.JwtConfig;
@@ -57,28 +60,31 @@ public class AuthFacadeImpl implements AuthFacade {
 
     DomainQuery userQuery = new DomainQuery(
         new FilterCondition(
-            "userId",
+            "userNo",
             ComparisonOperator.EQUALS,
-            userCredential.getUserId()),
+            userCredential.getUserNo()),
         null,
         null);
 
-    DomainQuery credentialQuery = new DomainQuery(
-        new FilterCondition(
-            "userId",
-            ComparisonOperator.EQUALS,
-            userCredential.getUserId()),
-        null,
-        null);
+    //
 
     AuthToken authToken = TransactionManager.execute(
         TransactionPropagation.REQUIRED,
         con -> {
           var users = userRepository.fetch(con, userQuery);
           if (users.isEmpty()) {
-            return null;
+            throw new RuntimeException("User not found!");
           }
           User u = users.get(0);
+
+          DomainQuery credentialQuery = new DomainQuery(
+              new FilterGroup(
+                  LogicalOperator.AND,
+                  List.of(
+                      new FilterCondition("userId", ComparisonOperator.EQUALS, u.getEntityId()),
+                      new FilterCondition("password", ComparisonOperator.EQUALS, userCredential.getPassword()))),
+              null,
+              null);
 
           var credentials = userRepository.fetchCredentials(con, credentialQuery);
           if (credentials.isEmpty()) {

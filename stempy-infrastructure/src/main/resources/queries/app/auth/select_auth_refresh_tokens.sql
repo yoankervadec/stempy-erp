@@ -6,7 +6,7 @@ SELECT
   ort.expires_at,
   ort.created_at
 FROM
-  auth_refresh_tokens AS ort
+  auth_refresh_token
 JOIN
   users AS us ON ort.user_seq = us.user_seq
 /* WHERE */

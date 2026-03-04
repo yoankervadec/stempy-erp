@@ -16,7 +16,7 @@ import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
 public class UserRepositoryImpl implements UserRepository {
 
-  private static final Map<String, String> FIELD_MAP = Map.ofEntries(
+  private static final Map<String, String> AUTH_USER_FIELD_MAP = Map.ofEntries(
       // auth_user table
       Map.entry("userId", "auth_user.id"),
       Map.entry("userNo", "auth_user.user_no"),
@@ -25,11 +25,14 @@ public class UserRepositoryImpl implements UserRepository {
       Map.entry("createdAt", "auth_user.created_at"),
       Map.entry("createdByUserId", "auth_user.created_by_user_id"),
       Map.entry("updatedAt", "auth_user.updated_at"),
-      Map.entry("updatedByUserId", "auth_user.updated_by_user_id"),
+      Map.entry("updatedByUserId", "auth_user.updated_by_user_id"));
 
-      // auth_user_credential table
+  private static final Map<String, String> AUTH_USER_CREDENTIAL_FIELD_MAP = Map.ofEntries(
       Map.entry("userCredentialId", "auth_user_credential.id"),
-      Map.entry("password", "auth_user_credential.password"));
+      Map.entry("userId", "auth_user_credential.user_id"),
+      Map.entry("password", "auth_user_credential.password"),
+      Map.entry("enabled", "auth_user_credential.enabled"),
+      Map.entry("createdAt", "auth_user_credential.created_at"));
 
   @Override
   public List<User> fetch(Connection connection, DomainQuery query) throws SQLException {
@@ -40,7 +43,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(FIELD_MAP);
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(AUTH_USER_FIELD_MAP);
 
     translator.apply(builder, query);
 
@@ -82,7 +85,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(FIELD_MAP);
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(AUTH_USER_CREDENTIAL_FIELD_MAP);
 
     translator.apply(builder, query);
 

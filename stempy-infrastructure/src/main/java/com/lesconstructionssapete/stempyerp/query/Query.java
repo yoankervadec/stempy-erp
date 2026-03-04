@@ -29,7 +29,7 @@ public enum Query {
   SELECT_AUTO_JOB("app/scheduler/select_auto_job.sql", false),
 
   // Entity Sequence
-  SELECT_NEXT_SEQUENCE_NO("app/sequence/select_next_sequence_no.sql", true),
+  SELECT_FOR_UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE("app/sequence/select_for_update_core_domain_entity_sequence.sql", true),
 
   // Retail Product
   SELECT_RETAIL_PRODUCT_VARIANT("app/retail_product/select_retail_product_variant.sql", true),
@@ -66,7 +66,7 @@ public enum Query {
   UPDATE_RETAIL_PRODUCT_VARIANT("app/retail_product/update_retail_product_variant.sql", true),
 
   // Entity Sequence
-  UPDATE_NEXT_SEQUENCE_NO("app/sequence/update_next_sequence_no.sql", true),
+  UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE("app/sequence/update_core_domain_entity_sequence.sql", true),
 
   // Automation
   UPDATE_AUTO_JOB("app/automation/update_auto_job.sql", true);

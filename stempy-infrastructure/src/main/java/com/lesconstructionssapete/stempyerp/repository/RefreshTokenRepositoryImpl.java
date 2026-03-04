@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
@@ -43,7 +44,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     String sqlString = QueryCache.get(Query.INSERT_AUTH_REFRESH_TOKEN);
 
-    try (var stmt = connection.prepareStatement(sqlString)) {
+    try (var stmt = connection.prepareStatement(sqlString, Statement.RETURN_GENERATED_KEYS)) {
 
       stmt.setLong(1, token.getUserId());
       stmt.setString(2, token.getRefreshToken());

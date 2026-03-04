@@ -11,6 +11,6 @@ public interface SequenceRepository {
   LiveSequence generateFor(
       Connection connection,
       DomainEntityType entityType,
-      long createdByUserSeq) throws SQLException;
+      long createdByUserId) throws SQLException;
 
 }
