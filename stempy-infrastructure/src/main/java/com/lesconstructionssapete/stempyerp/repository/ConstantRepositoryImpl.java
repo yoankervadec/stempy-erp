@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.base.constant.PaymentMethod;
 import com.lesconstructionssapete.stempyerp.domain.base.constant.RetailCategory;
 import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroupLine;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxRate;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
 
@@ -20,21 +22,22 @@ public class ConstantRepositoryImpl implements ConstantRepository {
 
   // Entity Type
   @Override
-  public List<EntityType> getEntityTypes(Connection con) throws SQLException {
+  public List<DomainEntityType> getEntityTypes(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
-        Query.SELECT_CONFIG_ENTITY_TYPE);
+        Query.SELECT_CORE_DOMAIN_ENTITY_CONFIG);
 
     try (var stmt = con.prepareStatement(sqlString);
         var rs = stmt.executeQuery()) {
-      List<EntityType> list = new ArrayList<>();
+      List<DomainEntityType> list = new ArrayList<>();
       while (rs.next()) {
-        list.add(new EntityType(
-            rs.getInt("id"),
+        list.add(new DomainEntityType(
+            rs.getLong("id"),
             rs.getString("name"),
+            rs.getBoolean("enabled"),
+            rs.getTimestamp("created_at").toLocalDateTime(),
             rs.getInt("pad_length"),
-            rs.getString("prefix_string"),
-            rs.getBoolean("is_enabled")));
+            rs.getString("prefix")));
       }
       return list;
     }
@@ -45,17 +48,18 @@ public class ConstantRepositoryImpl implements ConstantRepository {
   public List<RetailCategory> getRetailCategories(Connection con) throws SQLException {
 
     String sqlString = QueryCache.get(
-        Query.SELECT_CONFIG_RETAIL_CATEGORY);
+        Query.SELECT_REF_RETAIL_CATEGORY);
 
     try (var stmt = con.prepareStatement(sqlString);
         var rs = stmt.executeQuery()) {
       List<RetailCategory> list = new ArrayList<>();
       while (rs.next()) {
         list.add(new RetailCategory(
-            rs.getInt("id"),
+            rs.getLong("id"),
             rs.getString("name"),
             rs.getString("description"),
-            rs.getBoolean("is_enabled")));
+            rs.getBoolean("enabled"),
+            rs.getTimestamp("created_at").toLocalDateTime()));
       }
 
       return list;
@@ -64,14 +68,98 @@ public class ConstantRepositoryImpl implements ConstantRepository {
 
   @Override
   public List<PaymentMethod> getPaymentMethods(Connection con) throws SQLException {
-    // TODO Auto-generated method stub
-    return null;
+
+    String sqlString = QueryCache.get(
+        Query.SELECT_REF_PAYMENT_METHOD);
+
+    try (var stmt = con.prepareStatement(sqlString);
+        var rs = stmt.executeQuery()) {
+      List<PaymentMethod> list = new ArrayList<>();
+      while (rs.next()) {
+        list.add(new PaymentMethod(
+            rs.getLong("id"),
+            rs.getString("name"),
+            rs.getString("description"),
+            rs.getBoolean("enabled"),
+            rs.getTimestamp("created_at").toLocalDateTime()));
+      }
+
+      return list;
+    }
+
   }
 
   @Override
   public List<TaxGroup> getTaxGroups(Connection con) throws SQLException {
-    // TODO Auto-generated method stub
-    return null;
+
+    String sqlString = QueryCache.get(
+        Query.SELECT_REF_TAX_GROUP);
+
+    try (var stmt = con.prepareStatement(sqlString);
+        var rs = stmt.executeQuery()) {
+      List<TaxGroup> list = new ArrayList<>();
+      while (rs.next()) {
+        list.add(new TaxGroup(
+            rs.getLong("id"),
+            rs.getString("name"),
+            rs.getString("description"),
+            rs.getBoolean("enabled"),
+            rs.getTimestamp("created_at").toLocalDateTime()));
+      }
+
+      return list;
+    }
+
+  }
+
+  @Override
+  public List<TaxGroupLine> getTaxGroupLines(Connection con) throws SQLException {
+
+    String sqlString = QueryCache.get(
+        Query.SELECT_REF_TAX_GROUP_LINE);
+
+    try (var stmt = con.prepareStatement(sqlString);
+        var rs = stmt.executeQuery()) {
+      List<TaxGroupLine> list = new ArrayList<>();
+      while (rs.next()) {
+        list.add(new TaxGroupLine(
+            rs.getLong("id"),
+            rs.getLong("tax_group_id"),
+            rs.getLong("tax_rate_id"),
+            rs.getInt("sort_order")));
+      }
+
+      return list;
+    }
+
+  }
+
+  @Override
+  public List<TaxRate> getTaxRates(Connection con) throws SQLException {
+
+    String sqlString = QueryCache.get(
+        Query.SELECT_REF_TAX_RATE);
+
+    try (var stmt = con.prepareStatement(sqlString);
+        var rs = stmt.executeQuery()) {
+      List<TaxRate> list = new ArrayList<>();
+      while (rs.next()) {
+        list.add(new TaxRate(
+            rs.getLong("id"),
+            rs.getString("name"),
+            rs.getString("description"),
+            rs.getBoolean("enabled"),
+            rs.getTimestamp("created_at").toLocalDateTime(),
+            rs.getDouble("rate"),
+            rs.getBoolean("is_compound"),
+            rs.getInt("calculation_order"),
+            rs.getDate("valid_from").toLocalDate(),
+            rs.getDate("valid_to") != null ? rs.getDate("valid_to").toLocalDate() : null));
+      }
+
+      return list;
+    }
+
   }
 
 }

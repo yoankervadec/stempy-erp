@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
 import com.lesconstructionssapete.stempyerp.constant.ConstantUtil;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
 
@@ -22,8 +22,8 @@ public class SequenceServiceImpl implements SequenceService {
   @Override
   public LiveSequence next(Connection connection, String entityType, long createdByUserSeq) {
 
-    EntityType entity = ConstantUtil.findByName(
-        constantCache.getEntityTypes(), entityType);
+    DomainEntityType entity = ConstantUtil.findByName(
+        constantCache.getDomainEntityTypes(), entityType);
 
     try {
       LiveSequence liveSequence = repository.generateFor(connection, entity, createdByUserSeq);

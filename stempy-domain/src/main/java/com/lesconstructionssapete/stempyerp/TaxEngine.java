@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxRate;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroupLine;
 
 /*
  * Receives a List of subtotals and une TaxGroup
@@ -39,9 +39,9 @@ public class TaxEngine {
 
     BigDecimal totalTaxSum = BigDecimal.ZERO.setScale(2);
 
-    for (TaxRate taxRate : taxGroup.getTaxRates()) {
+    for (TaxGroupLine taxRate : taxGroup.getRates()) {
 
-      BigDecimal rate = BigDecimal.valueOf(taxRate.getRate())
+      BigDecimal rate = BigDecimal.valueOf(taxRate.getTaxRate().getRate())
           .divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
 
       BigDecimal subtotalSum = subtotals.stream()

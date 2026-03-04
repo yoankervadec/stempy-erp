@@ -2,20 +2,28 @@ package com.lesconstructionssapete.stempyerp.domain.base.constant;
 
 import java.time.LocalDateTime;
 
-public class RetailCategory implements ConstantEntity {
+public class DomainEntityType implements ConstantEntity {
 
   private final long id;
   private final String name;
-  private final String description;
   private final boolean enabled;
   private final LocalDateTime createdAt;
+  private final int padLength;
+  private final String prefix;
 
-  public RetailCategory(long id, String name, String description, boolean enabled, LocalDateTime createdAt) {
+  public DomainEntityType(
+      long id,
+      String name,
+      boolean enabled,
+      LocalDateTime createdAt,
+      int padLength,
+      String prefix) {
     this.id = id;
     this.name = name;
-    this.description = description;
     this.enabled = enabled;
     this.createdAt = createdAt;
+    this.padLength = padLength;
+    this.prefix = prefix;
   }
 
   @Override
@@ -28,10 +36,6 @@ public class RetailCategory implements ConstantEntity {
     return name;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
   @Override
   public boolean isEnabled() {
     return enabled;
@@ -39,6 +43,14 @@ public class RetailCategory implements ConstantEntity {
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
+  }
+
+  public int getPadLength() {
+    return padLength;
+  }
+
+  public String getPrefix() {
+    return prefix;
   }
 
 }

@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.service.base.sequence.numbering;
 
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
 /**
@@ -14,6 +14,6 @@ public interface EntityNumberGeneratorRegistry {
    * If no specific generator is registered for the EntityType, returns a default
    * generator.
    */
-  <T extends GenericEntity> EntityNumberGenerator<T> getFor(EntityType entityType);
+  <T extends GenericEntity> EntityNumberGenerator<T> getFor(DomainEntityType entityType);
 
 }

@@ -1,15 +1,21 @@
 package com.lesconstructionssapete.stempyerp.domain.base.constant;
 
+import java.time.LocalDateTime;
+
 public class PaymentMethod implements ConstantEntity {
 
   private final long id;
   private final String name;
-  private final boolean isEnabled;
+  private final String description;
+  private final boolean enabled;
+  private final LocalDateTime createdAt;
 
-  public PaymentMethod(long id, String name, boolean isEnabled) {
+  public PaymentMethod(long id, String name, String description, boolean enabled, LocalDateTime createdAt) {
     this.id = id;
     this.name = name;
-    this.isEnabled = isEnabled;
+    this.description = description;
+    this.enabled = enabled;
+    this.createdAt = createdAt;
   }
 
   @Override
@@ -24,6 +30,15 @@ public class PaymentMethod implements ConstantEntity {
 
   @Override
   public boolean isEnabled() {
-    return isEnabled;
+    return enabled;
   }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
 }

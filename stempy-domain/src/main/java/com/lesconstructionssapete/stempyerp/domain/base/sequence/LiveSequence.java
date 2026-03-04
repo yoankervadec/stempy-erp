@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.base.sequence;
 
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
 
 /*
  * Holds the sequence number for a given EntityType before persisting.
@@ -8,17 +8,17 @@ import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
 
 public class LiveSequence {
 
-  private final EntityType entityType;
+  private final DomainEntityType entityType;
   private final long sequenceNo;
   private final long createdByUserSeq;
 
-  public LiveSequence(EntityType entityType, long sequenceNo, long createdByUserSeq) {
+  public LiveSequence(DomainEntityType entityType, long sequenceNo, long createdByUserSeq) {
     this.entityType = entityType;
     this.sequenceNo = sequenceNo;
     this.createdByUserSeq = createdByUserSeq;
   }
 
-  public EntityType getEntityType() {
+  public DomainEntityType getEntityType() {
     return entityType;
   }
 

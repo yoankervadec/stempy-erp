@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.service.base.sequence.numbering;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
@@ -29,7 +29,7 @@ public class DefaultEntityNumberGeneratorRegistry
 
   @SuppressWarnings("unchecked")
   @Override
-  public EntityNumberGenerator<? extends GenericEntity> getFor(EntityType entityType) {
+  public EntityNumberGenerator<? extends GenericEntity> getFor(DomainEntityType entityType) {
     EntityNumberGenerator<? extends GenericEntity> generator = generators.getOrDefault(
         entityType.getName(),
         defaultGenerator);

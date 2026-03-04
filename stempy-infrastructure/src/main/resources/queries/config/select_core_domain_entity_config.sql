@@ -1,0 +1,9 @@
+SELECT
+  core_domain_entity_config.id,
+  core_domain_entity_config.name,
+  core_domain_entity_config.enabled,
+  core_domain_entity_config.created_at,
+  core_domain_entity_config.pad_length,
+  core_domain_entity_config.prefix
+FROM
+  core_domain_entity_config

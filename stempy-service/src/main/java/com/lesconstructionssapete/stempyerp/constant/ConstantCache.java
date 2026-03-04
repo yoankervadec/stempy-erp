@@ -12,8 +12,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lesconstructionssapete.stempyerp.config.redis.RedisProvider;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.PaymentMethod;
 import com.lesconstructionssapete.stempyerp.domain.base.constant.RetailCategory;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
 import com.lesconstructionssapete.stempyerp.service.base.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.util.JsonUtil;
 
@@ -65,21 +67,27 @@ public class ConstantCache {
 
     LOGGER.info("Loading and caching configuration constants...");
 
-    getEntityTypes();
+    getDomainEntityTypes();
     LOGGER.info("\t ...Cached Entity Type");
 
     getRetailCategories();
     LOGGER.info("\t ...Cached Retail Categories");
 
+    getTaxGroups();
+    LOGGER.info("\t ...Cached Tax Groups");
+
+    getPaymentMethods();
+    LOGGER.info("\t ...Cached Payment Methods");
+
     LOGGER.info("Finished caching configuration constants.\n");
   }
 
-  public List<EntityType> getEntityTypes() {
+  public List<DomainEntityType> getDomainEntityTypes() {
     return getOrLoad(
         "constant:entity_types",
-        new TypeReference<List<EntityType>>() {
+        new TypeReference<List<DomainEntityType>>() {
         },
-        () -> service.getEntityTypes());
+        () -> service.getDomainEntityTypes());
   }
 
   public List<RetailCategory> getRetailCategories() {
@@ -88,6 +96,22 @@ public class ConstantCache {
         new TypeReference<List<RetailCategory>>() {
         },
         () -> service.getRetailCategories());
+  }
+
+  public List<TaxGroup> getTaxGroups() {
+    return getOrLoad(
+        "constant:tax_groups",
+        new TypeReference<List<TaxGroup>>() {
+        },
+        () -> service.getTaxGroups());
+  }
+
+  public List<PaymentMethod> getPaymentMethods() {
+    return getOrLoad(
+        "constant:payment_methods",
+        new TypeReference<List<PaymentMethod>>() {
+        },
+        () -> service.getPaymentMethods());
   }
 
 }

@@ -13,6 +13,6 @@ public final class PaddedPrefixGenerator
         "%0" + liveSequence.getEntityType().getPadLength() + "d",
         liveSequence.getSequenceNo());
 
-    return liveSequence.getEntityType().getPrefixString() + formatted;
+    return liveSequence.getEntityType().getPrefix() + formatted;
   }
 }

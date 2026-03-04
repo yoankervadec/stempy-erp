@@ -1,6 +1,7 @@
 package com.lesconstructionssapete.stempyerp.domain.base.constant;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaxGroup implements ConstantEntity {
@@ -10,21 +11,23 @@ public class TaxGroup implements ConstantEntity {
   private final String description;
   private final boolean enabled;
   private final LocalDateTime createdAt;
-  private final List<TaxRate> taxRates;
+  private List<TaxGroupLine> rates;
+  private List<TaxRate> innactiveRates;
 
   public TaxGroup(
       long id,
       String name,
       String description,
       boolean enabled,
-      LocalDateTime createdAt,
-      List<TaxRate> taxRates) {
+      LocalDateTime createdAt) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.enabled = enabled;
     this.createdAt = createdAt;
-    this.taxRates = taxRates;
+
+    this.rates = new ArrayList<>();
+    this.innactiveRates = new ArrayList<>();
   }
 
   @Override
@@ -50,8 +53,19 @@ public class TaxGroup implements ConstantEntity {
     return createdAt;
   }
 
-  public List<TaxRate> getTaxRates() {
-    return taxRates;
+  public List<TaxGroupLine> getRates() {
+    return rates;
   }
 
+  public void setRates(List<TaxGroupLine> rates) {
+    this.rates = rates;
+  }
+
+  public List<TaxRate> getInnactiveRates() {
+    return innactiveRates;
+  }
+
+  public void setInnactiveRates(List<TaxRate> innactiveRates) {
+    this.innactiveRates = innactiveRates;
+  }
 }

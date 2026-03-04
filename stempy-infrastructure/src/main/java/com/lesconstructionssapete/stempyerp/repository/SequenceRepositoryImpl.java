@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.repository;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.domain.base.constant.EntityType;
+import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.base.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.exception.SequenceNotFoundException;
 import com.lesconstructionssapete.stempyerp.exception.SequenceUpdateException;
@@ -19,7 +19,7 @@ public class SequenceRepositoryImpl implements SequenceRepository {
   @Override
   public LiveSequence generateFor(
       Connection connection,
-      EntityType entityType,
+      DomainEntityType entityType,
       long createdByUserSeq) throws SQLException {
 
     LiveSequence entitySequence;

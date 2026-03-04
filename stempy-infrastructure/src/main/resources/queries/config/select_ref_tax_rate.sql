@@ -1,0 +1,13 @@
+SELECT
+  ref_tax_rate.id,
+  ref_tax_rate.name,
+  ref_tax_rate.description,
+  ref_tax_rate.enabled,
+  ref_tax_rate.created_at,
+  ref_tax_rate.rate,
+  ref_tax_rate.is_compound,
+  ref_tax_rate.calculation_order,
+  ref_tax_rate.valid_from,
+  ref_tax_rate.valid_to
+FROM
+  ref_tax_rate
