@@ -51,6 +51,8 @@ public class WorkerThread implements Runnable {
    * @param executable the job executable to run
    * @throws InterruptedException if the thread is interrupted during execution
    */
+
+  @SuppressWarnings("BusyWait") // Sleep is intentional for retry backoff
   private void executeAndLog(JobExecutable executable) throws InterruptedException {
 
     int attempt = 0;
