@@ -42,17 +42,6 @@ public class AuthFacadeImpl implements AuthFacade {
   }
 
   @Override
-  public boolean exists(String userNo, String refreshToken) {
-
-    return transaction.execute(
-        TransactionPropagation.REQUIRED,
-        con -> {
-          return authService.refreshTokenExists(con, 0, refreshToken);
-        });
-
-  }
-
-  @Override
   public AuthToken save(AuthToken token) {
 
     return transaction.execute(
@@ -140,10 +129,6 @@ public class AuthFacadeImpl implements AuthFacade {
       throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Invalid refresh token.");
     }
 
-    if (!exists(userNo, refreshToken)) {
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token revoked");
-    }
-
     DomainQuery userQuery = new DomainQuery(
         new FilterCondition(
             "userNo",
@@ -152,23 +137,34 @@ public class AuthFacadeImpl implements AuthFacade {
         null,
         null);
 
-    List<User> users = userFacade.fetch(userQuery);
+    AuthToken token = transaction.execute(
+        TransactionPropagation.REQUIRED,
+        con -> {
 
-    if (users.isEmpty()) {
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "User not found.");
-    }
+          List<User> users = userFacade.fetch(userQuery);
 
-    User user = users.get(0);
+          if (users.isEmpty()) {
+            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "User not found.");
+          }
 
-    String newAccessToken = tokenProvider.generateAccessToken(user.getEntityNo());
+          User user = users.get(0);
 
-    return new AuthToken(
-        null,
-        null,
-        newAccessToken,
-        null,
-        null,
-        null);
+          if (authService.refreshTokenExists(con, user.getEntityId(), refreshToken)) {
+            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token revoked");
+          }
+
+          String newAccessToken = tokenProvider.generateAccessToken(user.getEntityNo());
+
+          return new AuthToken(
+              null,
+              null,
+              newAccessToken,
+              null,
+              null,
+              null);
+        });
+
+    return token;
   }
 
 }

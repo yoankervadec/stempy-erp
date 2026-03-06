@@ -26,7 +26,7 @@ public class AuthToken {
     this.createdAt = createdAt;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
@@ -34,7 +34,7 @@ public class AuthToken {
     this.id = refreshTokenSeq;
   }
 
-  public long getUserId() {
+  public Long getUserId() {
     return userId;
   }
 
