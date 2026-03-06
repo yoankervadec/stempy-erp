@@ -43,13 +43,11 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class Dependencies {
 
-  Dotenv dotenv = Dotenv.load();
+  private final Dotenv dotenv = Dotenv.load();
 
   // Infrastructure
   public final RedisProvider redisProvider;
-
   public final ConnectionProvider connectionProvider;
-
   public final TransactionRunner transactionRunner;
 
   // Repositories
@@ -65,12 +63,10 @@ public class Dependencies {
   public final EntityNumberGeneratorRegistry entityNumberGeneratorRegistry;
   public final ConstantService constantService;
   public final AuthService authService;
+  public final SequenceService sequenceService;
 
   // Cache
   public final ConstantCache constantCache;
-
-  // Other Services
-  public final SequenceService sequenceService;
 
   // Facades
   public final RetailProductFacade retailProductFacade;
@@ -84,11 +80,9 @@ public class Dependencies {
   public Dependencies() {
 
     // Infrastructure
-    this.redisProvider = new RedisProvider();
-
-    this.connectionProvider = new HikariConnectionProvider();
-
-    this.transactionRunner = new TransactionManager(connectionProvider);
+    this.redisProvider = createRedisProvider();
+    this.connectionProvider = createConnectionProvider();
+    this.transactionRunner = createTransactionRunner();
 
     // Repositories
     this.constantRepository = new ConstantRepositoryImpl();
@@ -98,18 +92,16 @@ public class Dependencies {
     this.sequenceRepository = new SequenceRepositoryImpl();
 
     // Services
-    this.tokenProvider = new JwtTokenProvider(
-        dotenv.get("JWT_SECRET"),
-        Duration.ofMinutes(30).toMillis(),
-        Duration.ofDays(7).toMillis());
-    this.redisCache = new LettuceRedisCache(redisProvider.getConnection().sync());
+    this.tokenProvider = createTokenProvider();
+    this.redisCache = createRedisCache();
     this.entityNumberGeneratorRegistry = new DefaultEntityNumberGeneratorRegistry();
     this.constantService = new ConstantServiceImpl(connectionProvider, constantRepository);
     this.authService = new AuthServiceImpl(refreshTokenRepository, userRepository);
+
     // Cache
     this.constantCache = new ConstantCache(redisCache, constantService);
 
-    // Other Services
+    // Domain Services
     this.sequenceService = new SequenceServiceImpl(sequenceRepository, constantCache);
 
     // Facades
@@ -118,7 +110,9 @@ public class Dependencies {
         sequenceService,
         entityNumberGeneratorRegistry,
         retailProductRepository);
+
     this.userFacade = new UserFacadeImpl(transactionRunner, userRepository);
+
     this.authFacade = new AuthFacadeImpl(
         transactionRunner,
         refreshTokenRepository,
@@ -129,5 +123,32 @@ public class Dependencies {
     // Controllers
     this.retailProductController = new RetailProductController(retailProductFacade);
     this.authController = new AuthController(userFacade, authFacade);
+  }
+
+  // ---------- Infrastructure ----------
+
+  private RedisProvider createRedisProvider() {
+    return new RedisProvider();
+  }
+
+  private ConnectionProvider createConnectionProvider() {
+    return new HikariConnectionProvider();
+  }
+
+  private TransactionRunner createTransactionRunner() {
+    return new TransactionManager(connectionProvider);
+  }
+
+  // ---------- Services ----------
+
+  private TokenProvider createTokenProvider() {
+    return new JwtTokenProvider(
+        dotenv.get("JWT_SECRET"),
+        Duration.ofMinutes(30).toMillis(),
+        Duration.ofDays(7).toMillis());
+  }
+
+  private RedisCache createRedisCache() {
+    return new LettuceRedisCache(redisProvider.getConnection().sync());
   }
 }
