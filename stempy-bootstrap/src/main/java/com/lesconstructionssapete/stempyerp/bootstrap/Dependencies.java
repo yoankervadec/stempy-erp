@@ -8,6 +8,7 @@ import com.lesconstructionssapete.stempyerp.config.db.TransactionManager;
 import com.lesconstructionssapete.stempyerp.config.redis.LettuceRedisCache;
 import com.lesconstructionssapete.stempyerp.config.redis.RedisProvider;
 import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
+import com.lesconstructionssapete.stempyerp.constant.RedisConstantCache;
 import com.lesconstructionssapete.stempyerp.controller.AuthController;
 import com.lesconstructionssapete.stempyerp.controller.RetailProductController;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
@@ -43,112 +44,95 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class Dependencies {
 
-  private final Dotenv dotenv = Dotenv.load();
-
-  // Infrastructure
-  public final RedisProvider redisProvider;
-  public final ConnectionProvider connectionProvider;
-  public final TransactionRunner transactionRunner;
-
-  // Repositories
-  public final ConstantRepository constantRepository;
-  public final RetailProductRepository retailProductRepository;
-  public final RefreshTokenRepository refreshTokenRepository;
-  public final UserRepository userRepository;
-  public final SequenceRepository sequenceRepository;
-
-  // Services
-  public final TokenProvider tokenProvider;
-  public final RedisCache redisCache;
-  public final EntityNumberGeneratorRegistry entityNumberGeneratorRegistry;
-  public final ConstantService constantService;
-  public final AuthService authService;
-  public final SequenceService sequenceService;
-
-  // Cache
-  public final ConstantCache constantCache;
-
-  // Facades
-  public final RetailProductFacade retailProductFacade;
-  public final AuthFacade authFacade;
-  public final UserFacade userFacade;
-
-  // Controllers
-  public final RetailProductController retailProductController;
-  public final AuthController authController;
+  private final Container container = new Container();
 
   public Dependencies() {
+    registerInstances();
+    bindInfrastructure();
+    bindRepositories();
+    bindServices();
+    bindCache();
+    bindFacades();
+  }
 
-    // Infrastructure
-    this.redisProvider = createRedisProvider();
-    this.connectionProvider = createConnectionProvider();
-    this.transactionRunner = createTransactionRunner();
+  public Container container() {
+    return container;
+  }
 
-    // Repositories
-    this.constantRepository = new ConstantRepositoryImpl();
-    this.retailProductRepository = new RetailProductRepositoryImpl();
-    this.refreshTokenRepository = new RefreshTokenRepositoryImpl();
-    this.userRepository = new UserRepositoryImpl();
-    this.sequenceRepository = new SequenceRepositoryImpl();
+  // ---------- Manual Instances ----------
 
-    // Services
-    this.tokenProvider = createTokenProvider();
-    this.redisCache = createRedisCache();
-    this.entityNumberGeneratorRegistry = new DefaultEntityNumberGeneratorRegistry();
-    this.constantService = new ConstantServiceImpl(connectionProvider, constantRepository);
-    this.authService = new AuthServiceImpl(refreshTokenRepository, userRepository);
+  private void registerInstances() {
 
-    // Cache
-    this.constantCache = new ConstantCache(redisCache, constantService);
+    Dotenv dotenv = Dotenv.load();
+    container.instance(Dotenv.class, dotenv);
 
-    // Domain Services
-    this.sequenceService = new SequenceServiceImpl(sequenceRepository, constantCache);
+    RedisProvider redisProvider = new RedisProvider();
+    container.instance(RedisProvider.class, redisProvider);
 
-    // Facades
-    this.retailProductFacade = new RetailProductFacadeImpl(
-        transactionRunner,
-        sequenceService,
-        entityNumberGeneratorRegistry,
-        retailProductRepository);
+    RedisCache redisCache = new LettuceRedisCache(redisProvider.getConnection().sync());
+    container.instance(RedisCache.class, redisCache);
 
-    this.userFacade = new UserFacadeImpl(transactionRunner, userRepository);
+    TokenProvider tokenProvider = new JwtTokenProvider(
+        dotenv.get("JWT_SECRET"),
+        Duration.ofMinutes(30).toMillis(),
+        Duration.ofDays(7).toMillis());
 
-    this.authFacade = new AuthFacadeImpl(
-        transactionRunner,
-        refreshTokenRepository,
-        tokenProvider,
-        userFacade,
-        authService);
-
-    // Controllers
-    this.retailProductController = new RetailProductController(retailProductFacade);
-    this.authController = new AuthController(userFacade, authFacade);
+    container.instance(TokenProvider.class, tokenProvider);
   }
 
   // ---------- Infrastructure ----------
 
-  private RedisProvider createRedisProvider() {
-    return new RedisProvider();
+  private void bindInfrastructure() {
+
+    container.bind(ConnectionProvider.class, HikariConnectionProvider.class);
+    container.bind(TransactionRunner.class, TransactionManager.class);
+
+    container.bind(EntityNumberGeneratorRegistry.class, DefaultEntityNumberGeneratorRegistry.class);
   }
 
-  private ConnectionProvider createConnectionProvider() {
-    return new HikariConnectionProvider();
-  }
+  // ---------- Repositories ----------
 
-  private TransactionRunner createTransactionRunner() {
-    return new TransactionManager(connectionProvider);
+  private void bindRepositories() {
+
+    container.bind(ConstantRepository.class, ConstantRepositoryImpl.class);
+    container.bind(RetailProductRepository.class, RetailProductRepositoryImpl.class);
+    container.bind(RefreshTokenRepository.class, RefreshTokenRepositoryImpl.class);
+    container.bind(UserRepository.class, UserRepositoryImpl.class);
+    container.bind(SequenceRepository.class, SequenceRepositoryImpl.class);
   }
 
   // ---------- Services ----------
 
-  private TokenProvider createTokenProvider() {
-    return new JwtTokenProvider(
-        dotenv.get("JWT_SECRET"),
-        Duration.ofMinutes(30).toMillis(),
-        Duration.ofDays(7).toMillis());
+  private void bindServices() {
+
+    container.bind(ConstantService.class, ConstantServiceImpl.class);
+    container.bind(AuthService.class, AuthServiceImpl.class);
+    container.bind(SequenceService.class, SequenceServiceImpl.class);
   }
 
-  private RedisCache createRedisCache() {
-    return new LettuceRedisCache(redisProvider.getConnection().sync());
+  // ---------- Cache ----------
+
+  private void bindCache() {
+
+    container.bind(ConstantCache.class, RedisConstantCache.class);
+  }
+
+  // ---------- Facades ----------
+
+  private void bindFacades() {
+
+    container.bind(RetailProductFacade.class, RetailProductFacadeImpl.class);
+    container.bind(UserFacade.class, UserFacadeImpl.class);
+    container.bind(AuthFacade.class, AuthFacadeImpl.class);
+  }
+
+  // ---------- Controllers ----------
+
+  public AuthController authController() {
+    return container.get(AuthController.class);
+  }
+
+  public RetailProductController retailProductController() {
+    return container.get(RetailProductController.class);
   }
 }

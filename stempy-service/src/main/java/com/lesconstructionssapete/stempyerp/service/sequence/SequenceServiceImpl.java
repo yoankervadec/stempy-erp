@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.service.sequence;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
 import com.lesconstructionssapete.stempyerp.constant.ConstantUtil;
+import com.lesconstructionssapete.stempyerp.constant.RedisConstantCache;
 import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
@@ -12,9 +12,9 @@ import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
 public class SequenceServiceImpl implements SequenceService {
 
   private final SequenceRepository repository;
-  private final ConstantCache constantCache;
+  private final RedisConstantCache constantCache;
 
-  public SequenceServiceImpl(SequenceRepository repository, ConstantCache constantCache) {
+  public SequenceServiceImpl(SequenceRepository repository, RedisConstantCache constantCache) {
     this.repository = repository;
     this.constantCache = constantCache;
   }
