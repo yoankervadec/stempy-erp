@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.automation.execution;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobExecutable;
+import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 
 /**
  * Thread-safe queue for managing job execution requests.

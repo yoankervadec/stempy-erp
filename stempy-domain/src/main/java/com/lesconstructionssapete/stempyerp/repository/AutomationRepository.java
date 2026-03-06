@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.base.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 
 public interface AutomationRepository {
 

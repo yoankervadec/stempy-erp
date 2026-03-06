@@ -5,12 +5,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobFactory;
 import com.lesconstructionssapete.stempyerp.automation.scheduling.Scheduler;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobExecutable;
+import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.repository.AutomationRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.repository.automation.AutomationRepositoryImpl;
 
 /**
  * Central manager responsible for controlling automation jobs within the
@@ -50,9 +51,9 @@ public class AutomationManager {
    * @param jobs the initial set of jobs to manage
    * @return the singleton {@code AutomationManager} instance
    */
-  public static synchronized AutomationManager create(List<Job> jobs) {
+  public static synchronized AutomationManager create(ConnectionProvider provider, List<Job> jobs) {
     if (instance == null) {
-      instance = new AutomationManager(jobs);
+      instance = new AutomationManager(provider, jobs);
     }
     return instance;
   }
@@ -104,11 +105,11 @@ public class AutomationManager {
    *
    * @param jobs initial set of jobs to manage
    */
-  private AutomationManager(List<Job> jobs) {
+  private AutomationManager(ConnectionProvider provider, List<Job> jobs) {
     this.jobs = jobs;
 
     this.queue = new JobQueue();
-    this.workerThread = new WorkerThread(queue);
+    this.workerThread = new WorkerThread(provider, queue);
     this.thread = new Thread(workerThread, "JobWorker");
     this.scheduler = new Scheduler(queue);
 

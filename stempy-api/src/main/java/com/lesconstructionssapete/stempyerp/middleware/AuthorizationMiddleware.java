@@ -2,13 +2,13 @@ package com.lesconstructionssapete.stempyerp.middleware;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.base.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
-import com.lesconstructionssapete.stempyerp.facade.base.auth.UserFacade;
+import com.lesconstructionssapete.stempyerp.facade.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.http.contract.ApiRequest;
 

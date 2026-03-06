@@ -1,20 +1,21 @@
 package com.lesconstructionssapete.stempyerp.config;
 
-import com.lesconstructionssapete.stempyerp.facade.base.auth.UserFacade;
+import com.lesconstructionssapete.stempyerp.facade.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.AuthorizationMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.JwtAuthenticationMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.RequestOptionsMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.RequestQueryMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.ServerContextMiddleware;
+import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 
 import io.javalin.Javalin;
 
 public final class MiddlewareConfig {
 
-  public static void configure(Javalin app, UserFacade userFacade) {
+  public static void configure(Javalin app, UserFacade userFacade, TokenProvider tokenProvider) {
 
-    JwtAuthenticationMiddleware jwtAuthMiddleware = new JwtAuthenticationMiddleware();
+    JwtAuthenticationMiddleware jwtAuthMiddleware = new JwtAuthenticationMiddleware(tokenProvider);
     ApiRequestMiddleware apiRequestMiddleware = new ApiRequestMiddleware();
     ServerContextMiddleware serverContextMiddleware = new ServerContextMiddleware();
     RequestOptionsMiddleware requestOptionsMiddleware = new RequestOptionsMiddleware();

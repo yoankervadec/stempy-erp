@@ -28,7 +28,7 @@ public class App {
     Dependencies deps = new Dependencies();
 
     ConstantCacheInitializer.initialize(deps);
-    AutomationInitializer.initialize();
+    AutomationInitializer.initialize(deps.connectionProvider);
 
     // Setup Javalin
     Javalin app = Javalin.create(config -> {
@@ -37,7 +37,7 @@ public class App {
     }).start(APP_PORT);
 
     // Middleware
-    MiddlewareConfig.configure(app, deps.userFacade);
+    MiddlewareConfig.configure(app, deps.userFacade, deps.tokenProvider);
 
     // Exception handling
     ExceptionConfig.configure(app);

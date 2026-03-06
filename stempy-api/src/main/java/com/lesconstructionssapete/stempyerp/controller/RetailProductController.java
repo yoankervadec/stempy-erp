@@ -2,16 +2,16 @@ package com.lesconstructionssapete.stempyerp.controller;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.base.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.dto.base.RetailProductRequest;
-import com.lesconstructionssapete.stempyerp.facade.base.retailproduct.RetailProductFacade;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.dto.RetailProductRequest;
+import com.lesconstructionssapete.stempyerp.facade.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.http.RequestMapper;
 import com.lesconstructionssapete.stempyerp.http.Response;
 import com.lesconstructionssapete.stempyerp.http.contract.ApiRequest;
 import com.lesconstructionssapete.stempyerp.http.query.RequestQueryMapper;
-import com.lesconstructionssapete.stempyerp.mapper.base.RetailProductMapper;
+import com.lesconstructionssapete.stempyerp.mapper.RetailProductMapper;
 
 import io.javalin.http.Context;
 

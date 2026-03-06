@@ -11,15 +11,13 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lesconstructionssapete.stempyerp.config.redis.RedisProvider;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.PaymentMethod;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.RetailCategory;
-import com.lesconstructionssapete.stempyerp.domain.base.constant.TaxGroup;
-import com.lesconstructionssapete.stempyerp.service.base.constant.ConstantService;
+import com.lesconstructionssapete.stempyerp.cache.RedisCache;
+import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.domain.constant.PaymentMethod;
+import com.lesconstructionssapete.stempyerp.domain.constant.RetailCategory;
+import com.lesconstructionssapete.stempyerp.domain.constant.TaxGroup;
+import com.lesconstructionssapete.stempyerp.service.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.util.JsonUtil;
-
-import io.lettuce.core.api.sync.RedisCommands;
 
 /*
  * Caches configuration constants into memory.
@@ -34,11 +32,11 @@ public class ConstantCache {
 
   private static final Duration CACHE_TTL = Duration.ofHours(12);
 
-  private final RedisCommands<String, String> redis;
+  private final RedisCache redis;
   private final ConstantService service;
 
-  public ConstantCache(RedisProvider redisProvider, ConstantService service) {
-    this.redis = redisProvider.getConnection().sync();
+  public ConstantCache(RedisCache redis, ConstantService service) {
+    this.redis = redis;
     this.service = service;
   }
 

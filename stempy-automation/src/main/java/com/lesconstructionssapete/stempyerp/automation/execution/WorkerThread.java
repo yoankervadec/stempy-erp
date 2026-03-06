@@ -2,16 +2,19 @@ package com.lesconstructionssapete.stempyerp.automation.execution;
 
 import java.time.LocalDateTime;
 
+import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.handler.LogJobRuns;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobExecutable;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 
 public class WorkerThread implements Runnable {
 
+  private final ConnectionProvider provider;
   private final JobQueue queue;
   private volatile boolean running = true;
 
-  public WorkerThread(JobQueue queue) {
+  public WorkerThread(ConnectionProvider provider, JobQueue queue) {
+    this.provider = provider;
     this.queue = queue;
   }
 
@@ -64,7 +67,7 @@ public class WorkerThread implements Runnable {
       try {
         log.setMessage("Executing: " + executable.meta().getName() + "...");
 
-        log = executable.execute(log);
+        log = executable.execute(provider, log);
 
         log.markSuccess(executable.meta().getName());
 

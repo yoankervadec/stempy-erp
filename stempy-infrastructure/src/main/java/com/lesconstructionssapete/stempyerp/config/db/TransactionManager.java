@@ -5,10 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.exception.DatabaseAccessException;
 import com.lesconstructionssapete.stempyerp.exception.DomainException;
 import com.lesconstructionssapete.stempyerp.exception.InternalException;
 import com.lesconstructionssapete.stempyerp.exception.TransactionFailureException;
+import com.lesconstructionssapete.stempyerp.transaction.TransactionCallback;
+import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
+import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
+import com.lesconstructionssapete.stempyerp.transaction.TransactionVoidCallback;
 
 /**
  * Manages database transactions with support for different propagation
@@ -20,9 +25,15 @@ import com.lesconstructionssapete.stempyerp.exception.TransactionFailureExceptio
  * classification.
  */
 
-public class TransactionManager {
+public class TransactionManager implements TransactionRunner {
+
+  private final ConnectionProvider provider;
 
   private static final ThreadLocal<Deque<Connection>> CONNECTION_STACK = ThreadLocal.withInitial(ArrayDeque::new);
+
+  public TransactionManager(ConnectionProvider provider) {
+    this.provider = provider;
+  }
 
   /**
    * Executes the given callback within a transaction according to the specified
@@ -33,7 +44,9 @@ public class TransactionManager {
    * @param callback
    * @return the result of the callback execution
    */
-  public static <T> T execute(
+
+  @Override
+  public <T> T execute(
       TransactionPropagation propagation,
       TransactionCallback<T> callback) {
 
@@ -67,35 +80,35 @@ public class TransactionManager {
     };
   }
 
-  public static void executeVoid(
+  public void executeVoid(
       TransactionPropagation propagation,
       TransactionVoidCallback callback) {
 
     execute(propagation, connection -> {
-      callback.executeInTransaction(connection);
+      callback.execute(connection);
       return null;
     });
   }
 
-  private static <T> T executeInsideExistingTransaction(
+  private <T> T executeInsideExistingTransaction(
       Connection connection,
       TransactionCallback<T> callback) {
 
     try {
-      return callback.executeInTransaction(connection);
+      return callback.execute(connection);
     } catch (Exception e) {
       throw classify(e);
     }
   }
 
-  private static <T> T executeWithoutTransaction(
+  private <T> T executeWithoutTransaction(
       TransactionCallback<T> callback) {
 
     Connection connection = null;
 
     try {
-      connection = ConnectionPool.getConnection();
-      return callback.executeInTransaction(connection);
+      connection = provider.getConnection();
+      return callback.execute(connection);
 
     } catch (Exception e) {
       throw classify(e);
@@ -105,7 +118,7 @@ public class TransactionManager {
     }
   }
 
-  private static <T> T startNewTransaction(TransactionCallback<T> callback) {
+  private <T> T startNewTransaction(TransactionCallback<T> callback) {
 
     Deque<Connection> stack = CONNECTION_STACK.get();
     Connection connection = null;
@@ -113,13 +126,13 @@ public class TransactionManager {
     boolean pushed = false;
 
     try {
-      connection = ConnectionPool.getConnection();
+      connection = provider.getConnection();
       connection.setAutoCommit(false);
 
       stack.push(connection);
       pushed = true;
 
-      T result = callback.executeInTransaction(connection);
+      T result = callback.execute(connection);
 
       connection.commit();
       return result;
@@ -140,7 +153,7 @@ public class TransactionManager {
     }
   }
 
-  private static void rollbackQuietly(Connection connection) {
+  private void rollbackQuietly(Connection connection) {
     if (connection != null) {
       try {
         connection.rollback();
@@ -149,7 +162,7 @@ public class TransactionManager {
     }
   }
 
-  private static void closeQuietly(Connection connection) {
+  private void closeQuietly(Connection connection) {
     if (connection != null) {
       try {
         connection.close();
@@ -158,7 +171,7 @@ public class TransactionManager {
     }
   }
 
-  private static RuntimeException classify(Exception e) {
+  private RuntimeException classify(Exception e) {
 
     if (e instanceof DomainException domainException) {
       return domainException;

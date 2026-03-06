@@ -22,6 +22,7 @@
         </dependency>
 
         <!-- stempy-domain -->
+        <!-- TODO: remove dependency to domain, rely on stempy-api only -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-domain</artifactId>

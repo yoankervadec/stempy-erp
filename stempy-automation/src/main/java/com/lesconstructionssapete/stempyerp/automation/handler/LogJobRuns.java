@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.lesconstructionssapete.stempyerp.config.db.ConnectionPool;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobExecutable;
-import com.lesconstructionssapete.stempyerp.domain.base.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
+import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
 
 /**
@@ -48,7 +48,7 @@ public class LogJobRuns extends Job implements JobExecutable {
   }
 
   @Override
-  public JobLog execute(JobLog executionLog) {
+  public JobLog execute(ConnectionProvider provider, JobLog executionLog) {
 
     int totalLogs = logQueue.size();
     int totalBatches = (int) Math.ceil((double) totalLogs / MAX_BATCH_SIZE);
@@ -77,7 +77,7 @@ public class LogJobRuns extends Job implements JobExecutable {
       if (!batch.isEmpty()) {
         executionLog.appendMessage("Persisting records...");
 
-        try (Connection connection = ConnectionPool.getConnection()) {
+        try (Connection connection = provider.getConnection()) {
           connection.setAutoCommit(false);
 
           automationRepository.batchLog(connection, batch);

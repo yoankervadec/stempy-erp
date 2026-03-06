@@ -13,21 +13,31 @@
 
     <dependencies>
       
+        <!-- stempy-shared -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- stempy-domain -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- stempy-infrastructure -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-infrastructure</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- stempy-service -->
+        <dependency>
+            <groupId>com.lesconstructionssapete.stempyerp</groupId>
+            <artifactId>stempy-service</artifactId>
             <version>${project.version}</version>
         </dependency>
 

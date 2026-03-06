@@ -3,19 +3,19 @@ package com.lesconstructionssapete.stempyerp.bootstrap;
 import java.sql.Connection;
 
 import com.lesconstructionssapete.stempyerp.automation.execution.AutomationManager;
-import com.lesconstructionssapete.stempyerp.config.db.ConnectionPool;
+import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.repository.AutomationRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.repository.automation.AutomationRepositoryImpl;
 
 public class AutomationInitializer {
 
-  public static void initialize() {
-    try (Connection con = ConnectionPool.getConnection()) {
+  public static void initialize(ConnectionProvider provider) {
+    try (Connection con = provider.getConnection()) {
 
       AutomationRepository repo = new AutomationRepositoryImpl();
       var jobs = repo.fetchAll(con);
 
-      AutomationManager.create(jobs);
+      AutomationManager.create(provider, jobs);
       AutomationManager manager = AutomationManager.getInstance();
       manager.start();
 

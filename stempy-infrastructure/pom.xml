@@ -21,6 +21,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- stempy-service -->
+        <dependency>
+            <groupId>com.lesconstructionssapete.stempyerp</groupId>
+            <artifactId>stempy-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- stempy-domain -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>

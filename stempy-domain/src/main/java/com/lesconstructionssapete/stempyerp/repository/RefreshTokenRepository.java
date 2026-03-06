@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.repository;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.domain.base.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 
 public interface RefreshTokenRepository {
 

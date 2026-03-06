@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.constant;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.base.constant.ConstantEntity;
+import com.lesconstructionssapete.stempyerp.domain.constant.ConstantEntity;
 
 public class ConstantUtil {
 
