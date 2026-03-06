@@ -5,7 +5,6 @@ import java.util.Map;
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.facade.auth.AuthFacade;
-import com.lesconstructionssapete.stempyerp.facade.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.http.RequestMapper;
@@ -16,11 +15,9 @@ import io.javalin.http.Context;
 
 public class AuthController {
 
-  private final UserFacade userFacade;
   private final AuthFacade authFacade;
 
-  public AuthController(UserFacade userFacade, AuthFacade authFacade) {
-    this.userFacade = userFacade;
+  public AuthController(AuthFacade authFacade) {
     this.authFacade = authFacade;
   }
 

@@ -62,19 +62,18 @@ public class LettuceRedisCache implements RedisCache {
 
   @Override
   public String get(String key) {
-    // TODO Auto-generated method stub
-    return null;
+    return commands.get(key);
   }
 
   @Override
   public void set(String key, String value) {
-    // TODO Auto-generated method stub
+    commands.set(key, value);
 
   }
 
   @Override
   public void setex(String key, long seconds, String value) {
-    // TODO Auto-generated method stub
+    commands.setex(key, seconds, value);
 
   }
 
