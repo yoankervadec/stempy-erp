@@ -11,17 +11,20 @@ import java.util.regex.Pattern;
 import com.lesconstructionssapete.stempyerp.util.StringUtil;
 
 /**
- * SQL builder:
- * - Named parameters (:paramName) mapped to JDBC ? placeholders
- * - Typed params using SqlParam (value + SQL type)
- * - Buckets for bind params (SET values) vs WHERE params
- * - Debug helper to print SQL with values inlined
- * - Extensible for custom clauses
+ * A simple SQL builder that supports:
+ * - Base SQL with placeholders
+ * - Adding WHERE, JOIN, GROUP BY, HAVING, ORDER BY clauses
+ * - Binding named parameters (e.g. ":name") with automatic type inference
+ * - Generating final SQL with ? placeholders and ordered params list
+ * - Debugging with inlined params for logging/testing
  */
-
 public class SQLBuilder {
 
-  /** Internal wrapper for typed params */
+  /**
+   * Represents a single SQL parameter with name, value and JDBC type.
+   * The constructor with just name and value will attempt to guess the SQL type
+   * based on the Java type of the value.
+   */
   public static record SQLParam(String name, Object value, int sqlType) {
     public SQLParam(String name, Object value) {
       this(name, value, guessSqlType(value));
@@ -68,56 +71,81 @@ public class SQLBuilder {
     this.base = base.trim();
   }
 
-  // --- Bind values (SET, INSERT, WHERE etc.) ---
+  /**
+   * Bind a named parameter. The value's SQL type will be guessed based on its
+   * Java type.
+   */
   public SQLBuilder bind(String name, Object value) {
     params.put(name, new SQLParam(name, value));
     return this;
   }
 
+  /**
+   * Bind a named parameter with a specific SQL type.
+   */
   public SQLBuilder bind(String name, Object value, int sqlType) {
     params.put(name, new SQLParam(name, value, sqlType));
     return this;
   }
 
-  // --- WHERE with params (supports named params) ---
+  /**
+   * Add a WHERE clause.
+   */
   public SQLBuilder where(String condition) {
     whereClauses.add(condition);
     return this;
   }
 
+  /**
+   * Add an AND condition to the WHERE clause.
+   */
   public SQLBuilder and(String condition) {
     return where(condition);
   }
 
-  // --- JOIN ---
+  /**
+   * Add a JOIN clause.
+   */
   public SQLBuilder join(String joinClause) {
     joinClauses.add(joinClause);
     return this;
   }
 
-  // --- GROUP BY / HAVING ---
+  /**
+   * Add a GROUP BY clause.
+   */
   public SQLBuilder groupBy(String groupBy) {
     this.groupByClause = groupBy;
     return this;
   }
 
+  /**
+   * Add a HAVING clause.
+   */
   public SQLBuilder having(String having) {
     this.havingClause = having;
     return this;
   }
 
-  // --- ORDER BY ---
+  /**
+   * Add an ORDER BY clause.
+   */
   public SQLBuilder orderBy(String orderBy) {
     orderByClauses.add(orderBy);
     return this;
   }
 
-  // --- LIMIT / OFFSET ---
+  /**
+   * Add a LIMIT clause.
+   */
   public SQLBuilder limit(int limit) {
     this.limit = limit;
     return this;
   }
 
+  /**
+   * Add an OFFSET clause.
+   */
   public SQLBuilder offset(int offset) {
     this.offset = offset;
     return this;
@@ -164,7 +192,9 @@ public class SQLBuilder {
     return normalizeNamedParams(StringUtil.normalizeWhitespace(sql));
   }
 
-  // --- Get params in execution order ---
+  /**
+   * Get the list of SQL parameters in the order they appear in the final SQL.
+   */
   public List<SQLParam> getParams() {
 
     List<SQLParam> ordered = new ArrayList<>();
@@ -212,7 +242,9 @@ public class SQLBuilder {
     return sql;
   }
 
-  // --- Internal: replace named params with ? ---
+  /**
+   * Internal method to replace named parameters with ? and track their order.
+   */
   private String normalizeNamedParams(String sql) {
 
     Matcher matcher = NAMED_PARAM_PATTERN.matcher(sql);
