@@ -4,12 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.mapper.automation.JobMapper;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
@@ -39,26 +39,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
       try (var rs = stmt.executeQuery()) {
         while (rs.next()) {
-
-          String runTimesUTCString = rs.getString("run_times_utc");
-          List<LocalTime> runTimes = DateTimeUtil.parseRunTimes(runTimesUTCString);
-
-          jobs.add(
-              new Job(
-                  rs.getLong("id"),
-                  rs.getString("name"),
-                  rs.getBoolean("enabled"),
-                  rs.getTimestamp("created_at").toLocalDateTime(),
-                  rs.getString("description"),
-                  rs.getString("handler"),
-                  rs.getLong("run_before_job_id"),
-                  rs.getLong("run_after_job_id"),
-                  rs.getBoolean("active"),
-                  rs.getBoolean("deactivate_on_failure"),
-                  rs.getInt("max_retries"),
-                  rs.getDouble("interval_minutes"),
-                  runTimes,
-                  null)); // TODO: map String of days of week to List<DayOfWeek>
+          jobs.add(JobMapper.map(rs));
         }
       }
       return jobs;

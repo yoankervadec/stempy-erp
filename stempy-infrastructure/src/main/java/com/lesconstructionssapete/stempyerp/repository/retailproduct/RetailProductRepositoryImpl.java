@@ -1,15 +1,15 @@
-package com.lesconstructionssapete.stempyerp.retailproduct;
+package com.lesconstructionssapete.stempyerp.repository.retailproduct;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductSqlMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
@@ -83,17 +83,9 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     String sqlBase = QueryCache.get(
         Query.INSERT_RETAIL_PRODUCT_VARIANT);
 
-    SQLBuilder builder = new SQLBuilder(sqlBase)
-        .bindTyped(retailProduct.getRetailProductMasterId(), Types.BIGINT)
-        .bindTyped(retailProduct.getRetailProductNo(), Types.VARCHAR)
-        .bindTyped(retailProduct.getRetailProductVariantNo(), Types.VARCHAR)
-        .bindTyped(retailProduct.getName(), Types.VARCHAR)
-        .bindTyped(retailProduct.getDescription(), Types.VARCHAR)
-        .bindTyped(retailProduct.isEnabled(), Types.TINYINT)
-        .bindTyped(retailProduct.getCreatedByUserId(), Types.BIGINT)
-        .bindTyped(retailProduct.getCreatedAt(), Types.TIMESTAMP)
-        .bindTyped(retailProduct.getUpdatedByUserId(), Types.BIGINT)
-        .bindTyped(retailProduct.getUpdatedAt(), Types.TIMESTAMP);
+    SQLBuilder builder = new SQLBuilder(sqlBase);
+
+    RetailProductSqlMapper.bindInsert(builder, retailProduct);
 
     String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
@@ -117,17 +109,14 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     String sqlBase = QueryCache.get(
         Query.UPDATE_RETAIL_PRODUCT_VARIANT);
 
-    SQLBuilder builder = new SQLBuilder(sqlBase)
-        .bindTyped(retailProduct.getRetailProductMasterId(), Types.BIGINT)
-        .bindTyped(retailProduct.getRetailProductNo(), Types.VARCHAR)
-        .bindTyped(retailProduct.getRetailProductVariantNo(), Types.VARCHAR)
-        .bindTyped(retailProduct.getName(), Types.VARCHAR)
-        .bindTyped(retailProduct.getDescription(), Types.VARCHAR)
-        .bindTyped(retailProduct.isEnabled(), Types.TINYINT)
-        .bindTyped(retailProduct.getUpdatedByUserId(), Types.BIGINT)
-        .bindTyped(LocalDateTime.now(), Types.TIMESTAMP)
-        .bindTyped(retailProduct.getRetailProductId(), Types.BIGINT)
-        .where("retail_product_variant.id = :id", retailProduct.getRetailProductId(), Types.BIGINT);
+    SQLBuilder builder = new SQLBuilder(sqlBase);
+
+    RetailProductSqlMapper.bindUpdate(builder, retailProduct);
+
+    builder.where(
+        "retail_product_variant.id = :id",
+        retailProduct.getRetailProductId(),
+        Types.BIGINT);
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
