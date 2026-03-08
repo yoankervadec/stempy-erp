@@ -14,6 +14,13 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.PageSpec;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.http.contract.RequestQuery;
 
+/**
+ * Utility class for mapping HTTP request queries to domain queries.
+ * This class takes a {@link RequestQuery} object, which represents the query
+ * parameters sent by the client,
+ * and converts it into a {@link DomainQuery} object that can be used by the
+ * repository layer to fetch data from the database.
+ */
 public final class RequestQueryMapper {
 
   private RequestQueryMapper() {

@@ -2,7 +2,6 @@ package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 
 public class RetailProductMasterPolicy {
 
-  private Long retailProductMasterPolicyId;
   private Long retailProductMasterId;
   private boolean discontiued;
   private boolean trackInventory;
@@ -11,28 +10,18 @@ public class RetailProductMasterPolicy {
   private boolean applyPromotion;
 
   public RetailProductMasterPolicy(
-      Long retailProductMasterPolicyId,
       Long retailProductMasterId,
       boolean discontiued,
       boolean trackInventory,
       boolean allowNegativeInventory,
       boolean applyTax,
       boolean applyPromotion) {
-    this.retailProductMasterPolicyId = retailProductMasterPolicyId;
     this.retailProductMasterId = retailProductMasterId;
     this.discontiued = discontiued;
     this.trackInventory = trackInventory;
     this.allowNegativeInventory = allowNegativeInventory;
     this.applyTax = applyTax;
     this.applyPromotion = applyPromotion;
-  }
-
-  public Long getRetailProductMasterPolicyId() {
-    return retailProductMasterPolicyId;
-  }
-
-  public void setRetailProductMasterPolicyId(Long retailProductMasterPolicyId) {
-    this.retailProductMasterPolicyId = retailProductMasterPolicyId;
   }
 
   public Long getRetailProductMasterId() {

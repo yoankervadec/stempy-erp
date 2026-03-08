@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
@@ -16,24 +16,6 @@ import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.UserRepository;
 
 public class UserRepositoryImpl implements UserRepository {
-
-  private static final Map<String, String> AUTH_USER_FIELD_MAP = Map.ofEntries(
-      // auth_user table
-      Map.entry("userId", "auth_user.id"),
-      Map.entry("userNo", "auth_user.user_no"),
-      Map.entry("userName", "auth_user.user_name"),
-      Map.entry("enabled", "auth_user.enabled"),
-      Map.entry("createdAt", "auth_user.created_at"),
-      Map.entry("createdByUserId", "auth_user.created_by_user_id"),
-      Map.entry("updatedAt", "auth_user.updated_at"),
-      Map.entry("updatedByUserId", "auth_user.updated_by_user_id"));
-
-  private static final Map<String, String> AUTH_USER_CREDENTIAL_FIELD_MAP = Map.ofEntries(
-      Map.entry("userCredentialId", "auth_user_credential.id"),
-      Map.entry("userId", "auth_user_credential.user_id"),
-      Map.entry("password", "auth_user_credential.password"),
-      Map.entry("enabled", "auth_user_credential.enabled"),
-      Map.entry("createdAt", "auth_user_credential.created_at"));
 
   @Override
   public List<User> fetch(Connection connection, DomainQuery query) throws SQLException {
@@ -44,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(AUTH_USER_FIELD_MAP);
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserField.all());
 
     translator.apply(builder, query);
 
@@ -86,7 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(AUTH_USER_CREDENTIAL_FIELD_MAP);
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserField.all());
 
     translator.apply(builder, query);
 

@@ -10,6 +10,7 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterNode;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.exception.FieldNotFoundException;
+import com.lesconstructionssapete.stempyerp.mapper.SQLField;
 
 /**
  * Translates a {@link DomainQuery} into SQL using {@link SQLBuilder}.
@@ -20,9 +21,9 @@ import com.lesconstructionssapete.stempyerp.exception.FieldNotFoundException;
  */
 public final class DomainQuerySQLTranslator {
 
-  private final Map<String, String> fieldMap;
+  private final Map<String, SQLField> fieldMap;
 
-  public DomainQuerySQLTranslator(Map<String, String> fieldMap) {
+  public DomainQuerySQLTranslator(Map<String, SQLField> fieldMap) {
     this.fieldMap = fieldMap;
   }
 
@@ -104,49 +105,50 @@ public final class DomainQuerySQLTranslator {
 
   private ConditionFragment buildCondition(SQLBuilder builder, FilterCondition c) {
 
-    String column = fieldMap.get(c.field());
+    SQLField field = fieldMap.get(c.field());
 
-    if (column == null) {
+    if (field == null) {
       throw new FieldNotFoundException("Invalid field: " + c.field());
     }
 
+    String column = field.qualifiedColumnName();
     Object value = c.value();
 
     return switch (c.operator()) {
 
       case EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " = :" + p);
       }
 
       case NOT_EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " <> :" + p);
       }
 
       case GREATER_THAN -> {
         String p = nextParam();
-        builder.bind(p, value);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " > :" + p);
       }
 
       case LESS_THAN -> {
         String p = nextParam();
-        builder.bind(p, value);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " < :" + p);
       }
 
       case GREATER_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " >= :" + p);
       }
 
       case LESS_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " <= :" + p);
       }
 
@@ -172,7 +174,7 @@ public final class DomainQuerySQLTranslator {
 
           String p = nextParam();
 
-          builder.bind(p, v);
+          builder.bind(p, v, field.sqlType());
 
           placeholders.add(":" + p);
         }
@@ -203,10 +205,11 @@ public final class DomainQuerySQLTranslator {
 
     for (SortSpec sort : query.sortSpec()) {
 
-      String column = fieldMap.get(sort.field());
-      if (column == null) {
+      SQLField field = fieldMap.get(sort.field());
+      if (field == null) {
         throw new FieldNotFoundException("Invalid sort field: " + sort.field());
       }
+      String column = field.qualifiedColumnName();
 
       builder.orderBy(column + (sort.ascending() ? " ASC" : " DESC"));
     }

@@ -5,10 +5,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
 import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
@@ -17,19 +17,6 @@ import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.RetailProductRepository;
 
 public class RetailProductRepositoryImpl implements RetailProductRepository {
-
-  private static final Map<String, String> FIELD_MAP = Map.ofEntries(
-      Map.entry("retailProductId", "dom_retail_product_variant.id"),
-      Map.entry("retailProductMasterId", "dom_retail_product_variant.retail_product_master_id"),
-      Map.entry("retailProductNo", "dom_retail_product_variant.retail_product_no"),
-      Map.entry("retailProductVariantNo", "dom_retail_product_variant.dom_retail_product_variant_no"),
-      Map.entry("name", "dom_retail_product_variant.name"),
-      Map.entry("description", "dom_retail_product_variant.description"),
-      Map.entry("enabled", "dom_retail_product_variant.enabled"),
-      Map.entry("createdAt", "dom_retail_product_variant.created_at"),
-      Map.entry("createdByUserId", "dom_retail_product_variant.created_by_user_id"),
-      Map.entry("updatedAt", "dom_retail_product_variant.updated_at"),
-      Map.entry("updatedByUserId", "dom_retail_product_variant.updated_by_user_id"));
 
   @Override
   public List<RetailProduct> fetch(Connection connection, DomainQuery query) throws SQLException {
@@ -41,7 +28,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(FIELD_MAP);
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductMasterField.all());
 
     translator.apply(builder, query);
 

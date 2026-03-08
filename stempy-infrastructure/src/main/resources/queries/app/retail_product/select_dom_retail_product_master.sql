@@ -1,0 +1,14 @@
+SELECT
+  dom_retail_product_master.id,
+  dom_retail_product_master.retail_product_master_no,
+  dom_retail_product_master.name,
+  dom_retail_product_master.description,
+  dom_retail_product_master.enabled,
+  dom_retail_product_master.created_at,
+  dom_retail_product_master.created_by_user_id,
+  dom_retail_product_master.updated_at,
+  dom_retail_product_master.updated_by_user_id,
+  dom_retail_product_master.retail_category_id,
+  dom_retail_product_master.price
+FROM
+  dom_retail_product_master

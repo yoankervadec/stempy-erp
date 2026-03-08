@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
-public class RetailProductSQLMapper {
+public final class RetailProductSQLMapper {
 
   private RetailProductSQLMapper() {
   }

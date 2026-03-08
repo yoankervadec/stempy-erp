@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 
-public class RetailProductRowMapper {
+public final class RetailProductRowMapper {
 
   private RetailProductRowMapper() {
   }
