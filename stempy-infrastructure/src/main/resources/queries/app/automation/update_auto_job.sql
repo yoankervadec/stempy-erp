@@ -2,7 +2,6 @@ UPDATE
   auto_job
 SET
   enabled = :enabled,
-  created_at = :created_at,
   description = :description,
   handler = :handler,
   run_before_id = :run_before_id,

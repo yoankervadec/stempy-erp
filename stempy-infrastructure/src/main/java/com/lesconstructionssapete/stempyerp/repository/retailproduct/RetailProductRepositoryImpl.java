@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductSqlMapper;
+import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
@@ -46,6 +46,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     translator.apply(builder, query);
 
     String sqlFinal = builder.build();
+    System.out.println(builder.toDebugSql());
     List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlFinal)) {
@@ -85,7 +86,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
     SQLBuilder builder = new SQLBuilder(sqlBase);
 
-    RetailProductSqlMapper.bindInsert(builder, retailProduct);
+    RetailProductSQLMapper.bindInsert(builder, retailProduct);
 
     String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
@@ -111,12 +112,12 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
     SQLBuilder builder = new SQLBuilder(sqlBase);
 
-    RetailProductSqlMapper.bindUpdate(builder, retailProduct);
+    RetailProductSQLMapper.bindUpdate(builder, retailProduct);
 
-    builder.where(
-        "retail_product_variant.id = :id",
-        retailProduct.getRetailProductId(),
-        Types.BIGINT);
+    builder.where("retail_product_variant.id = :id")
+        .bind("id",
+            retailProduct.getRetailProductId(),
+            Types.BIGINT);
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();

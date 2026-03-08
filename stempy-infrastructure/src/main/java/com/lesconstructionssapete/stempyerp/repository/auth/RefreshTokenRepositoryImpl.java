@@ -3,6 +3,7 @@ package com.lesconstructionssapete.stempyerp.repository.auth;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
@@ -19,8 +20,10 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     String sqlBase = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
 
     SQLBuilder builder = new SQLBuilder(sqlBase)
-        .where("auth_refresh_token.user_id = :userId", userId)
-        .and("auth_refresh_token.token = :refreshToken", refreshToken);
+        .where("auth_refresh_token.user_id = :userId")
+        .and("auth_refresh_token.token = :refreshToken")
+        .bind("userId", userId, Types.BIGINT)
+        .bind("refreshToken", refreshToken, Types.VARCHAR);
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();

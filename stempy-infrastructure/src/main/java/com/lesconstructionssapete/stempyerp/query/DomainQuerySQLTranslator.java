@@ -1,10 +1,8 @@
 package com.lesconstructionssapete.stempyerp.query;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
@@ -28,7 +26,13 @@ public final class DomainQuerySQLTranslator {
     this.fieldMap = fieldMap;
   }
 
-  record ConditionFragment(String sql, List<?> params) {
+  record ConditionFragment(String sql) {
+  }
+
+  private int paramCounter = 0;
+
+  private String nextParam() {
+    return "p" + (++paramCounter);
   }
 
   /**
@@ -47,9 +51,9 @@ public final class DomainQuerySQLTranslator {
   public void apply(SQLBuilder builder, DomainQuery query) {
 
     if (query.filters() != null) {
-      ConditionFragment fragment = buildFragment(query.filters());
+      ConditionFragment fragment = buildFragment(builder, query.filters());
       if (!fragment.sql().isBlank()) {
-        builder.where(fragment.sql(), fragment.params().toArray());
+        builder.where(fragment.sql());
       }
     }
 
@@ -61,49 +65,47 @@ public final class DomainQuerySQLTranslator {
   // Recursive builder
   // =============================
 
-  private ConditionFragment buildFragment(FilterNode node) {
+  private ConditionFragment buildFragment(SQLBuilder builder, FilterNode node) {
 
     if (node instanceof FilterCondition condition) {
-      return buildCondition(condition);
+      return buildCondition(builder, condition);
     }
 
     if (node instanceof FilterGroup group) {
 
       List<String> sqlParts = new ArrayList<>();
-      List<Object> params = new ArrayList<>();
 
       for (FilterNode child : group.children()) {
-        ConditionFragment childFragment = buildFragment(child);
+
+        ConditionFragment childFragment = buildFragment(builder, child);
 
         if (!childFragment.sql().isBlank()) {
           sqlParts.add(childFragment.sql());
-          params.addAll(childFragment.params());
         }
       }
 
       if (sqlParts.isEmpty()) {
-        return new ConditionFragment("", Collections.emptyList());
+        return new ConditionFragment("");
       }
 
       String joined = String.join(
           " " + group.operator().name() + " ",
           sqlParts);
 
-      return new ConditionFragment(
-          "(" + joined + ")",
-          params);
+      return new ConditionFragment("(" + joined + ")");
     }
 
-    return new ConditionFragment("", Collections.emptyList());
+    return new ConditionFragment("");
   }
 
   // =============================
   // Condition builder
   // =============================
 
-  private ConditionFragment buildCondition(FilterCondition c) {
+  private ConditionFragment buildCondition(SQLBuilder builder, FilterCondition c) {
 
     String column = fieldMap.get(c.field());
+
     if (column == null) {
       throw new FieldNotFoundException("Invalid field: " + c.field());
     }
@@ -112,52 +114,78 @@ public final class DomainQuerySQLTranslator {
 
     return switch (c.operator()) {
 
-      case EQUALS ->
-        new ConditionFragment(column + " = ?", List.of(value));
+      case EQUALS -> {
+        String p = nextParam();
+        builder.bind(p, value);
+        yield new ConditionFragment(column + " = :" + p);
+      }
 
-      case NOT_EQUALS ->
-        new ConditionFragment(column + " <> ?", List.of(value));
+      case NOT_EQUALS -> {
+        String p = nextParam();
+        builder.bind(p, value);
+        yield new ConditionFragment(column + " <> :" + p);
+      }
 
-      case GREATER_THAN ->
-        new ConditionFragment(column + " > ?", List.of(value));
+      case GREATER_THAN -> {
+        String p = nextParam();
+        builder.bind(p, value);
+        yield new ConditionFragment(column + " > :" + p);
+      }
 
-      case LESS_THAN ->
-        new ConditionFragment(column + " < ?", List.of(value));
+      case LESS_THAN -> {
+        String p = nextParam();
+        builder.bind(p, value);
+        yield new ConditionFragment(column + " < :" + p);
+      }
 
-      case GREATER_OR_EQUAL ->
-        new ConditionFragment(column + " >= ?", List.of(value));
+      case GREATER_OR_EQUAL -> {
+        String p = nextParam();
+        builder.bind(p, value);
+        yield new ConditionFragment(column + " >= :" + p);
+      }
 
-      case LESS_OR_EQUAL ->
-        new ConditionFragment(column + " <= ?", List.of(value));
+      case LESS_OR_EQUAL -> {
+        String p = nextParam();
+        builder.bind(p, value);
+        yield new ConditionFragment(column + " <= :" + p);
+      }
 
-      case LIKE ->
-        new ConditionFragment(
-            column + " LIKE ?",
-            List.of("%" + value + "%"));
+      case LIKE -> {
+        String p = nextParam();
+        builder.bind(p, "%" + value + "%");
+        yield new ConditionFragment(column + " LIKE :" + p);
+      }
 
       case IN -> {
+
         List<?> values = value instanceof List<?> list
             ? list
             : List.of(value);
 
         if (values.isEmpty()) {
-          yield new ConditionFragment("1 = 0", Collections.emptyList());
+          yield new ConditionFragment("1 = 0");
         }
 
-        String placeholders = values.stream()
-            .map(v -> "?")
-            .collect(Collectors.joining(", "));
+        List<String> placeholders = new ArrayList<>();
+
+        for (Object v : values) {
+
+          String p = nextParam();
+
+          builder.bind(p, v);
+
+          placeholders.add(":" + p);
+        }
 
         yield new ConditionFragment(
-            column + " IN (" + placeholders + ")",
-            new ArrayList<>(values));
+            column + " IN (" + String.join(", ", placeholders) + ")");
       }
 
       case IS_NULL ->
-        new ConditionFragment(column + " IS NULL", Collections.emptyList());
+        new ConditionFragment(column + " IS NULL");
 
       case IS_NOT_NULL ->
-        new ConditionFragment(column + " IS NOT NULL", Collections.emptyList());
+        new ConditionFragment(column + " IS NOT NULL");
 
       default ->
         throw new UnsupportedOperationException("Unsupported operator: " + c.operator());

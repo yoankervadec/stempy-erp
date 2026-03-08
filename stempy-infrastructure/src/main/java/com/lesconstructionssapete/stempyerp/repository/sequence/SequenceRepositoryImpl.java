@@ -31,8 +31,10 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     String sql = QueryCache.get(Query.SELECT_FOR_UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder selectBuilder = new SQLBuilder(sql)
-        .where("core_domain_entity_sequence.domain_entity_id = :entityTypeId", entityType.getId())
-        .and("core_domain_entity_sequence.enabled = :enabled", true);
+        .where("core_domain_entity_sequence.domain_entity_id = :entityTypeId")
+        .and("core_domain_entity_sequence.enabled = :enabled")
+        .bind("entityTypeId", entityType.getId())
+        .bind("enabled", true);
 
     String sqlFinal = selectBuilder.build();
     List<SQLBuilder.SQLParam> params = selectBuilder.getParams();
@@ -57,8 +59,10 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     sql = QueryCache.get(Query.UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder updateBuilder = new SQLBuilder(sql)
-        .where("core_domain_entity_sequence.domain_entity_id = :entityTypeId", entityType.getId())
-        .and("core_domain_entity_sequence.enabled = :enabled", true);
+        .where("core_domain_entity_sequence.domain_entity_id = :entityTypeId")
+        .and("core_domain_entity_sequence.enabled = :enabled")
+        .bind("entityTypeId", entityType.getId())
+        .bind("enabled", true);
 
     sqlFinal = updateBuilder.build();
     params = updateBuilder.getParams();

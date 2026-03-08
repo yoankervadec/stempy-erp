@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.util.DateTimeUtil;
 
-public class JobMapper {
+public class JobRowMapper {
 
-  private JobMapper() {
+  private JobRowMapper() {
   }
 
   public static Job map(ResultSet rs) throws SQLException {

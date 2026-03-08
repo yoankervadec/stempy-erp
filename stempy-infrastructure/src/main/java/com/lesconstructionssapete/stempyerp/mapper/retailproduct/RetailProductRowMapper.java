@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.mapper;
+package com.lesconstructionssapete.stempyerp.mapper.retailproduct;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

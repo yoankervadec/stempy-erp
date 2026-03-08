@@ -3,18 +3,17 @@ package com.lesconstructionssapete.stempyerp.repository.automation;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
-import com.lesconstructionssapete.stempyerp.mapper.automation.JobMapper;
+import com.lesconstructionssapete.stempyerp.mapper.automation.JobRowMapper;
+import com.lesconstructionssapete.stempyerp.mapper.automation.JobSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.util.DateTimeUtil;
 
 public class AutomationRepositoryImpl implements AutomationRepository {
 
@@ -39,7 +38,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
       try (var rs = stmt.executeQuery()) {
         while (rs.next()) {
-          jobs.add(JobMapper.map(rs));
+          jobs.add(JobRowMapper.map(rs));
         }
       }
       return jobs;
@@ -73,20 +72,13 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
     String sqlBase = QueryCache.get(Query.UPDATE_AUTO_JOB);
 
-    SQLBuilder builder = new SQLBuilder(sqlBase)
-        .bindTyped(job.isEnabled(), Types.TINYINT)
-        .bind(job.getCreatedAt())
-        .bindTyped(job.getDescription(), Types.VARCHAR)
-        .bindTyped(job.getHandlerAsString(), Types.VARCHAR)
-        .bindTyped(job.getRunBeforeJobId(), Types.BIGINT)
-        .bindTyped(job.getRunAfterJobId(), Types.BIGINT)
-        .bindTyped(job.isActive(), Types.TINYINT)
-        .bindTyped(job.isDeactivateOnFailure(), Types.TINYINT)
-        .bindTyped(job.getMaxRetries(), Types.INTEGER)
-        .bindTyped(job.getIntervalMinutes(), Types.DOUBLE)
-        .bindTyped(DateTimeUtil.toRunTimesJson(job.getRunTimesUTC()), Types.VARCHAR)
-        .bindTyped("", Types.VARCHAR)
-        .where("id = :jobid", job.getId());
+    SQLBuilder builder = new SQLBuilder(sqlBase);
+
+    JobSQLMapper.bindUpdate(builder, job);
+
+    builder
+        .where("id = :jobid")
+        .bind("jobId", job.getId());
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();

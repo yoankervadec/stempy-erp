@@ -2,9 +2,9 @@ package com.lesconstructionssapete.stempyerp.query;
 
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,9 +22,9 @@ import com.lesconstructionssapete.stempyerp.util.StringUtil;
 public class SQLBuilder {
 
   /** Internal wrapper for typed params */
-  public static record SQLParam(Object value, int sqlType) {
-    public SQLParam(Object value) {
-      this(value, guessSqlType(value));
+  public static record SQLParam(String name, Object value, int sqlType) {
+    public SQLParam(String name, Object value) {
+      this(name, value, guessSqlType(value));
     }
 
     private static int guessSqlType(Object v) {
@@ -57,9 +57,9 @@ public class SQLBuilder {
   private Integer limit;
   private Integer offset;
 
-  // Params seperated into buckets
-  private final List<SQLParam> bindParams = new ArrayList<>(); // SET / INSERT values
-  private final List<SQLParam> whereParams = new ArrayList<>(); // WHERE values
+  // Params bucket
+  private final Map<String, SQLParam> params = new LinkedHashMap<>();
+  private final List<String> paramOrder = new ArrayList<>();
 
   // Named param support
   private static final Pattern NAMED_PARAM_PATTERN = Pattern.compile(":(\\w+)");
@@ -68,33 +68,25 @@ public class SQLBuilder {
     this.base = base.trim();
   }
 
-  // --- Bind values (SET, INSERT, etc.) ---
-  public SQLBuilder bind(Object... values) {
-    for (Object v : values) {
-      bindParams.add(new SQLParam(v));
-    }
+  // --- Bind values (SET, INSERT, WHERE etc.) ---
+  public SQLBuilder bind(String name, Object value) {
+    params.put(name, new SQLParam(name, value));
     return this;
   }
 
-  public SQLBuilder bindTyped(Object value, int sqlType) {
-    bindParams.add(new SQLParam(value, sqlType));
+  public SQLBuilder bind(String name, Object value, int sqlType) {
+    params.put(name, new SQLParam(name, value, sqlType));
     return this;
   }
 
   // --- WHERE with params (supports named params) ---
-  public SQLBuilder where(String condition, Object... values) {
-    if (values == null || Arrays.stream(values).anyMatch(Objects::isNull)) {
-      return this; // skip nulls
-    }
+  public SQLBuilder where(String condition) {
     whereClauses.add(condition);
-    for (Object v : values) {
-      whereParams.add(new SQLParam(v));
-    }
     return this;
   }
 
-  public SQLBuilder and(String condition, Object... values) {
-    return where(condition, values);
+  public SQLBuilder and(String condition) {
+    return where(condition);
   }
 
   // --- JOIN ---
@@ -174,10 +166,21 @@ public class SQLBuilder {
 
   // --- Get params in execution order ---
   public List<SQLParam> getParams() {
-    List<SQLParam> all = new ArrayList<>();
-    all.addAll(bindParams);
-    all.addAll(whereParams);
-    return all;
+
+    List<SQLParam> ordered = new ArrayList<>();
+
+    for (String name : paramOrder) {
+
+      SQLParam p = params.get(name);
+
+      if (p == null) {
+        throw new IllegalStateException("Missing SQL parameter: " + name);
+      }
+
+      ordered.add(p);
+    }
+
+    return ordered;
   }
 
   /**
@@ -211,12 +214,21 @@ public class SQLBuilder {
 
   // --- Internal: replace named params with ? ---
   private String normalizeNamedParams(String sql) {
+
     Matcher matcher = NAMED_PARAM_PATTERN.matcher(sql);
+
     StringBuffer sb = new StringBuffer();
+
     while (matcher.find()) {
+
+      String paramName = matcher.group(1);
+      paramOrder.add(paramName);
+
       matcher.appendReplacement(sb, "?");
     }
+
     matcher.appendTail(sb);
+
     return sb.toString();
   }
 
