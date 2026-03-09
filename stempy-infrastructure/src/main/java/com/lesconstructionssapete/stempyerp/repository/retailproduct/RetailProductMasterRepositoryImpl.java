@@ -1,35 +1,31 @@
 package com.lesconstructionssapete.stempyerp.repository.retailproduct;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
-import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductRowMapper;
-import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductSQLMapper;
+import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductMasterRowMapper;
+import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductMasterSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
-public class RetailProductRepositoryImpl implements RetailProductRepository {
+public class RetailProductMasterRepositoryImpl implements RetailProductMasterRepository {
 
   @Override
-  public List<RetailProduct> fetch(Connection connection, DomainQuery query) throws SQLException {
+  public List<RetailProductMaster> fetch(Connection connection, DomainQuery query) throws Exception {
 
-    List<RetailProduct> retailProducts;
+    List<RetailProductMaster> retailProductMasters;
 
-    String sql = QueryCache.get(
-        Query.SELECT_DOM_RETAIL_PRODUCT_VARIANT);
+    String sql = QueryCache.get(Query.SELECT_DOM_RETAIL_PRODUCT_MASTER);
 
     SQLBuilder builder = new SQLBuilder(sql);
-
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductField.all());
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductMasterField.all());
 
     translator.apply(builder, query);
 
@@ -44,25 +40,23 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
       }
 
       try (var rs = stmt.executeQuery()) {
-        retailProducts = new ArrayList<>();
+        retailProductMasters = new java.util.ArrayList<>();
         while (rs.next()) {
-          retailProducts.add(RetailProductRowMapper.map(rs));
+          retailProductMasters.add(RetailProductMasterRowMapper.map(rs));
         }
       }
     }
-
-    return retailProducts;
+    return retailProductMasters;
   }
 
   @Override
-  public long insert(Connection connection, RetailProduct retailProduct) throws SQLException {
+  public long insert(Connection connection, RetailProductMaster retailProductMaster) throws Exception {
 
-    String sql = QueryCache.get(
-        Query.INSERT_DOM_RETAIL_PRODUCT_VARIANT);
+    String sql = QueryCache.get(Query.INSERT_DOM_RETAIL_PRODUCT_MASTER);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RetailProductSQLMapper.bindInsert(builder, retailProduct);
+    RetailProductMasterSQLMapper.bindInsert(builder, retailProductMaster);
 
     String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
@@ -87,18 +81,17 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   }
 
   @Override
-  public RetailProduct save(Connection connection, RetailProduct retailProduct) throws SQLException {
+  public RetailProductMaster save(Connection connection, RetailProductMaster retailProductMaster) throws Exception {
 
-    String sql = QueryCache.get(
-        Query.UPDATE_DOM_RETAIL_PRODUCT_VARIANT);
+    String sql = QueryCache.get(Query.UPDATE_DOM_RETAIL_PRODUCT_MASTER);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RetailProductSQLMapper.bindUpdate(builder, retailProduct);
+    RetailProductMasterSQLMapper.bindUpdate(builder, retailProductMaster);
 
-    builder.where("retail_product_variant.id = :id")
+    builder.where("retail_product_master.id = :id")
         .bind("id",
-            retailProduct.getRetailProductId(),
+            retailProductMaster.getRetailProductMasterId(),
             Types.BIGINT);
 
     String sqlString = builder.build();
@@ -113,7 +106,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
       stmt.executeUpdate();
 
-      return retailProduct;
+      return retailProductMaster;
     }
   }
 

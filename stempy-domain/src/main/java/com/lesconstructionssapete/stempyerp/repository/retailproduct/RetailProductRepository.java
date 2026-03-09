@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.repository;
+package com.lesconstructionssapete.stempyerp.repository.retailproduct;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ public interface RetailProductRepository {
   List<RetailProduct> fetch(Connection connection, DomainQuery query)
       throws SQLException;
 
-  RetailProduct insert(Connection connection, RetailProduct retailProduct)
+  long insert(Connection connection, RetailProduct retailProduct)
       throws SQLException;
 
   RetailProduct save(Connection connection, RetailProduct retailProduct) throws SQLException;

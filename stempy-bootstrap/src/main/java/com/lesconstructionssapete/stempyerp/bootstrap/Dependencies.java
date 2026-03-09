@@ -20,11 +20,13 @@ import com.lesconstructionssapete.stempyerp.facade.retailproduct.RetailProductFa
 import com.lesconstructionssapete.stempyerp.facade.retailproduct.RetailProductFacadeImpl;
 import com.lesconstructionssapete.stempyerp.repository.ConstantRepository;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
-import com.lesconstructionssapete.stempyerp.repository.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.repository.UserRepository;
 import com.lesconstructionssapete.stempyerp.repository.auth.RefreshTokenRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.constant.ConstantRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepository;
+import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.sequence.SequenceRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.user.UserRepositoryImpl;
@@ -34,6 +36,8 @@ import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.service.constant.ConstantServiceImpl;
+import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
+import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.sequence.numbering.DefaultEntityNumberGeneratorRegistry;
@@ -94,10 +98,18 @@ public class Dependencies {
 
   private void bindRepositories() {
 
+    // Constant
     container.bind(ConstantRepository.class, ConstantRepositoryImpl.class);
+
+    // Retail Product
     container.bind(RetailProductRepository.class, RetailProductRepositoryImpl.class);
+    container.bind(RetailProductMasterRepository.class, RetailProductMasterRepositoryImpl.class);
+
+    // Auth / User
     container.bind(RefreshTokenRepository.class, RefreshTokenRepositoryImpl.class);
     container.bind(UserRepository.class, UserRepositoryImpl.class);
+
+    // Sequence
     container.bind(SequenceRepository.class, SequenceRepositoryImpl.class);
   }
 
@@ -105,8 +117,16 @@ public class Dependencies {
 
   private void bindServices() {
 
+    // Constant
     container.bind(ConstantService.class, ConstantServiceImpl.class);
+
+    // Retail Product
+    container.bind(RetailProductService.class, RetailProductServiceImpl.class);
+
+    // Auth / User
     container.bind(AuthService.class, AuthServiceImpl.class);
+
+    // Sequence
     container.bind(SequenceService.class, SequenceServiceImpl.class);
   }
 
@@ -121,7 +141,10 @@ public class Dependencies {
 
   private void bindFacades() {
 
+    // Retail Product
     container.bind(RetailProductFacade.class, RetailProductFacadeImpl.class);
+
+    // Auth / User
     container.bind(UserFacade.class, UserFacadeImpl.class);
     container.bind(AuthFacade.class, AuthFacadeImpl.class);
   }

@@ -7,7 +7,7 @@ import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.RetailProductRepository;
+import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.service.sequence.numbering.EntityNumberGenerator;
 import com.lesconstructionssapete.stempyerp.service.sequence.numbering.EntityNumberGeneratorRegistry;
@@ -19,18 +19,18 @@ public class RetailProductFacadeImpl
 
   private final TransactionRunner transaction;
   private final SequenceService sequenceService;
-  private final RetailProductRepository retailProductRepository;
+  private final RetailProductService retailProductService;
   private final EntityNumberGeneratorRegistry entityGenerators;
 
   public RetailProductFacadeImpl(
       TransactionRunner transaction,
       SequenceService sequenceService,
       EntityNumberGeneratorRegistry entityGenerators,
-      RetailProductRepository retailProductRepository) {
+      RetailProductService retailProductService) {
     this.transaction = transaction;
     this.sequenceService = sequenceService;
     this.entityGenerators = entityGenerators;
-    this.retailProductRepository = retailProductRepository;
+    this.retailProductService = retailProductService;
   }
 
   @Override
@@ -39,7 +39,7 @@ public class RetailProductFacadeImpl
     return transaction.execute(
         TransactionPropagation.REQUIRED,
         con -> {
-          return retailProductRepository.fetch(con, query);
+          return retailProductService.fetch(con, query);
         });
 
   }
@@ -74,8 +74,9 @@ public class RetailProductFacadeImpl
               null,
               null);
 
-          RetailProduct result = retailProductRepository
+          RetailProduct result = retailProductService
               .insert(connection, rp);
+
 
           return result;
         });

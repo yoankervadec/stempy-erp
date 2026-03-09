@@ -23,4 +23,16 @@ public final class RetailProductMasterSQLMapper {
         .bind(RetailProductMasterField.DEFAULT_PRICE, p.getDefaultPrice());
   }
 
+  public static void bindUpdate(SQLBuilder builder, RetailProductMaster p) {
+    builder
+        .bind(RetailProductMasterField.RETAIL_PRODUCT_MASTER_NO, p.getRetailProductMasterNo())
+        .bind(RetailProductMasterField.NAME, p.getName())
+        .bind(RetailProductMasterField.DESCRIPTION, p.getDescription())
+        .bind(RetailProductMasterField.ENABLED, p.isEnabled())
+        .bind(RetailProductMasterField.UPDATED_BY_USER_ID, p.getUpdatedByUserId())
+        .bind(RetailProductMasterField.UPDATED_AT, p.getUpdatedAt())
+        .bind(RetailProductMasterField.RETAIL_CATEGORY_ID, p.getRetailCategoryId())
+        .bind(RetailProductMasterField.DEFAULT_PRICE, p.getDefaultPrice());
+  }
+
 }
