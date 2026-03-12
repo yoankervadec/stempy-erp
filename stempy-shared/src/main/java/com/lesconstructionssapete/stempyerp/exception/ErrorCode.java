@@ -28,10 +28,12 @@ public enum ErrorCode {
   // INFRASTRUCTURE
   UNDEFINED_INFRASTRUCTURE_EXCEPTION("UNDEFINED_INFRASTRUCTURE_EXCEPTION", "Undefined infrastructure exception"),
   CONNECTION_FAILURE("CONNECTION_FAILURE", "Failed to connect to the database"),
+  DATABASE_ACCESS_ERROR("DATABASE_ACCESS_ERROR", "A database access error occurred"),
+  SEQUENCE_UPDATE_FAILURE("SEQUENCE_UPDATE_FAILURE", "Failed to update sequence"),
+  TRANSACTION_FAILURE("TRANSACTION_FAILURE", "Transaction failed"),
 
   // INTERNAL
   UNDEFINED_SYSTEM_ERROR("SYSTEM_ERROR", "Unexpected internal system error"),
-  DATABASE_ERROR("DATABASE_ERROR", "A database error occurred"),
   CONFIGURATION_ERROR("CONFIGURATION_ERROR", "Invalid configuration"),
 
   ;
