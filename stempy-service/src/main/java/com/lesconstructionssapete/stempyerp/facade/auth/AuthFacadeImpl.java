@@ -12,8 +12,9 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
-import com.lesconstructionssapete.stempyerp.exception.ErrorCode;
-import com.lesconstructionssapete.stempyerp.exception.UnauthorizedException;
+import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
+import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
+import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
@@ -118,7 +119,7 @@ public class AuthFacadeImpl implements AuthFacade {
   public AuthToken refresh(String refreshToken) {
 
     if (refreshToken == null || refreshToken.isEmpty()) {
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token is required.");
+      throw new InvalidRefreshTokenException("Refresh token is required.");
     }
 
     String userNo;
@@ -126,7 +127,7 @@ public class AuthFacadeImpl implements AuthFacade {
     try {
       userNo = tokenProvider.validateRefreshTokenAndGetUserNo(refreshToken);
     } catch (Exception e) {
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Invalid refresh token.");
+      throw new InvalidRefreshTokenException("Invalid refresh token.");
     }
 
     DomainQuery userQuery = new DomainQuery(
@@ -144,13 +145,13 @@ public class AuthFacadeImpl implements AuthFacade {
           List<User> users = userFacade.fetch(userQuery);
 
           if (users.isEmpty()) {
-            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "User not found.");
+            throw new UserNotFoundException("The user associated with the refresh token was not found.");
           }
 
           User user = users.get(0);
 
-          if (authService.refreshTokenExists(con, user.getEntityId(), refreshToken)) {
-            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED.getCode(), "Refresh token revoked");
+          if (!authService.refreshTokenExists(con, user.getEntityId(), refreshToken)) {
+            throw new RefreshTokenRevokedException("This refresh token has been revoked.");
           }
 
           String newAccessToken = tokenProvider.generateAccessToken(user.getEntityNo());

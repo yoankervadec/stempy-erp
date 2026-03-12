@@ -20,6 +20,8 @@ public enum ErrorCode {
 
   // DOMAIN
   UNDEFINED_DOMAIN_EXCEPTION("UNDEFINED_DOMAIN_EXCEPTION", "Undefined domain exception"),
+  USER_NOT_FOUND("USER_NOT_FOUND", "User not found"),
+  INVALID_TOKEN("INVALID_TOKEN", "The provided token is invalid"),
   QUERY_LOAD_EXCEPTION("QUERY_LOAD_EXCEPTION", "Failed to load SQL file"),
   FIELD_NOT_FOUND("FIELD_NOT_FOUND", "Field not found in query"),
 

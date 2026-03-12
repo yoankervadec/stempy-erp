@@ -44,7 +44,7 @@ public class AuthorizationMiddleware implements Handler {
     List<User> users = userFacade.fetch(userQuery);
 
     if (users.isEmpty()) {
-      throw new UserNotFoundException(null, "Authenticated user not found in the system");
+      throw new UserNotFoundException("Authenticated user not found in the system");
     }
 
     User user = users.get(0);
