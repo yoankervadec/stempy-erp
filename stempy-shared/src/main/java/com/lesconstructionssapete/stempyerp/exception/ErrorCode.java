@@ -25,6 +25,10 @@ public enum ErrorCode {
   QUERY_LOAD_EXCEPTION("QUERY_LOAD_EXCEPTION", "Failed to load SQL file"),
   FIELD_NOT_FOUND("FIELD_NOT_FOUND", "Field not found in query"),
 
+  // INFRASTRUCTURE
+  UNDEFINED_INFRASTRUCTURE_EXCEPTION("UNDEFINED_INFRASTRUCTURE_EXCEPTION", "Undefined infrastructure exception"),
+  CONNECTION_FAILURE("CONNECTION_FAILURE", "Failed to connect to the database"),
+
   // INTERNAL
   UNDEFINED_SYSTEM_ERROR("SYSTEM_ERROR", "Unexpected internal system error"),
   DATABASE_ERROR("DATABASE_ERROR", "A database error occurred"),

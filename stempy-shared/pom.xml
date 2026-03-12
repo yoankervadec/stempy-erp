@@ -43,7 +43,11 @@
             <artifactId>jackson-module-parameter-names</artifactId>
         </dependency>
 
- 
+        <!-- Javalin -->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+        </dependency>
 
     </dependencies>
 

@@ -17,7 +17,7 @@ public class ExceptionConfig {
 
     // API EXCEPTIONS
     app.exception(com.lesconstructionssapete.stempyerp.exception.ApiException.class, (e, ctx) -> {
-      LOGGER.error("API Exception : {}", e.getMessage());
+      LOGGER.error("API Exception", e);
       Response.error(
           ctx,
           e.getStatus(),
@@ -27,10 +27,20 @@ public class ExceptionConfig {
 
     // DOMAIN EXCEPTIONS
     app.exception(com.lesconstructionssapete.stempyerp.exception.DomainException.class, (e, ctx) -> {
-      LOGGER.error("Domain Exception : {}", e.getMessage());
+      LOGGER.error("Domain Exception", e);
       Response.error(
           ctx,
           HttpStatus.BAD_REQUEST,
+          e.getCode() + ": " + e.getMessage(),
+          ApiErrorFactory.from(e));
+    });
+
+    // INFRASTRUCTURE EXCEPTIONS
+    app.exception(com.lesconstructionssapete.stempyerp.exception.InfrastructureException.class, (e, ctx) -> {
+      LOGGER.error("Infrastructure Exception", e);
+      Response.error(
+          ctx,
+          HttpStatus.INTERNAL_SERVER_ERROR,
           e.getCode() + ": " + e.getMessage(),
           ApiErrorFactory.from(e));
     });
