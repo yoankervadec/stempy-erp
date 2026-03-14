@@ -165,6 +165,7 @@ public class SQLBuilder {
    * Replaces named params (:name) with JDBC ? placeholders.
    */
   public String build() {
+
     String sql = base;
 
     if (!joinClauses.isEmpty()) {
@@ -226,8 +227,7 @@ public class SQLBuilder {
    * Debug helper: returns SQL with params inlined.
    * For logging/testing only — never use in production execution.
    */
-  public String toDebugSql() {
-    String sql = build();
+  public String toDebugSql(String sql) {
     List<SQLParam> ps = getParams();
 
     for (SQLParam p : ps) {
@@ -255,6 +255,8 @@ public class SQLBuilder {
    * Internal method to replace named parameters with ? and track their order.
    */
   private String normalizeNamedParams(String sql) {
+
+    paramOrder.clear(); // Reset param order before processing
 
     Matcher matcher = NAMED_PARAM_PATTERN.matcher(sql);
 

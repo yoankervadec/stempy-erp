@@ -9,9 +9,9 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 
 public interface AuthService {
 
-  boolean refreshTokenExists(Connection connection, long userId, String refreshToken);
+  boolean isValidRefreshToken(Connection connection, long userId, String refreshToken);
 
-  long save(Connection connection, AuthToken token);
+  long insert(Connection connection, AuthToken token);
 
   boolean isValidCredential(Connection connection, long userId, String password);
 

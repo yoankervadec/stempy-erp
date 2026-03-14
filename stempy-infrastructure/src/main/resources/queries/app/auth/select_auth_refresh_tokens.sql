@@ -1,12 +1,13 @@
 SELECT
-  ort.refresh_token_seq,
-  us.user_no,
-  ort.user_seq,
-  ort.token,
-  ort.expires_at,
-  ort.created_at
+  auth_refresh_token.id,
+  auth_refresh_token.user_id,
+  auth_user.user_no,
+  auth_refresh_token.token,
+  auth_refresh_token.expires_at,
+  auth_refresh_token.enabled,
+  auth_refresh_token.created_at
 FROM
   auth_refresh_token
 JOIN
-  users AS us ON ort.user_seq = us.user_seq
+  auth_user ON auth_refresh_token.user_id = auth_user.id
 /* WHERE */

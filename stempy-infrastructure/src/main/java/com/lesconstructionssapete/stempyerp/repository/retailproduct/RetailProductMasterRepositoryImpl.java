@@ -13,6 +13,7 @@ import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductMa
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.query.SQLBinder;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
 public class RetailProductMasterRepositoryImpl implements RetailProductMasterRepository {
@@ -34,10 +35,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
 
     try (var stmt = connection.prepareStatement(sqlFinal)) {
 
-      int idx = 1;
-      for (SQLBuilder.SQLParam p : params) {
-        stmt.setObject(idx++, p.value(), p.sqlType());
-      }
+      SQLBinder.bind(stmt, params);
 
       try (var rs = stmt.executeQuery()) {
         retailProductMasters = new java.util.ArrayList<>();
@@ -63,10 +61,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
 
     try (var stmt = connection.prepareStatement(sqlFinal, Statement.RETURN_GENERATED_KEYS)) {
 
-      int idx = 1;
-      for (SQLBuilder.SQLParam p : params) {
-        stmt.setObject(idx++, p.value(), p.sqlType());
-      }
+      SQLBinder.bind(stmt, params);
 
       stmt.executeUpdate();
 
@@ -99,10 +94,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
-      int idx = 1;
-      for (SQLBuilder.SQLParam p : params) {
-        stmt.setObject(idx++, p.value(), p.sqlType());
-      }
+      SQLBinder.bind(stmt, params);
 
       stmt.executeUpdate();
 

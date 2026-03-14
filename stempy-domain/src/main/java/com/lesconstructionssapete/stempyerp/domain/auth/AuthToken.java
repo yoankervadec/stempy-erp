@@ -9,6 +9,7 @@ public class AuthToken {
   private String token;
   private String refreshToken;
   private LocalDateTime refreshTokenExpiresAt;
+  private boolean enabled;
   private LocalDateTime createdAt;
 
   public AuthToken(
@@ -17,11 +18,13 @@ public class AuthToken {
       String token,
       String refreshToken,
       LocalDateTime refreshTokenExpiresAt,
+      boolean enabled,
       LocalDateTime createdAt) {
     this.id = id;
     this.userId = userId;
     this.token = token;
     this.refreshToken = refreshToken;
+    this.enabled = enabled;
     this.refreshTokenExpiresAt = refreshTokenExpiresAt;
     this.createdAt = createdAt;
   }
@@ -64,6 +67,14 @@ public class AuthToken {
 
   public void setRefreshTokenExpiresAt(LocalDateTime expiresAt) {
     this.refreshTokenExpiresAt = expiresAt;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   public LocalDateTime getCreatedAt() {

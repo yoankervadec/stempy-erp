@@ -12,6 +12,7 @@ import com.lesconstructionssapete.stempyerp.mapper.automation.JobRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.query.SQLBinder;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
 
@@ -31,10 +32,8 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     List<SQLBuilder.SQLParam> params = builder.getParams();
 
     try (var stmt = connection.prepareStatement(sqlString)) {
-      int idx = 1;
-      for (SQLBuilder.SQLParam p : params) {
-        stmt.setObject(idx++, p.value(), p.sqlType());
-      }
+
+      SQLBinder.bind(stmt, params);
 
       try (var rs = stmt.executeQuery()) {
         while (rs.next()) {
@@ -85,10 +84,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
     try (var stmt = connection.prepareStatement(sqlString)) {
 
-      int idx = 1;
-      for (SQLBuilder.SQLParam p : params) {
-        stmt.setObject(idx, p.value(), p.sqlType());
-      }
+      SQLBinder.bind(stmt, params);
 
       stmt.executeUpdate();
     }

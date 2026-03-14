@@ -3,56 +3,69 @@ package com.lesconstructionssapete.stempyerp.repository.auth;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
+import com.lesconstructionssapete.stempyerp.mapper.auth.RefreshTokenRowMapper;
+import com.lesconstructionssapete.stempyerp.mapper.auth.RefreshTokenSQLMapper;
+import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
+import com.lesconstructionssapete.stempyerp.query.SQLBinder;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
   @Override
-  public boolean exists(Connection connection, long userId, String refreshToken) throws SQLException {
+  public List<AuthToken> fetch(Connection connection, DomainQuery query) throws SQLException {
 
-    String sqlBase = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
+    List<AuthToken> tokens;
 
-    SQLBuilder builder = new SQLBuilder(sqlBase)
-        .where("auth_refresh_token.user_id = :userId")
-        .and("auth_refresh_token.token = :refreshToken")
-        .bind("userId", userId, Types.BIGINT)
-        .bind("refreshToken", refreshToken, Types.VARCHAR);
+    String sql = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
 
-    String sqlString = builder.build();
+    SQLBuilder builder = new SQLBuilder(sql);
+
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RefreshTokenField.all());
+
+    translator.apply(builder, query);
+
+    String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
 
-    try (var stmt = connection.prepareStatement(sqlString)) {
+    try (var stmt = connection.prepareStatement(sqlFinal)) {
 
-      int idx = 1;
-      for (SQLBuilder.SQLParam p : params) {
-        stmt.setObject(idx++, p.value(), p.sqlType());
-      }
+      SQLBinder.bind(stmt, params);
 
       try (var rs = stmt.executeQuery()) {
-
-        return rs.next();
+        tokens = new ArrayList<>();
+        while (rs.next()) {
+          tokens.add(RefreshTokenRowMapper.map(rs));
+        }
       }
-
+      return tokens;
     }
+
   }
 
   @Override
-  public long save(Connection connection, AuthToken token) throws SQLException {
+  public long insert(Connection connection, AuthToken token) throws SQLException {
 
-    String sqlString = QueryCache.get(Query.INSERT_AUTH_REFRESH_TOKEN);
+    String sql = QueryCache.get(Query.INSERT_AUTH_REFRESH_TOKEN);
 
-    try (var stmt = connection.prepareStatement(sqlString, Statement.RETURN_GENERATED_KEYS)) {
+    SQLBuilder builder = new SQLBuilder(sql);
 
-      stmt.setLong(1, token.getUserId());
-      stmt.setString(2, token.getRefreshToken());
-      stmt.setObject(3, token.getRefreshTokenExpiresAt());
+    RefreshTokenSQLMapper.bindInsert(builder, token);
+
+    String sqlFinal = builder.build();
+    List<SQLBuilder.SQLParam> params = builder.getParams();
+
+    try (var stmt = connection.prepareStatement(sqlFinal, Statement.RETURN_GENERATED_KEYS)) {
+
+      SQLBinder.bind(stmt, params);
 
       stmt.executeUpdate();
 

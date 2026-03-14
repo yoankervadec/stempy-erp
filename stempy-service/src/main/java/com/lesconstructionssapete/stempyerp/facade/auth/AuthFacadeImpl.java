@@ -48,7 +48,7 @@ public class AuthFacadeImpl implements AuthFacade {
     return transaction.execute(
         TransactionPropagation.REQUIRED,
         con -> {
-          refreshTokenRepository.save(con, token);
+          refreshTokenRepository.insert(con, token);
           return token;
         });
   }
@@ -77,7 +77,7 @@ public class AuthFacadeImpl implements AuthFacade {
               new FilterGroup(
                   LogicalOperator.AND,
                   List.of(
-                      new FilterCondition("userId", ComparisonOperator.EQUALS, u.getEntityId()),
+                      new FilterCondition("userCredentialUserId", ComparisonOperator.EQUALS, u.getEntityId()),
                       new FilterCondition("password", ComparisonOperator.EQUALS, userCredential.getPassword()))),
               null,
               null);
@@ -105,6 +105,7 @@ public class AuthFacadeImpl implements AuthFacade {
               accessToken,
               refreshToken,
               refreshTokenExpiration,
+              true,
               LocalDateTime.now());
 
           save(token);
@@ -150,7 +151,7 @@ public class AuthFacadeImpl implements AuthFacade {
 
           User user = users.get(0);
 
-          if (!authService.refreshTokenExists(con, user.getEntityId(), refreshToken)) {
+          if (!authService.isValidRefreshToken(con, user.getEntityId(), refreshToken)) {
             throw new RefreshTokenRevokedException("This refresh token has been revoked.");
           }
 
@@ -162,6 +163,7 @@ public class AuthFacadeImpl implements AuthFacade {
               newAccessToken,
               null,
               null,
+              true,
               null);
         });
 
