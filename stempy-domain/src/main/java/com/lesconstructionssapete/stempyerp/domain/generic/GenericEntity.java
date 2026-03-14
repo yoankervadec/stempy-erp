@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.generic;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /*
  * GenericEntity extended by entities like RetailProduct, CustomerOrderHeader, etc...
@@ -11,7 +11,7 @@ public abstract class GenericEntity {
   protected final String entityName;
   protected Long entityId;
   protected String entityNo;
-  protected final LocalDateTime createdAt;
+  protected final Instant createdAt;
   protected final Long createdByUserId;
 
   // New GenericEntity generates createdAt
@@ -21,7 +21,7 @@ public abstract class GenericEntity {
       Long createdByUserId) {
     this.entityName = entityName;
     this.entityId = entityId;
-    this.createdAt = LocalDateTime.now();
+    this.createdAt = Instant.now();
     this.createdByUserId = createdByUserId;
   }
 
@@ -30,7 +30,7 @@ public abstract class GenericEntity {
       String entityName,
       String entityNo,
       Long entityId,
-      LocalDateTime createdAt,
+      Instant createdAt,
       Long createdByUserId) {
     this.entityName = entityName;
     this.entityNo = entityNo;
@@ -59,7 +59,7 @@ public abstract class GenericEntity {
     this.entityId = entityId;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 

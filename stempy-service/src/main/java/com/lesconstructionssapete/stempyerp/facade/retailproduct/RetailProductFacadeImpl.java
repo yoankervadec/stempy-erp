@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.facade.retailproduct;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
@@ -69,14 +69,13 @@ public class RetailProductFacadeImpl
               product.getName(),
               product.getDescription(),
               product.isEnabled(),
-              LocalDateTime.now(),
+              Instant.now(),
               liveSequence.getCreatedByUserSeq(),
               null,
               null);
 
           RetailProduct result = retailProductService
               .insert(connection, rp);
-
 
           return result;
         });

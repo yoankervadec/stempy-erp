@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.domain.constant;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class TaxRate implements ConstantEntity {
 
@@ -9,7 +9,7 @@ public class TaxRate implements ConstantEntity {
   private final String name;
   private final String description;
   private final boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private final double rate;
   private final boolean compound;
   private final int calculationOrder;
@@ -21,7 +21,7 @@ public class TaxRate implements ConstantEntity {
       String name,
       String description,
       boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       double rate,
       boolean compound,
       int calculationOrder,
@@ -62,7 +62,7 @@ public class TaxRate implements ConstantEntity {
     return description;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 

@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.mapper.retailproduct;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
@@ -33,7 +33,7 @@ public final class RetailProductSQLMapper {
         .bind(RetailProductField.NAME, rp.getName())
         .bind(RetailProductField.DESCRIPTION, rp.getDescription())
         .bind(RetailProductField.ENABLED, rp.isEnabled())
-        .bind(RetailProductField.UPDATED_AT, LocalDateTime.now())
+        .bind(RetailProductField.UPDATED_AT, Instant.now())
         .bind(RetailProductField.UPDATED_BY_USER_ID, rp.getUpdatedByUserId());
   }
 

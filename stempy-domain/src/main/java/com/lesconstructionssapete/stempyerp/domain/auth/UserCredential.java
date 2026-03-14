@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.auth;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class UserCredential {
 
@@ -9,14 +9,14 @@ public class UserCredential {
   private String userNo;
   private String password;
   private boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
 
   public UserCredential(
       long userCredentialId,
       long userId,
       String password,
       boolean enabled,
-      LocalDateTime createdAt) {
+      Instant createdAt) {
     this.userCredentialId = userCredentialId;
     this.userId = userId;
     this.password = password;
@@ -48,7 +48,7 @@ public class UserCredential {
     this.enabled = enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 

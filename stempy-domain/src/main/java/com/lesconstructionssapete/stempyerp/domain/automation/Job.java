@@ -2,8 +2,9 @@ package com.lesconstructionssapete.stempyerp.domain.automation;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Job {
   private final long id;
   private final String name;
   private final boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private final String description;
   private final String handlerAsString;
 
@@ -37,8 +38,8 @@ public class Job {
   private final Double intervalMinutes; // If null or 0, this is a fixed-time job; otherwise interval-based
   private final List<LocalTime> runTimesUTC; // For fixed-time jobs, the times of day to run (in UTC)
   private final List<DayOfWeek> runDaysOfWeek; // Optional: for fixed-time jobs, which days to run on
-  private LocalDateTime lastRun;
-  private LocalDateTime nextRun;
+  private Instant lastRun;
+  private Instant nextRun;
 
   /**
    * Creates a new Job definition.
@@ -47,7 +48,7 @@ public class Job {
       long id,
       String name,
       boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       String description,
       String handlerAsString,
       Long runBeforeJobId,
@@ -122,10 +123,10 @@ public class Job {
    * - Interval jobs: lastRun + interval
    * - Fixed-time jobs: first runTime after now, otherwise earliest tomorrow
    * 
-   * @return LocalDateTime of next run, or null if no schedule
+   * @return Instant of next run, or null if no schedule
    */
-  public LocalDateTime calculateNextRun() {
-    var now = LocalDateTime.now();
+  public Instant calculateNextRun() {
+    var now = Instant.now();
 
     // Interval-based scheduling
     if (isIntervalBasedJob()) {
@@ -137,9 +138,12 @@ public class Job {
 
     // Fixed-time scheduling
     if (!isIntervalBasedJob() && !runTimesUTC.isEmpty()) {
+      var startOfTodayUTC = now.truncatedTo(ChronoUnit.DAYS);
+
       var todayCandidate = runTimesUTC.stream()
-          .map(t -> LocalDateTime.of(now.toLocalDate(), t))
-          .filter(dt -> dt.isAfter(now))
+          .map(t -> startOfTodayUTC.plusSeconds(t.toSecondOfDay()))
+          .filter(candidate -> candidate.isAfter(now))
+          .sorted()
           .findFirst()
           .orElse(null);
 
@@ -147,8 +151,13 @@ public class Job {
         return todayCandidate;
       }
 
-      // Otherwise roll to the next day
-      return LocalDateTime.of(now.toLocalDate().plusDays(1), runTimesUTC.get(0));
+      // Otherwise roll to the earliest configured time on the next day.
+      var startOfTomorrowUTC = startOfTodayUTC.plus(1, ChronoUnit.DAYS);
+      return runTimesUTC.stream()
+          .map(t -> startOfTomorrowUTC.plusSeconds(t.toSecondOfDay()))
+          .sorted()
+          .findFirst()
+          .orElse(null);
     }
 
     return null; // No scheduling data
@@ -167,7 +176,7 @@ public class Job {
    * @return true if enabled, active, and nextRun <= now
    */
   public boolean isDueToRun() {
-    return enabled && active && nextRun != null && !nextRun.isAfter(LocalDateTime.now());
+    return enabled && active && nextRun != null && !nextRun.isAfter(Instant.now());
   }
 
   /**
@@ -175,7 +184,7 @@ public class Job {
    * Updates lastRun and recalculates nextRun.
    */
   public void markRunCompleted() {
-    this.lastRun = LocalDateTime.now();
+    this.lastRun = Instant.now();
     updateNextRun();
   }
 
@@ -185,7 +194,7 @@ public class Job {
    * @return Duration until next run, or null if no schedule
    */
   public Duration timeUntilNextRun() {
-    return nextRun == null ? null : Duration.between(LocalDateTime.now(), nextRun);
+    return nextRun == null ? null : Duration.between(Instant.now(), nextRun);
   }
 
   /**
@@ -194,7 +203,7 @@ public class Job {
    * @return Duration since last run, or null if never run
    */
   public Duration timeSinceLastRun() {
-    return lastRun == null ? null : Duration.between(lastRun, LocalDateTime.now());
+    return lastRun == null ? null : Duration.between(lastRun, Instant.now());
   }
 
   // =====================================================
@@ -213,7 +222,7 @@ public class Job {
     return enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
@@ -261,11 +270,11 @@ public class Job {
     return runDaysOfWeek;
   }
 
-  public LocalDateTime getLastRun() {
+  public Instant getLastRun() {
     return lastRun;
   }
 
-  public LocalDateTime getNextRun() {
+  public Instant getNextRun() {
     return nextRun;
   }
 

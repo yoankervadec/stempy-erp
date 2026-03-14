@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class RetailProductRequest {
 
@@ -15,9 +15,9 @@ public class RetailProductRequest {
 
   public boolean enabled;
 
-  public LocalDateTime createdAt;
+  public Instant createdAt;
   public Long createdByUserId;
-  public LocalDateTime updatedAt;
+  public Instant updatedAt;
   public Long updatedByUserId;
 
 }

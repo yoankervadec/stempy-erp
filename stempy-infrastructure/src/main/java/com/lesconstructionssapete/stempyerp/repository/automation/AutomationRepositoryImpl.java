@@ -53,8 +53,8 @@ public class AutomationRepositoryImpl implements AutomationRepository {
       for (JobLog log : jobLogs) {
         stmt.clearParameters();
         stmt.setLong(1, log.getJobId());
-        stmt.setTimestamp(2, Timestamp.valueOf(log.getStartedAt()));
-        stmt.setTimestamp(3, Timestamp.valueOf(log.getEndedAt()));
+        stmt.setTimestamp(2, Timestamp.from(log.getStartedAt()));
+        stmt.setTimestamp(3, Timestamp.from(log.getEndedAt()));
         stmt.setInt(4, log.getDurationMs());
         stmt.setBoolean(5, log.isError());
         stmt.setString(6, log.getMessage());

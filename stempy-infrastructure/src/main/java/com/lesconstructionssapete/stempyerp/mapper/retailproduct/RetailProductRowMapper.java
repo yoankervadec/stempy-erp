@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
+import com.lesconstructionssapete.stempyerp.mapper.SQLInstantMapper;
 
 public final class RetailProductRowMapper {
 
@@ -20,9 +21,9 @@ public final class RetailProductRowMapper {
         rs.getString(RetailProductField.NAME.columnName()),
         rs.getString(RetailProductField.DESCRIPTION.columnName()),
         rs.getBoolean(RetailProductField.ENABLED.columnName()),
-        rs.getTimestamp(RetailProductField.CREATED_AT.columnName()).toLocalDateTime(),
+        SQLInstantMapper.read(rs, RetailProductField.CREATED_AT.columnName()),
         rs.getLong(RetailProductField.CREATED_BY_USER_ID.columnName()),
-        rs.getTimestamp(RetailProductField.UPDATED_AT.columnName()).toLocalDateTime(),
+        SQLInstantMapper.read(rs, RetailProductField.UPDATED_AT.columnName()),
         rs.getLong(RetailProductField.UPDATED_BY_USER_ID.columnName()));
   }
 

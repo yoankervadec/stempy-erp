@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.service.auth;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
@@ -32,8 +33,9 @@ public class AuthServiceImpl implements AuthService {
             LogicalOperator.AND,
             List.of(
                 new FilterCondition("userId", ComparisonOperator.EQUALS, userId),
-                new FilterCondition("token", ComparisonOperator.EQUALS, refreshToken))),
-        // check expiration and if enabled
+                new FilterCondition("token", ComparisonOperator.EQUALS, refreshToken),
+                new FilterCondition("enabled", ComparisonOperator.EQUALS, true),
+                new FilterCondition("expiration", ComparisonOperator.GREATER_THAN, Instant.now()))),
         null,
         null);
 

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
+import com.lesconstructionssapete.stempyerp.mapper.SQLInstantMapper;
 
 public final class RefreshTokenRowMapper {
 
@@ -17,9 +18,9 @@ public final class RefreshTokenRowMapper {
         rs.getLong(RefreshTokenField.USER_ID.columnName()),
         null,
         rs.getString(RefreshTokenField.TOKEN.columnName()),
-        rs.getTimestamp(RefreshTokenField.EXPIRES_AT.columnName()).toLocalDateTime(),
+        SQLInstantMapper.read(rs, RefreshTokenField.EXPIRES_AT.columnName()),
         rs.getBoolean(RefreshTokenField.ENABLED.columnName()),
-        rs.getTimestamp(RefreshTokenField.CREATED_AT.columnName()).toLocalDateTime());
+        SQLInstantMapper.read(rs, RefreshTokenField.CREATED_AT.columnName()));
   }
 
 }

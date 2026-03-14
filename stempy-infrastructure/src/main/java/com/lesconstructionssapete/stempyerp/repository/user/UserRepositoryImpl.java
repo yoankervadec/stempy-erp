@@ -9,6 +9,7 @@ import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.mapper.SQLInstantMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
@@ -47,9 +48,9 @@ public class UserRepositoryImpl implements UserRepository {
               rs.getString("user_no"),
               rs.getString("user_name"),
               rs.getBoolean("enabled"),
-              rs.getTimestamp("created_at").toLocalDateTime(),
+              SQLInstantMapper.read(rs, "created_at"),
               rs.getLong("created_by_user_id"),
-              rs.getTimestamp("updated_at").toLocalDateTime(),
+              SQLInstantMapper.read(rs, "updated_at"),
               rs.getLong("updated_by_user_id")));
         }
       }
@@ -89,7 +90,7 @@ public class UserRepositoryImpl implements UserRepository {
               rs.getLong("user_id"),
               rs.getString("password"),
               rs.getBoolean("enabled"),
-              rs.getTimestamp("created_at").toLocalDateTime()));
+              SQLInstantMapper.read(rs, "created_at")));
         }
       }
     }

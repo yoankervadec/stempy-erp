@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.auth;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
@@ -14,7 +14,7 @@ public class User extends GenericEntity {
 
   private String userName;
   private Boolean enabled;
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
   private Long updatedByUserId;
 
   public User(
@@ -22,9 +22,9 @@ public class User extends GenericEntity {
       String userNo,
       String userName,
       Boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       Long createdByUserId,
-      LocalDateTime updatedAt,
+      Instant updatedAt,
       Long updatedByUserId) {
     super(
         USER_ENTITY_NAME,
@@ -58,11 +58,11 @@ public class User extends GenericEntity {
     this.enabled = enabled;
   }
 
-  public LocalDateTime getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 

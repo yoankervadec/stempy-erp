@@ -1,13 +1,13 @@
 package com.lesconstructionssapete.stempyerp.domain.automation;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class JobLog {
 
   private final long jobId;
-  private final LocalDateTime startedAt = LocalDateTime.now();
-  private LocalDateTime endedAt;
+  private final Instant startedAt = Instant.now();
+  private Instant endedAt;
   private boolean isError = false;
   private StringBuilder message = new StringBuilder();
 
@@ -59,7 +59,7 @@ public class JobLog {
   }
 
   public int getDurationMs() {
-    LocalDateTime end = (endedAt != null) ? endedAt : LocalDateTime.now();
+    Instant end = (endedAt != null) ? endedAt : Instant.now();
     return (int) Duration.between(startedAt, end).toMillis();
   }
 
@@ -69,15 +69,15 @@ public class JobLog {
     return jobId;
   }
 
-  public LocalDateTime getStartedAt() {
+  public Instant getStartedAt() {
     return startedAt;
   }
 
-  public LocalDateTime getEndedAt() {
+  public Instant getEndedAt() {
     return endedAt;
   }
 
-  public void setEndedAt(LocalDateTime endedAt) {
+  public void setEndedAt(Instant endedAt) {
     this.endedAt = endedAt;
   }
 

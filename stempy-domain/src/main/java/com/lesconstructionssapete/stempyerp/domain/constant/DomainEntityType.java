@@ -1,13 +1,13 @@
 package com.lesconstructionssapete.stempyerp.domain.constant;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class DomainEntityType implements ConstantEntity {
 
   private final long id;
   private final String name;
   private final boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private final int padLength;
   private final String prefix;
 
@@ -15,7 +15,7 @@ public class DomainEntityType implements ConstantEntity {
       long id,
       String name,
       boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       int padLength,
       String prefix) {
     this.id = id;
@@ -41,7 +41,7 @@ public class DomainEntityType implements ConstantEntity {
     return enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 

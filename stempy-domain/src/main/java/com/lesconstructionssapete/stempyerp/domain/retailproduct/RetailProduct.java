@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
@@ -19,7 +19,7 @@ public class RetailProduct extends GenericEntity {
 
   private boolean enabled;
 
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
   private Long updatedByUserId;
 
   public RetailProduct(
@@ -30,9 +30,9 @@ public class RetailProduct extends GenericEntity {
       String name,
       String description,
       boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       Long createdByUserId,
-      LocalDateTime updatedAt,
+      Instant updatedAt,
       Long updatedByUserId) {
     super(
         RETAIL_PRODUCT_ENTITY_NAME,
@@ -111,11 +111,11 @@ public class RetailProduct extends GenericEntity {
     this.enabled = enabled;
   }
 
-  public LocalDateTime getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 

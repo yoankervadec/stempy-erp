@@ -44,7 +44,7 @@ public class SQLBuilder {
         return Types.DECIMAL;
       if (v instanceof Boolean)
         return Types.BOOLEAN;
-      if (v instanceof java.time.LocalDateTime)
+      if (v instanceof java.time.Instant)
         return Types.TIMESTAMP;
       return Types.OTHER;
     }

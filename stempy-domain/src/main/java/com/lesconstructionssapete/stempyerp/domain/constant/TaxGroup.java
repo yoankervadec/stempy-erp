@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.constant;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class TaxGroup implements ConstantEntity {
   private final String name;
   private final String description;
   private final boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private List<TaxGroupLine> rates;
   private List<TaxRate> innactiveRates;
 
@@ -19,7 +19,7 @@ public class TaxGroup implements ConstantEntity {
       String name,
       String description,
       boolean enabled,
-      LocalDateTime createdAt) {
+      Instant createdAt) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -49,7 +49,7 @@ public class TaxGroup implements ConstantEntity {
     return description;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 

@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.automation.execution;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.handler.LogJobRuns;
@@ -29,7 +29,7 @@ public class WorkerThread implements Runnable {
         JobExecutable executable = queue.take(); // blocks until a job arrives
 
         System.out.println("Worker picked up job ID " + executable.meta().getId() + " ("
-            + executable.meta().getName() + ") at " + LocalDateTime.now());
+            + executable.meta().getName() + ") at " + Instant.now());
 
         executeAndLog(executable);
 
@@ -86,7 +86,7 @@ public class WorkerThread implements Runnable {
         Thread.sleep(1000L * attempt);
 
       } finally {
-        log.setEndedAt(LocalDateTime.now());
+        log.setEndedAt(Instant.now());
         log.save();
         LogJobRuns.enqueueLog(log);
       }

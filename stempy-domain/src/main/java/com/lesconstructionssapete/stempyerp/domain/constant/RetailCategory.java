@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.constant;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class RetailCategory implements ConstantEntity {
 
@@ -8,9 +8,9 @@ public class RetailCategory implements ConstantEntity {
   private final String name;
   private final String description;
   private final boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
 
-  public RetailCategory(long id, String name, String description, boolean enabled, LocalDateTime createdAt) {
+  public RetailCategory(long id, String name, String description, boolean enabled, Instant createdAt) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -37,7 +37,7 @@ public class RetailCategory implements ConstantEntity {
     return enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 

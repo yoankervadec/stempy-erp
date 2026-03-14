@@ -1,7 +1,6 @@
 package com.lesconstructionssapete.stempyerp.facade.auth;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
@@ -96,8 +95,8 @@ public class AuthFacadeImpl implements AuthFacade {
               .generateAccessToken(u.getEntityNo());
           String refreshToken = tokenProvider
               .generateRefreshToken(u.getEntityNo());
-          LocalDateTime refreshTokenExpiration = LocalDateTime.now()
-              .plus(Duration.ofMillis(tokenProvider.getRefreshTokenExpirationMillis()));
+          Instant refreshTokenExpiration = Instant.now()
+              .plusMillis(tokenProvider.getRefreshTokenExpirationMillis());
 
           AuthToken token = new AuthToken(
               null,
@@ -106,7 +105,7 @@ public class AuthFacadeImpl implements AuthFacade {
               refreshToken,
               refreshTokenExpiration,
               true,
-              LocalDateTime.now());
+              Instant.now());
 
           save(token);
 

@@ -16,7 +16,7 @@ public class JobRowMapper {
         rs.getLong("id"),
         rs.getString("name"),
         rs.getBoolean("enabled"),
-        rs.getTimestamp("created_at").toLocalDateTime(),
+        rs.getTimestamp("created_at").toInstant(),
         rs.getString("description"),
         rs.getString("handler"),
         rs.getLong("run_before_job_id"),

@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.automation.scheduling;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -69,7 +69,7 @@ public class Scheduler {
           + ") was run less than " + (MIN_DELAY / 1000) + " seconds ago. Cannot reschedule so soon.");
     }
 
-    LocalDateTime next = job.calculateNextRun();
+    Instant next = job.calculateNextRun();
     if (next == null)
       return;
 

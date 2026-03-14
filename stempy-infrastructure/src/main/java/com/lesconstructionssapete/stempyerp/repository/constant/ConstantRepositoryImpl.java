@@ -36,7 +36,7 @@ public class ConstantRepositoryImpl implements ConstantRepository {
             rs.getLong("id"),
             rs.getString("name"),
             rs.getBoolean("enabled"),
-            rs.getTimestamp("created_at").toLocalDateTime(),
+            rs.getTimestamp("created_at").toInstant(),
             rs.getInt("pad_length"),
             rs.getString("prefix")));
       }
@@ -60,7 +60,7 @@ public class ConstantRepositoryImpl implements ConstantRepository {
             rs.getString("name"),
             rs.getString("description"),
             rs.getBoolean("enabled"),
-            rs.getTimestamp("created_at").toLocalDateTime()));
+            rs.getTimestamp("created_at").toInstant()));
       }
 
       return list;
@@ -82,7 +82,7 @@ public class ConstantRepositoryImpl implements ConstantRepository {
             rs.getString("name"),
             rs.getString("description"),
             rs.getBoolean("enabled"),
-            rs.getTimestamp("created_at").toLocalDateTime()));
+            rs.getTimestamp("created_at").toInstant()));
       }
 
       return list;
@@ -105,7 +105,7 @@ public class ConstantRepositoryImpl implements ConstantRepository {
             rs.getString("name"),
             rs.getString("description"),
             rs.getBoolean("enabled"),
-            rs.getTimestamp("created_at").toLocalDateTime()));
+            rs.getTimestamp("created_at").toInstant()));
       }
 
       return list;
@@ -150,7 +150,7 @@ public class ConstantRepositoryImpl implements ConstantRepository {
             rs.getString("name"),
             rs.getString("description"),
             rs.getBoolean("enabled"),
-            rs.getTimestamp("created_at").toLocalDateTime(),
+            rs.getTimestamp("created_at").toInstant(),
             rs.getDouble("rate"),
             rs.getBoolean("is_compound"),
             rs.getInt("calculation_order"),

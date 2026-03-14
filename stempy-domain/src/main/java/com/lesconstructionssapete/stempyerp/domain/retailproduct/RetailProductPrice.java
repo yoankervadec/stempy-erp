@@ -1,30 +1,30 @@
 package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class RetailProductPrice {
 
   private Long retailProductPriceId;
   private Long retailProductVariantId;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private final Long createdByUserId;
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
   private Long updatedByUserId;
   private BigDecimal price;
-  private LocalDateTime validFrom;
-  private LocalDateTime validTo;
+  private Instant validFrom;
+  private Instant validTo;
 
   public RetailProductPrice(
       Long retailProductPriceId,
       Long retailProductVariantId,
-      final LocalDateTime createdAt,
+      final Instant createdAt,
       final Long createdByUserId,
-      LocalDateTime updatedAt,
+      Instant updatedAt,
       Long updatedByUserId,
       BigDecimal price,
-      LocalDateTime validFrom,
-      LocalDateTime validTo) {
+      Instant validFrom,
+      Instant validTo) {
     this.retailProductPriceId = retailProductPriceId;
     this.retailProductVariantId = retailProductVariantId;
     this.createdAt = createdAt;
@@ -52,7 +52,7 @@ public class RetailProductPrice {
     this.retailProductVariantId = retailProductVariantId;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
@@ -60,11 +60,11 @@ public class RetailProductPrice {
     return createdByUserId;
   }
 
-  public LocalDateTime getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -84,19 +84,19 @@ public class RetailProductPrice {
     this.price = price;
   }
 
-  public LocalDateTime getValidFrom() {
+  public Instant getValidFrom() {
     return validFrom;
   }
 
-  public void setValidFrom(LocalDateTime validFrom) {
+  public void setValidFrom(Instant validFrom) {
     this.validFrom = validFrom;
   }
 
-  public LocalDateTime getValidTo() {
+  public Instant getValidTo() {
     return validTo;
   }
 
-  public void setValidTo(LocalDateTime validTo) {
+  public void setValidTo(Instant validTo) {
     this.validTo = validTo;
   }
 

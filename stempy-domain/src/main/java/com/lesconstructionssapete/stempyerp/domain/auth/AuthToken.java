@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.auth;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class AuthToken {
 
@@ -8,18 +8,18 @@ public class AuthToken {
   private Long userId;
   private String token;
   private String refreshToken;
-  private LocalDateTime refreshTokenExpiresAt;
+  private Instant refreshTokenExpiresAt;
   private boolean enabled;
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
   public AuthToken(
       Long id,
       Long userId,
       String token,
       String refreshToken,
-      LocalDateTime refreshTokenExpiresAt,
+      Instant refreshTokenExpiresAt,
       boolean enabled,
-      LocalDateTime createdAt) {
+      Instant createdAt) {
     this.id = id;
     this.userId = userId;
     this.token = token;
@@ -61,11 +61,11 @@ public class AuthToken {
     this.refreshToken = refreshToken;
   }
 
-  public LocalDateTime getRefreshTokenExpiresAt() {
+  public Instant getRefreshTokenExpiresAt() {
     return refreshTokenExpiresAt;
   }
 
-  public void setRefreshTokenExpiresAt(LocalDateTime expiresAt) {
+  public void setRefreshTokenExpiresAt(Instant expiresAt) {
     this.refreshTokenExpiresAt = expiresAt;
   }
 
@@ -77,11 +77,11 @@ public class AuthToken {
     this.enabled = enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(LocalDateTime createdAt) {
+  public void setCreatedAt(Instant createdAt) {
     this.createdAt = createdAt;
   }
 

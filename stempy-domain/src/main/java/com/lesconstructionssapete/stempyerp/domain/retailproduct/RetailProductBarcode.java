@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class RetailProductBarcode {
 
@@ -8,9 +8,9 @@ public class RetailProductBarcode {
   private Long retailProductMasterId;
   private Long retailProductVariantId;
   private boolean enabled;
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private final Long createdByUserId;
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
   private Long updatedByUserId;
   private String barcodeType;
   private String barcode;
@@ -20,9 +20,9 @@ public class RetailProductBarcode {
       Long retailProductMasterId,
       Long retailProductVariantId,
       boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       Long createdByUserId,
-      LocalDateTime updatedAt,
+      Instant updatedAt,
       Long updatedByUserId,
       String barcodeType,
       String barcode) {
@@ -70,7 +70,7 @@ public class RetailProductBarcode {
     this.enabled = enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
@@ -78,11 +78,11 @@ public class RetailProductBarcode {
     return createdByUserId;
   }
 
-  public LocalDateTime getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 

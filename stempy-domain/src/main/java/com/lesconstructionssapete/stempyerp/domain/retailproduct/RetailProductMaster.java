@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class RetailProductMaster {
 
@@ -13,9 +13,9 @@ public class RetailProductMaster {
 
   private boolean enabled;
 
-  private final LocalDateTime createdAt;
+  private final Instant createdAt;
   private final Long createdByUserId;
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
   private Long updatedByUserId;
 
   private Long retailCategoryId;
@@ -30,9 +30,9 @@ public class RetailProductMaster {
       String name,
       String description,
       boolean enabled,
-      LocalDateTime createdAt,
+      Instant createdAt,
       Long createdByUserId,
-      LocalDateTime updatedAt,
+      Instant updatedAt,
       Long updatedByUserId,
       Long retailCategoryId,
       BigDecimal defaultPrice,
@@ -91,7 +91,7 @@ public class RetailProductMaster {
     this.enabled = enabled;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
@@ -99,11 +99,11 @@ public class RetailProductMaster {
     return createdByUserId;
   }
 
-  public LocalDateTime getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(LocalDateTime updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 
