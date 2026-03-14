@@ -91,7 +91,7 @@ public final class JobField {
       Types.VARCHAR);
 
   public final static SQLField RUN_DAYS = new SQLField(
-      "runDays",
+      "runDaysOfWeek",
       AUTO_JOB,
       "run_days",
       Types.VARCHAR);

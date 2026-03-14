@@ -11,4 +11,4 @@ SET
   max_retries = :maxRetries,
   interval_minutes = :intervalMinutes,
   run_times_utc = :runTimesUTC,
-  run_days = :runDays
+  run_days = :runDaysOfWeek
