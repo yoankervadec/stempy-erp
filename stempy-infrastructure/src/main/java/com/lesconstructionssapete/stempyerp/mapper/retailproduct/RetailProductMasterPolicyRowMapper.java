@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMasterPolicy;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
 
-public class RetailProductMasterPolicyMapper {
+public class RetailProductMasterPolicyRowMapper {
 
-  private RetailProductMasterPolicyMapper() {
+  private RetailProductMasterPolicyRowMapper() {
   }
 
   public static RetailProductMasterPolicy map(ResultSet rs) throws SQLException {

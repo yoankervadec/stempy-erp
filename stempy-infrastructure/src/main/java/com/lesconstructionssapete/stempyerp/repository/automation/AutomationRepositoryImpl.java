@@ -3,6 +3,7 @@ package com.lesconstructionssapete.stempyerp.repository.automation;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,20 +70,19 @@ public class AutomationRepositoryImpl implements AutomationRepository {
   @Override
   public void save(Connection connection, Job job) throws SQLException {
 
-    String sqlBase = QueryCache.get(Query.UPDATE_AUTO_JOB);
+    String sql = QueryCache.get(Query.UPDATE_AUTO_JOB);
 
-    SQLBuilder builder = new SQLBuilder(sqlBase);
+    SQLBuilder builder = new SQLBuilder(sql);
 
     JobSQLMapper.bindUpdate(builder, job);
 
-    builder
-        .where("id = :jobid")
-        .bind("jobId", job.getId());
+    builder.where("auto_job_id = :id")
+        .bind("id", job.getId(), Types.BIGINT);
 
-    String sqlString = builder.build();
+    String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
 
-    try (var stmt = connection.prepareStatement(sqlString)) {
+    try (var stmt = connection.prepareStatement(sqlFinal)) {
 
       SQLBinder.bind(stmt, params);
 

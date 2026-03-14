@@ -3,12 +3,12 @@ UPDATE
 SET
   enabled = :enabled,
   description = :description,
-  handler = :handler,
-  run_before_id = :run_before_id,
-  run_after_id = :run_after_id,
+  handler = :handlerAsString,
+  run_before_id = :runBeforeJobId,
+  run_after_id = :runAfterJobId,
   active = :active,
-  deactivate_on_failure = :deactivate_on_failure,
-  max_retries = :max_retries,
-  interval_minutes = :interval_minutes,
-  run_times_utc = :run_times_utc,
-  run_days = :run_days
+  deactivate_on_failure = :deactivateOnFailure,
+  max_retries = :maxRetries,
+  interval_minutes = :intervalMinutes,
+  run_times_utc = :runTimesUTC,
+  run_days = :runDays

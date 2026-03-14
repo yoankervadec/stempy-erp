@@ -25,7 +25,7 @@ public class RetailProductMasterRowMapper {
         rs.getLong(RetailProductMasterField.UPDATED_BY_USER_ID.columnName()),
         rs.getLong(RetailProductMasterField.RETAIL_CATEGORY_ID.columnName()),
         rs.getBigDecimal(RetailProductMasterField.DEFAULT_PRICE.columnName()),
-        RetailProductMasterPolicyMapper.map(rs));
+        RetailProductMasterPolicyRowMapper.map(rs));
   }
 
 }
