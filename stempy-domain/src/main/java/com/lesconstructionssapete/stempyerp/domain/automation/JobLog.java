@@ -8,7 +8,7 @@ public class JobLog {
   private final long jobId;
   private final Instant startedAt = Instant.now();
   private Instant endedAt;
-  private boolean isError = false;
+  private boolean error = false;
   private StringBuilder message = new StringBuilder();
 
   public JobLog(long jobId) {
@@ -39,20 +39,20 @@ public class JobLog {
   }
 
   public JobLog markSuccess(String jobName) {
-    this.isError = false;
+    this.error = false;
     appendMessage("Success: " + jobName);
     return this;
   }
 
   public JobLog markFailure(String jobName, Exception e, int attempt, int maxAttempts) {
-    this.isError = true;
+    this.error = true;
     appendMessage(String.format("Failure [%s] attempt %d/%d: %s",
         jobName, attempt, maxAttempts, e.getMessage()));
     return this;
   }
 
   public JobLog markFinalFailure(String jobName, Exception e) {
-    this.isError = true;
+    this.error = true;
     appendMessage(String.format("Job %s permanently failed: %s",
         jobName, e.getMessage()));
     return this;
@@ -82,11 +82,11 @@ public class JobLog {
   }
 
   public boolean isError() {
-    return isError;
+    return error;
   }
 
-  public void setError(boolean isError) {
-    this.isError = isError;
+  public void setError(boolean error) {
+    this.error = error;
   }
 
 }

@@ -99,6 +99,11 @@ public class SQLBuilder {
 
   /**
    * Add a WHERE clause.
+   * 
+   * The condition can contain named parameters (e.g. "table_name.column_name =
+   * :logicalName") which should be
+   * bound using the {@link #bind(String, Object)} or
+   * {@link #bind(SQLField, Object)} methods.
    */
   public SQLBuilder where(String condition) {
     whereClauses.add(condition);
@@ -221,6 +226,14 @@ public class SQLBuilder {
     }
 
     return ordered;
+  }
+
+  /**
+   * Clear all bound parameters. Useful if you want to reuse the same builder
+   * instance for multiple executions with different params.
+   */
+  public void clearParams() {
+    params.clear();
   }
 
   /**

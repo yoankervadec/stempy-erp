@@ -2,13 +2,13 @@ package com.lesconstructionssapete.stempyerp.repository.automation;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.field.automation.JobField;
+import com.lesconstructionssapete.stempyerp.mapper.automation.JobLogSQLMapper;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.Query;
@@ -24,10 +24,10 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
     List<Job> jobs = new ArrayList<>();
 
-    String sqlBase = QueryCache.get(
+    String sql = QueryCache.get(
         Query.SELECT_AUTO_JOB);
 
-    SQLBuilder builder = new SQLBuilder(sqlBase);
+    SQLBuilder builder = new SQLBuilder(sql);
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
@@ -48,17 +48,21 @@ public class AutomationRepositoryImpl implements AutomationRepository {
   @Override
   public void batchLog(Connection connection, List<JobLog> jobLogs) throws SQLException {
 
-    String sqlString = QueryCache.get(Query.INSERT_JOB_LOG);
+    String sql = QueryCache.get(Query.INSERT_JOB_LOG);
 
-    try (var stmt = connection.prepareStatement(sqlString)) {
+    SQLBuilder builder = new SQLBuilder(sql);
+    String sqlFinal = builder.build();
+
+    try (var stmt = connection.prepareStatement(sqlFinal)) {
       for (JobLog log : jobLogs) {
         stmt.clearParameters();
-        stmt.setLong(1, log.getJobId());
-        stmt.setTimestamp(2, Timestamp.from(log.getStartedAt()));
-        stmt.setTimestamp(3, Timestamp.from(log.getEndedAt()));
-        stmt.setInt(4, log.getDurationMs());
-        stmt.setBoolean(5, log.isError());
-        stmt.setString(6, log.getMessage());
+
+        builder.clearParams();
+
+        JobLogSQLMapper.bindInsert(builder, log);
+
+        SQLBinder.bind(stmt, builder.getParams());
+
         stmt.addBatch();
       }
 
@@ -76,8 +80,8 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
     JobSQLMapper.bindUpdate(builder, job);
 
-    builder.where("auto_job_id = :id")
-        .bind("id", job.getId(), Types.BIGINT);
+    builder.where("auto_job.id = :id")
+        .bind(JobField.ID, job.getId());
 
     String sqlFinal = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
