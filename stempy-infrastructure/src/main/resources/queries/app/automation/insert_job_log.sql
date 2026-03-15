@@ -1,4 +1,4 @@
-INSERT INTO jobs_log (
+INSERT INTO auto_job_log (
   job_id,
   started_at,
   ended_at,

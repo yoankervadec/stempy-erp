@@ -84,6 +84,8 @@ public class LogJobRuns extends Job implements JobExecutable {
 
           connection.commit();
         } catch (SQLException e) {
+          // Note: Will fail silently and lose logs if we get here, but I don't want to
+          // risk infinite retries or blocking the queue.
           executionLog.appendMessage("Error persisting batch: " + e.getMessage());
         }
       }

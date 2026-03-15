@@ -1,6 +1,10 @@
 package com.lesconstructionssapete.stempyerp.automation.execution;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.handler.LogJobRuns;
@@ -8,6 +12,8 @@ import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 
 public class WorkerThread implements Runnable {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(WorkerThread.class);
 
   private final ConnectionProvider provider;
   private final JobQueue queue;
@@ -28,8 +34,11 @@ public class WorkerThread implements Runnable {
       try {
         JobExecutable executable = queue.take(); // blocks until a job arrives
 
-        System.out.println("Worker picked up job ID " + executable.meta().getId() + " ("
-            + executable.meta().getName() + ") at " + Instant.now());
+        LOGGER.info(
+            "{} ({}) executing at {}",
+            executable.meta().getName(),
+            executable.meta().getId(),
+            Instant.now().truncatedTo(ChronoUnit.SECONDS));
 
         executeAndLog(executable);
 
@@ -37,7 +46,7 @@ public class WorkerThread implements Runnable {
         Thread.currentThread().interrupt();
         running = false;
       } catch (Exception e) {
-        System.err.println("Job execution failed: " + e.getMessage());
+        LOGGER.error("Job execution failed: {}", e.getMessage(), e);
       }
     }
   }

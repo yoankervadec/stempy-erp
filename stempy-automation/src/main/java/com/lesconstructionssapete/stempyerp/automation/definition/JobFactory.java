@@ -12,7 +12,7 @@ import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 public class JobFactory {
 
   private final Map<Class<?>, Object> dependencies = new HashMap<>();
-  private static final String JOB_PACKAGE = "com.lesconstructionssapete.stempyerp.core.automation.handler";
+  private static final String JOB_PACKAGE = "com.lesconstructionssapete.stempyerp.automation.handler";
 
   public JobFactory register(Class<?> type, Object instance) {
     dependencies.put(type, instance);
