@@ -3,7 +3,6 @@ package com.lesconstructionssapete.stempyerp.repository.retailproduct;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,9 +91,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     RetailProductSQLMapper.bindUpdate(builder, retailProduct);
 
     builder.where("retail_product_variant.id = :id")
-        .bind("id",
-            retailProduct.getRetailProductId(),
-            Types.BIGINT);
+        .bind(RetailProductField.ID, retailProduct.getRetailProductId());
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();

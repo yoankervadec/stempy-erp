@@ -2,7 +2,6 @@ package com.lesconstructionssapete.stempyerp.repository.retailproduct;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
@@ -85,9 +84,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
     RetailProductMasterSQLMapper.bindUpdate(builder, retailProductMaster);
 
     builder.where("retail_product_master.id = :id")
-        .bind("id",
-            retailProductMaster.getRetailProductMasterId(),
-            Types.BIGINT);
+        .bind(RetailProductMasterField.ID, retailProductMaster.getRetailProductMasterId());
 
     String sqlString = builder.build();
     List<SQLBuilder.SQLParam> params = builder.getParams();
