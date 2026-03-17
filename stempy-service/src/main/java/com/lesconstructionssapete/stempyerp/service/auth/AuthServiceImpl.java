@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
                 new FilterCondition("userId", ComparisonOperator.EQUALS, userId),
                 new FilterCondition("token", ComparisonOperator.EQUALS, refreshToken),
                 new FilterCondition("enabled", ComparisonOperator.EQUALS, true),
-                new FilterCondition("expiration", ComparisonOperator.GREATER_THAN, Instant.now()))),
+                new FilterCondition("expiresAt", ComparisonOperator.GREATER_THAN, Instant.now()))),
         null,
         null);
 

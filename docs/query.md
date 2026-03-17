@@ -328,12 +328,28 @@ List<SQLBuilder.SQLParam> params = builder.getParams();
 Example output:
 
 ```sql
-SELECT *
-FROM products p
-WHERE (p.status = ? AND (p.price > ? OR p.category = ?))
-ORDER BY p.created_at DESC
-LIMIT 50
-OFFSET 0
+SELECT
+  dom_retail_product_variant.retail_product_variant_no,
+  dom_retail_product_variant.name,
+  dom_retail_product_variant.description,
+  dom_retail_product_variant.enabled,
+FROM
+  dom_retail_product_variant
+WHERE
+  (
+    dom_retail_product_variant.enabled = ?
+    AND dom_retail_product_variant.retail_product_variant_no = ?
+    AND (
+      dom_retail_product_variant.description LIKE ?
+      OR dom_retail_product_variant.name LIKE ?
+    )
+  )
+ORDER BY
+  dom_retail_product_variant.enabled DESC
+LIMIT
+  50
+OFFSET
+  50
 ```
 
 Parameters:

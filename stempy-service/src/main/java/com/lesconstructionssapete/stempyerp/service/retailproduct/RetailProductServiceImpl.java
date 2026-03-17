@@ -1,7 +1,6 @@
 package com.lesconstructionssapete.stempyerp.service.retailproduct;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
@@ -19,37 +18,18 @@ public class RetailProductServiceImpl implements RetailProductService {
   @Override
   public List<RetailProduct> fetch(Connection connection, DomainQuery query) {
 
-    try {
-      return repository.fetch(connection, query);
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
+    return repository.fetch(connection, query);
   }
 
   @Override
   public RetailProduct insert(Connection connection, RetailProduct retailProduct) {
-    try {
-      long generatedId = repository.insert(connection, retailProduct);
-      retailProduct.setEntityId(generatedId);
-      return retailProduct;
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
+    long generatedId = repository.insert(connection, retailProduct);
+    retailProduct.setEntityId(generatedId);
+    return retailProduct;
   }
 
   @Override
-  public RetailProduct save(Connection connection, RetailProduct retailProduct) {
-    try {
-      return repository.save(connection, retailProduct);
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
+  public int save(Connection connection, RetailProduct retailProduct) {
+    return repository.save(connection, retailProduct);
   }
-
 }

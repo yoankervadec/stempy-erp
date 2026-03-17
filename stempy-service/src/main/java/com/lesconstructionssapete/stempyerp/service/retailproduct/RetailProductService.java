@@ -12,6 +12,6 @@ public interface RetailProductService {
 
   RetailProduct insert(Connection connection, RetailProduct retailProduct);
 
-  RetailProduct save(Connection connection, RetailProduct retailProduct);
+  int save(Connection connection, RetailProduct retailProduct);
 
 }
