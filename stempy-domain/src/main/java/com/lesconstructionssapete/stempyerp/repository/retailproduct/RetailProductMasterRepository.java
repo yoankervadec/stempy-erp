@@ -12,6 +12,6 @@ public interface RetailProductMasterRepository {
 
   long insert(Connection connection, RetailProductMaster retailProductMaster) throws Exception;
 
-  RetailProductMaster save(Connection connection, RetailProductMaster retailProductMaster) throws Exception;
+  int save(Connection connection, RetailProductMaster retailProductMaster) throws Exception;
 
 }

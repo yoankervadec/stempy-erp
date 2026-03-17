@@ -1,11 +1,10 @@
 package com.lesconstructionssapete.stempyerp.repository.auth;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
@@ -14,16 +13,13 @@ import com.lesconstructionssapete.stempyerp.mapper.auth.RefreshTokenSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
-import com.lesconstructionssapete.stempyerp.query.SQLBinder;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
   @Override
-  public List<AuthToken> fetch(Connection connection, DomainQuery query) throws SQLException {
-
-    List<AuthToken> tokens;
+  public List<AuthToken> fetch(Connection connection, DomainQuery query) {
 
     String sql = QueryCache.get(Query.SELECT_AUTH_REFRESH_TOKENS);
 
@@ -33,26 +29,21 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     translator.apply(builder, query);
 
-    String sqlFinal = builder.build();
-    List<SQLBuilder.SQLParam> params = builder.getParams();
-
-    try (var stmt = connection.prepareStatement(sqlFinal)) {
-
-      SQLBinder.bind(stmt, params);
-
-      try (var rs = stmt.executeQuery()) {
-        tokens = new ArrayList<>();
-        while (rs.next()) {
-          tokens.add(RefreshTokenRowMapper.map(rs));
-        }
-      }
-      return tokens;
-    }
-
+    return SQLExecutor.query(
+        connection,
+        builder.build(),
+        builder.getParams(),
+        rs -> {
+          List<AuthToken> list = new ArrayList<>();
+          while (rs.next()) {
+            list.add(RefreshTokenRowMapper.map(rs));
+          }
+          return list;
+        });
   }
 
   @Override
-  public long insert(Connection connection, AuthToken token) throws SQLException {
+  public long insert(Connection connection, AuthToken token) {
 
     String sql = QueryCache.get(Query.INSERT_AUTH_REFRESH_TOKEN);
 
@@ -60,23 +51,12 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     RefreshTokenSQLMapper.bindInsert(builder, token);
 
-    String sqlFinal = builder.build();
-    List<SQLBuilder.SQLParam> params = builder.getParams();
+    long generatedId = SQLExecutor.insert(
+        connection,
+        builder.build(),
+        builder.getParams());
 
-    try (var stmt = connection.prepareStatement(sqlFinal, Statement.RETURN_GENERATED_KEYS)) {
-
-      SQLBinder.bind(stmt, params);
-
-      stmt.executeUpdate();
-
-      try (var rs = stmt.getGeneratedKeys()) {
-        if (rs.next()) {
-          return rs.getLong(1);
-        }
-        return 0;
-      }
-    }
-
+    return generatedId;
   }
 
 }

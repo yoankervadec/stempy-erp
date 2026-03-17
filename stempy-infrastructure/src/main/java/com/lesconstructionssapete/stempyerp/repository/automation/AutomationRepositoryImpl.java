@@ -1,7 +1,6 @@
 package com.lesconstructionssapete.stempyerp.repository.automation;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,40 +13,34 @@ import com.lesconstructionssapete.stempyerp.mapper.automation.JobRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
-import com.lesconstructionssapete.stempyerp.query.SQLBinder;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
 
 public class AutomationRepositoryImpl implements AutomationRepository {
 
   @Override
-  public List<Job> fetchAll(Connection connection) throws SQLException {
-
-    List<Job> jobs = new ArrayList<>();
+  public List<Job> fetchAll(Connection connection) {
 
     String sql = QueryCache.get(
         Query.SELECT_AUTO_JOB);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    String sqlString = builder.build();
-    List<SQLBuilder.SQLParam> params = builder.getParams();
-
-    try (var stmt = connection.prepareStatement(sqlString)) {
-
-      SQLBinder.bind(stmt, params);
-
-      try (var rs = stmt.executeQuery()) {
-        while (rs.next()) {
-          jobs.add(JobRowMapper.map(rs));
-        }
-      }
-      return jobs;
-    }
+    return SQLExecutor.query(
+        connection,
+        builder.build(),
+        builder.getParams(),
+        rs -> {
+          List<Job> list = new ArrayList<>();
+          while (rs.next()) {
+            list.add(JobRowMapper.map(rs));
+          }
+          return list;
+        });
   }
 
   @Override
-  public void batchLog(Connection connection, List<JobLog> jobLogs) throws SQLException {
+  public void batchLog(Connection connection, List<JobLog> jobLogs) {
 
     String sql = QueryCache.get(Query.INSERT_JOB_LOG);
 
@@ -69,7 +62,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
   }
 
   @Override
-  public void save(Connection connection, Job job) throws SQLException {
+  public int save(Connection connection, Job job) {
 
     String sql = QueryCache.get(Query.UPDATE_AUTO_JOB);
 
@@ -80,15 +73,9 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     builder.where("auto_job.id = :id")
         .bind(JobField.ID, job.getId());
 
-    String sqlFinal = builder.build();
-    List<SQLBuilder.SQLParam> params = builder.getParams();
+    int rowsAffected = SQLExecutor.update(connection, builder.build(), builder.getParams());
 
-    try (var stmt = connection.prepareStatement(sqlFinal)) {
-
-      SQLBinder.bind(stmt, params);
-
-      stmt.executeUpdate();
-    }
+    return rowsAffected;
   }
 
 }
