@@ -11,7 +11,6 @@ public final class UserField {
   }
 
   private static final String AUTH_USER = "auth_user";
-  private static final String AUTH_USER_CREDENTIAL = "auth_user_credential";
 
   public final static SQLField ID = new SQLField(
       "userId",
@@ -61,36 +60,6 @@ public final class UserField {
       "updated_by_user_id",
       Types.BIGINT);
 
-  public final static SQLField USER_CREDENTIAL_ID = new SQLField(
-      "userCredentialId",
-      AUTH_USER_CREDENTIAL,
-      "id",
-      Types.BIGINT);
-
-  public final static SQLField USER_CREDENTIAL_USER_ID = new SQLField(
-      "userCredentialUserId",
-      AUTH_USER_CREDENTIAL,
-      "user_id",
-      Types.BIGINT);
-
-  public final static SQLField PASSWORD = new SQLField(
-      "password",
-      AUTH_USER_CREDENTIAL,
-      "password",
-      Types.VARCHAR);
-
-  public final static SQLField USER_CREDENTIAL_ENABLED = new SQLField(
-      "userCredentialEnabled",
-      AUTH_USER_CREDENTIAL,
-      "enabled",
-      Types.BOOLEAN);
-
-  public final static SQLField USER_CREDENTIAL_CREATED_AT = new SQLField(
-      "userCredentialCreatedAt",
-      AUTH_USER_CREDENTIAL,
-      "created_at",
-      Types.TIMESTAMP);
-
   private static final Map<String, SQLField> LOOKUP = Map.ofEntries(
       Map.entry(ID.logicalName(), ID),
       Map.entry(USER_NO.logicalName(), USER_NO),
@@ -99,12 +68,7 @@ public final class UserField {
       Map.entry(CREATED_AT.logicalName(), CREATED_AT),
       Map.entry(CREATED_BY_USER_ID.logicalName(), CREATED_BY_USER_ID),
       Map.entry(UPDATED_AT.logicalName(), UPDATED_AT),
-      Map.entry(UPDATED_BY_USER_ID.logicalName(), UPDATED_BY_USER_ID),
-      Map.entry(USER_CREDENTIAL_ID.logicalName(), USER_CREDENTIAL_ID),
-      Map.entry(USER_CREDENTIAL_USER_ID.logicalName(), USER_CREDENTIAL_USER_ID),
-      Map.entry(PASSWORD.logicalName(), PASSWORD),
-      Map.entry(USER_CREDENTIAL_ENABLED.logicalName(), USER_CREDENTIAL_ENABLED),
-      Map.entry(USER_CREDENTIAL_CREATED_AT.logicalName(), USER_CREDENTIAL_CREATED_AT));
+      Map.entry(UPDATED_BY_USER_ID.logicalName(), UPDATED_BY_USER_ID));
 
   public static SQLField get(String logicalName) {
     return LOOKUP.get(logicalName);

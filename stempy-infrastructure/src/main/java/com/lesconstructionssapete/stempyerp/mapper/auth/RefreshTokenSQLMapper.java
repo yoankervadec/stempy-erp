@@ -22,8 +22,7 @@ public final class RefreshTokenSQLMapper {
         .bind(RefreshTokenField.USER_ID, token.getUserId())
         .bind(RefreshTokenField.TOKEN, token.getToken())
         .bind(RefreshTokenField.EXPIRES_AT, token.getRefreshTokenExpiresAt())
-        .bind(RefreshTokenField.ENABLED, token.isEnabled())
-        .bind(RefreshTokenField.CREATED_AT, token.getCreatedAt());
+        .bind(RefreshTokenField.ENABLED, token.isEnabled());
   }
 
 }

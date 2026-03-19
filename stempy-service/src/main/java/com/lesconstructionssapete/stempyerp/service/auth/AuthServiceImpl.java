@@ -64,12 +64,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public List<UserCredential> fetchUserCredentials(Connection connection, DomainQuery query) {
-    List<UserCredential> userCredentials = null;
-    try {
-      userCredentials = userRepository.fetchCredentials(connection, query);
-    } catch (SQLException e) {
-    }
-    return userCredentials;
+    return userRepository.fetchCredentials(connection, query);
   }
 
 }

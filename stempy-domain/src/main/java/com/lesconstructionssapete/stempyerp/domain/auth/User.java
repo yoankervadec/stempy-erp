@@ -50,7 +50,7 @@ public class User extends GenericEntity {
     this.userName = userName;
   }
 
-  public Boolean getEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 

@@ -39,8 +39,8 @@ public enum Query {
   SELECT_AUTH_REFRESH_TOKENS("app/auth/select_auth_refresh_tokens.sql", true),
 
   // Auth / Users
-  SELECT_USER("app/auth/select_user.sql", true),
-  SELECT_USER_CREDENTIAL("app/auth/select_user_credential.sql", true),
+  AUTH_SELECT_USER("app/auth/select_user.sql", true),
+  AUTH_SELECT_USER_CREDENTIAL("app/auth/select_user_credential.sql", true),
 
   /**
    * ==========================
