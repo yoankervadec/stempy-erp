@@ -111,10 +111,27 @@ public class SQLBuilder {
   }
 
   /**
+   * Add a WHERE clause using an SQLField. The condition should contain a named
+   * parameter matching the field's logical name (e.g. "table_name.column_name =
+   * :logicalName").
+   */
+  public SQLBuilder where(SQLField field, String condition) {
+    whereClauses.add(field.qualifiedColumnName() + " " + condition);
+    return this;
+  }
+
+  /**
    * Add an AND condition to the WHERE clause.
    */
   public SQLBuilder and(String condition) {
     return where(condition);
+  }
+
+  /**
+   * Add an AND condition to the WHERE clause using an SQLField.
+   */
+  public SQLBuilder and(SQLField field, String condition) {
+    return where(field, condition);
   }
 
   /**
