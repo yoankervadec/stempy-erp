@@ -1,31 +1,30 @@
-package com.lesconstructionssapete.stempyerp.repository.user;
+package com.lesconstructionssapete.stempyerp.repository.auth;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
-import com.lesconstructionssapete.stempyerp.domain.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.field.user.UserField;
-import com.lesconstructionssapete.stempyerp.mapper.user.UserRowMapper;
+import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
+import com.lesconstructionssapete.stempyerp.mapper.auth.UserCredentialRowMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.repository.UserRepository;
 
-public class UserRepositoryImpl implements UserRepository {
+public class UserCredentialRepositoryImpl implements UserCredentialRepository {
 
   @Override
-  public List<User> fetch(Connection connection, DomainQuery query) {
+  public List<UserCredential> fetch(Connection connection, DomainQuery query) {
 
     String sql = QueryCache.get(
-        Query.AUTH_SELECT_USER);
+        Query.AUTH_SELECT_USER_CREDENTIAL);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserField.all());
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserCredentialField.all());
 
     translator.apply(builder, query);
 
@@ -34,12 +33,13 @@ public class UserRepositoryImpl implements UserRepository {
         builder.build(),
         builder.getParams(),
         rs -> {
-          List<User> list = new ArrayList<>();
+          List<UserCredential> list = new ArrayList<>();
           while (rs.next()) {
-            list.add(UserRowMapper.map(rs));
+            list.add(UserCredentialRowMapper.map(rs));
           }
           return list;
         });
+
   }
 
 }

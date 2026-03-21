@@ -23,6 +23,8 @@ import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.repository.UserRepository;
 import com.lesconstructionssapete.stempyerp.repository.auth.RefreshTokenRepositoryImpl;
+import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
+import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.constant.ConstantRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepository;
 import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepositoryImpl;
@@ -31,6 +33,8 @@ import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProdu
 import com.lesconstructionssapete.stempyerp.repository.sequence.SequenceRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.user.UserRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.security.JwtTokenProvider;
+import com.lesconstructionssapete.stempyerp.security.PBKDF2PasswordProvider;
+import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthServiceImpl;
@@ -107,7 +111,11 @@ public class Dependencies {
 
     // Auth / User
     container.bind(RefreshTokenRepository.class, RefreshTokenRepositoryImpl.class);
+    container.bind(UserCredentialRepository.class, UserCredentialRepositoryImpl.class);
     container.bind(UserRepository.class, UserRepositoryImpl.class);
+
+    // Security
+    container.bind(PasswordHashProvider.class, PBKDF2PasswordProvider.class);
 
     // Sequence
     container.bind(SequenceRepository.class, SequenceRepositoryImpl.class);

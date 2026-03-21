@@ -13,16 +13,22 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
-import com.lesconstructionssapete.stempyerp.repository.UserRepository;
+import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
+import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
 
 public class AuthServiceImpl implements AuthService {
 
   private final RefreshTokenRepository refreshTokenRepository;
-  private final UserRepository userRepository;
+  private final UserCredentialRepository userCredentialRepository;
+  private final PasswordHashProvider passwordHashProvider;
 
-  public AuthServiceImpl(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+  public AuthServiceImpl(
+      RefreshTokenRepository refreshTokenRepository,
+      UserCredentialRepository userCredentialRepository,
+      PasswordHashProvider passwordHashProvider) {
     this.refreshTokenRepository = refreshTokenRepository;
-    this.userRepository = userRepository;
+    this.userCredentialRepository = userCredentialRepository;
+    this.passwordHashProvider = passwordHashProvider;
   }
 
   @Override
@@ -58,13 +64,30 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public boolean isValidCredential(Connection connection, long userId, String password) {
-    // Implementation to validate user credentials
-    return false; // Placeholder return value
+
+    DomainQuery query = new DomainQuery(
+        new FilterGroup(
+            LogicalOperator.AND,
+            List.of(
+                new FilterCondition("userId", ComparisonOperator.EQUALS, userId),
+                new FilterCondition("enabled", ComparisonOperator.EQUALS, true))),
+        null,
+        null);
+
+    List<UserCredential> credentials = userCredentialRepository.fetch(connection, query);
+
+    if (credentials.isEmpty()) {
+      return false;
+    }
+
+    String hash = credentials.get(0).getPassword();
+
+    return passwordHashProvider.verifyPassword(password, hash);
   }
 
   @Override
   public List<UserCredential> fetchUserCredentials(Connection connection, DomainQuery query) {
-    return userRepository.fetchCredentials(connection, query);
+    return userCredentialRepository.fetch(connection, query);
   }
 
 }

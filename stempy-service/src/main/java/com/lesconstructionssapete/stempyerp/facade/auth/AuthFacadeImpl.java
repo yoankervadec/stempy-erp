@@ -9,8 +9,6 @@ import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
 import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
@@ -68,26 +66,12 @@ public class AuthFacadeImpl implements AuthFacade {
         con -> {
           var users = userFacade.fetch(userQuery);
           if (users.isEmpty()) {
-            throw new RuntimeException("User not found!");
+            throw new UserNotFoundException("User not found!");
           }
           User u = users.get(0);
 
-          DomainQuery credentialQuery = new DomainQuery(
-              new FilterGroup(
-                  LogicalOperator.AND,
-                  List.of(
-                      new FilterCondition("userCredentialUserId", ComparisonOperator.EQUALS, u.getEntityId()),
-                      new FilterCondition("password", ComparisonOperator.EQUALS, userCredential.getPassword()))),
-              null,
-              null);
-
-          var credentials = authService.fetchUserCredentials(con, credentialQuery);
-          if (credentials.isEmpty()) {
-            return null;
-          }
-          UserCredential c = credentials.get(0);
-
-          if (!c.getPassword().equals(userCredential.getPassword())) {
+          if (!authService.isValidCredential(con, u.getEntityId(), userCredential.getPassword())) {
+            // TODO: Implement proper error handling and logging for failed login attempts
             return null;
           }
 

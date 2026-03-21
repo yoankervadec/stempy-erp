@@ -1,6 +1,7 @@
-package com.lesconstructionssapete.stempyerp.field.user;
+package com.lesconstructionssapete.stempyerp.field.auth;
 
 import java.sql.Types;
+import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.mapper.SQLField;
 
@@ -18,7 +19,7 @@ public final class UserCredentialField {
       Types.BIGINT);
 
   public final static SQLField USER_ID = new SQLField(
-      "user_id",
+      "userId",
       AUTH_USER_CREDENTIAL,
       "user_id",
       Types.BIGINT);
@@ -36,9 +37,24 @@ public final class UserCredentialField {
       Types.BOOLEAN);
 
   public final static SQLField CREATED_AT = new SQLField(
-      "created_at",
+      "createdAt",
       AUTH_USER_CREDENTIAL,
       "created_at",
       Types.TIMESTAMP);
+
+  private static final Map<String, SQLField> LOOKUP = Map.ofEntries(
+      Map.entry(ID.logicalName(), ID),
+      Map.entry(USER_ID.logicalName(), USER_ID),
+      Map.entry(PASSWORD.logicalName(), PASSWORD),
+      Map.entry(ENABLED.logicalName(), ENABLED),
+      Map.entry(CREATED_AT.logicalName(), CREATED_AT));
+
+  public static SQLField get(String logicalName) {
+    return LOOKUP.get(logicalName);
+  }
+
+  public static Map<String, SQLField> all() {
+    return LOOKUP;
+  }
 
 }

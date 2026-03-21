@@ -1,7 +1,7 @@
-package com.lesconstructionssapete.stempyerp.mapper.user;
+package com.lesconstructionssapete.stempyerp.mapper.auth;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.field.user.UserCredentialField;
+import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
 public final class UserCredentialSQLMapper {
