@@ -1,7 +1,6 @@
 package com.lesconstructionssapete.stempyerp.service.auth;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.Instant;
 import java.util.List;
 
@@ -45,21 +44,15 @@ public class AuthServiceImpl implements AuthService {
         null,
         null);
 
-    try {
-      List<AuthToken> tokens = refreshTokenRepository.fetch(connection, query);
-      return !tokens.isEmpty();
-    } catch (SQLException e) {
-      return false;
-    }
+    List<AuthToken> tokens = refreshTokenRepository.fetch(connection, query);
+
+    return !tokens.isEmpty();
   }
 
   @Override
   public long insert(Connection connection, AuthToken token) {
-    try {
-      return refreshTokenRepository.insert(connection, token);
-    } catch (SQLException e) {
-      return 0; // Placeholder return value
-    }
+
+    return refreshTokenRepository.insert(connection, token);
   }
 
   @Override
@@ -83,11 +76,6 @@ public class AuthServiceImpl implements AuthService {
     String hash = credentials.get(0).getPassword();
 
     return passwordHashProvider.verifyPassword(password, hash);
-  }
-
-  @Override
-  public List<UserCredential> fetchUserCredentials(Connection connection, DomainQuery query) {
-    return userCredentialRepository.fetch(connection, query);
   }
 
 }

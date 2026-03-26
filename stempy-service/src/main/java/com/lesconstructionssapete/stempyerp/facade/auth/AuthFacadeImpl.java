@@ -9,10 +9,10 @@ import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.exception.InvalidCredentialsException;
 import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
-import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
 import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
@@ -21,33 +21,19 @@ import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
 public class AuthFacadeImpl implements AuthFacade {
 
   private final TransactionRunner transaction;
-  private final RefreshTokenRepository refreshTokenRepository;
   private final TokenProvider tokenProvider;
   private final UserFacade userFacade;
   private final AuthService authService;
 
   public AuthFacadeImpl(
       TransactionRunner transaction,
-      RefreshTokenRepository refreshTokenRepository,
       TokenProvider tokenProvider,
       UserFacade userFacade,
       AuthService authService) {
     this.transaction = transaction;
-    this.refreshTokenRepository = refreshTokenRepository;
     this.tokenProvider = tokenProvider;
     this.userFacade = userFacade;
     this.authService = authService;
-  }
-
-  @Override
-  public AuthToken save(AuthToken token) {
-
-    return transaction.execute(
-        TransactionPropagation.REQUIRED,
-        con -> {
-          refreshTokenRepository.insert(con, token);
-          return token;
-        });
   }
 
   @Override
@@ -71,8 +57,7 @@ public class AuthFacadeImpl implements AuthFacade {
           User u = users.get(0);
 
           if (!authService.isValidCredential(con, u.getEntityId(), userCredential.getPassword())) {
-            // TODO: Implement proper error handling and logging for failed login attempts
-            return null;
+            throw new InvalidCredentialsException("Invalid credentials provided.");
           }
 
           String accessToken = tokenProvider
@@ -91,7 +76,7 @@ public class AuthFacadeImpl implements AuthFacade {
               true,
               Instant.now());
 
-          save(token);
+          authService.insert(con, token);
 
           return token;
         });

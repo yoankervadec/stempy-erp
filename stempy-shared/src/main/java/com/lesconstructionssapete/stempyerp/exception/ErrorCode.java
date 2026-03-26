@@ -24,6 +24,7 @@ public enum ErrorCode {
   INVALID_TOKEN("INVALID_TOKEN", "The provided token is invalid"),
   QUERY_LOAD_EXCEPTION("QUERY_LOAD_EXCEPTION", "Failed to load SQL file"),
   FIELD_NOT_FOUND("FIELD_NOT_FOUND", "Field not found in query"),
+  INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Invalid user credentials"),
 
   // INFRASTRUCTURE
   UNDEFINED_INFRASTRUCTURE_EXCEPTION("UNDEFINED_INFRASTRUCTURE_EXCEPTION", "Undefined infrastructure exception"),
