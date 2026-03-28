@@ -72,7 +72,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
     RetailProductSQLMapper.bindUpdate(builder, retailProduct);
 
     builder.where("retail_product_variant.id = :id")
-        .bind(RetailProductField.ID, retailProduct.getRetailProductId());
+        .bind(RetailProductField.ID, retailProduct.getEntityId());
 
     int rowsAffected = SQLExecutor.update(
         connection,

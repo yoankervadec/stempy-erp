@@ -11,7 +11,7 @@ public final class RetailProductMasterSQLMapper {
 
   public static void bindInsert(SQLBuilder builder, RetailProductMaster p) {
     builder
-        .bind(RetailProductMasterField.RETAIL_PRODUCT_MASTER_NO, p.getRetailProductMasterNo())
+        .bind(RetailProductMasterField.RETAIL_PRODUCT_MASTER_NO, p.getEntityNo())
         .bind(RetailProductMasterField.NAME, p.getName())
         .bind(RetailProductMasterField.DESCRIPTION, p.getDescription())
         .bind(RetailProductMasterField.ENABLED, p.isEnabled())
@@ -25,7 +25,7 @@ public final class RetailProductMasterSQLMapper {
 
   public static void bindUpdate(SQLBuilder builder, RetailProductMaster p) {
     builder
-        .bind(RetailProductMasterField.RETAIL_PRODUCT_MASTER_NO, p.getRetailProductMasterNo())
+        .bind(RetailProductMasterField.RETAIL_PRODUCT_MASTER_NO, p.getEntityNo())
         .bind(RetailProductMasterField.NAME, p.getName())
         .bind(RetailProductMasterField.DESCRIPTION, p.getDescription())
         .bind(RetailProductMasterField.ENABLED, p.isEnabled())

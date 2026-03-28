@@ -8,7 +8,6 @@ public class RetailProduct extends GenericEntity {
 
   public static final String RETAIL_PRODUCT_ENTITY_NAME = "RETAIL PRODUCT";
 
-  private Long retailProductId;
   private Long retailProductMasterId;
 
   private String retailProductNo;
@@ -40,7 +39,6 @@ public class RetailProduct extends GenericEntity {
         retailProductId,
         createdAt,
         createdByUserId);
-    this.retailProductId = retailProductId;
     this.retailProductMasterId = retailProductMasterId;
     this.retailProductNo = retailProductNo;
     this.retailProductVariantNo = retailProductVariantNo;
@@ -53,14 +51,6 @@ public class RetailProduct extends GenericEntity {
 
   public static String getRetailProductEntityName() {
     return RETAIL_PRODUCT_ENTITY_NAME;
-  }
-
-  public Long getRetailProductId() {
-    return retailProductId;
-  }
-
-  public void setRetailProductId(Long retailProductId) {
-    this.retailProductId = retailProductId;
   }
 
   public Long getRetailProductMasterId() {

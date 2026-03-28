@@ -69,7 +69,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
     RetailProductMasterSQLMapper.bindUpdate(builder, retailProductMaster);
 
     builder.where("retail_product_master.id = :id")
-        .bind(RetailProductMasterField.ID, retailProductMaster.getRetailProductMasterId());
+        .bind(RetailProductMasterField.ID, retailProductMaster.getEntityId());
 
     int rowsAffected = SQLExecutor.update(
         connection,

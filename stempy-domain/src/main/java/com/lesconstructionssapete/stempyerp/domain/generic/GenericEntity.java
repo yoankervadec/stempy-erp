@@ -35,7 +35,7 @@ public abstract class GenericEntity {
     this.entityName = entityName;
     this.entityNo = entityNo;
     this.entityId = entityId;
-    this.createdAt = createdAt;
+    this.createdAt = createdAt == null ? Instant.now() : createdAt;
     this.createdByUserId = createdByUserId;
   }
 

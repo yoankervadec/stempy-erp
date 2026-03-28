@@ -3,18 +3,17 @@ package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public class RetailProductMaster {
+import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
-  private Long retailProductMasterId;
-  private String retailProductMasterNo;
+public class RetailProductMaster extends GenericEntity {
+
+  public static final String RETAIL_PRODUCT_MASTER_ENTITY_NAME = "RETAIL PRODUCT MASTER";
 
   private String name;
   private String description;
 
   private boolean enabled;
 
-  private final Instant createdAt;
-  private final Long createdByUserId;
   private Instant updatedAt;
   private Long updatedByUserId;
 
@@ -25,6 +24,7 @@ public class RetailProductMaster {
   private RetailProductMasterPolicy policy;
 
   public RetailProductMaster(
+
       Long retailProductMasterId,
       String retailProductMasterNo,
       String name,
@@ -37,34 +37,20 @@ public class RetailProductMaster {
       Long retailCategoryId,
       BigDecimal defaultPrice,
       RetailProductMasterPolicy policy) {
-    this.retailProductMasterId = retailProductMasterId;
-    this.retailProductMasterNo = retailProductMasterNo;
+    super(
+        RETAIL_PRODUCT_MASTER_ENTITY_NAME,
+        retailProductMasterNo,
+        retailProductMasterId,
+        createdAt,
+        createdByUserId);
     this.name = name;
     this.description = description;
     this.enabled = enabled;
-    this.createdAt = createdAt;
-    this.createdByUserId = createdByUserId;
     this.updatedAt = updatedAt;
     this.updatedByUserId = updatedByUserId;
     this.retailCategoryId = retailCategoryId;
     this.defaultPrice = defaultPrice;
     this.policy = policy;
-  }
-
-  public Long getRetailProductMasterId() {
-    return retailProductMasterId;
-  }
-
-  public void setRetailProductMasterId(Long retailProductMasterId) {
-    this.retailProductMasterId = retailProductMasterId;
-  }
-
-  public String getRetailProductMasterNo() {
-    return retailProductMasterNo;
-  }
-
-  public void setRetailProductMasterNo(String retailProductMasterNo) {
-    this.retailProductMasterNo = retailProductMasterNo;
   }
 
   public String getName() {
@@ -89,14 +75,6 @@ public class RetailProductMaster {
 
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public Long getCreatedByUserId() {
-    return createdByUserId;
   }
 
   public Instant getUpdatedAt() {
