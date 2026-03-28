@@ -8,6 +8,7 @@ import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.field.automation.JobField;
+import com.lesconstructionssapete.stempyerp.field.automation.JobSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobLogSQLMapper;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.automation.JobSQLMapper;
@@ -71,7 +72,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     JobSQLMapper.bindUpdate(builder, job);
 
     builder.where("auto_job.id = :id")
-        .bind(JobField.ID, job.getId());
+        .bind(JobSQLField.get(JobField.ID), job.getId());
 
     int rowsAffected = SQLExecutor.update(connection, builder.build(), builder.getParams());
 

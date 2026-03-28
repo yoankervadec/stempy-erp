@@ -5,6 +5,7 @@ import java.time.Instant;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
 public final class UserSQLMapper {
@@ -14,20 +15,20 @@ public final class UserSQLMapper {
 
   public static void bindInsert(SQLBuilder builder, User user) {
     builder
-        .bind(UserField.ID, user.getEntityId())
-        .bind(UserField.USER_NO, user.getEntityNo())
-        .bind(UserField.USER_NAME, user.getUserName())
-        .bind(UserField.ENABLED, user.isEnabled())
-        .bind(UserField.CREATED_BY_USER_ID, user.getCreatedByUserId());
+        .bind(UserSQLField.get(UserField.ID), user.getEntityId())
+        .bind(UserSQLField.get(UserField.USER_NO), user.getEntityNo())
+        .bind(UserSQLField.get(UserField.USER_NAME), user.getUserName())
+        .bind(UserSQLField.get(UserField.ENABLED), user.isEnabled())
+        .bind(UserSQLField.get(UserField.CREATED_BY_USER_ID), user.getCreatedByUserId());
   }
 
   public static void bindUpdate(SQLBuilder builder, User user) {
     builder
-        .bind(UserField.USER_NO, user.getEntityNo())
-        .bind(UserField.USER_NAME, user.getUserName())
-        .bind(UserField.ENABLED, user.isEnabled())
-        .bind(UserField.UPDATED_AT, Timestamp.from(Instant.now()))
-        .bind(UserField.UPDATED_BY_USER_ID, user.getUpdatedByUserId());
+        .bind(UserSQLField.get(UserField.USER_NO), user.getEntityNo())
+        .bind(UserSQLField.get(UserField.USER_NAME), user.getUserName())
+        .bind(UserSQLField.get(UserField.ENABLED), user.isEnabled())
+        .bind(UserSQLField.get(UserField.UPDATED_AT), Timestamp.from(Instant.now()))
+        .bind(UserSQLField.get(UserField.UPDATED_BY_USER_ID), user.getUpdatedByUserId());
   }
 
 }

@@ -4,7 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMasterPolicy;
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterPolicyField;
+import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterSQLField;
 
 public class RetailProductMasterPolicyRowMapper {
 
@@ -13,12 +14,14 @@ public class RetailProductMasterPolicyRowMapper {
 
   public static RetailProductMasterPolicy map(ResultSet rs) throws SQLException {
     return new RetailProductMasterPolicy(
-        rs.getLong(RetailProductMasterField.ID.columnName()),
-        rs.getBoolean(RetailProductMasterField.DISCONTINUED.columnName()),
-        rs.getBoolean(RetailProductMasterField.TRACK_INVENTORY.columnName()),
-        rs.getBoolean(RetailProductMasterField.ALLOW_NEGATIVE_INVENTORY.columnName()),
-        rs.getBoolean(RetailProductMasterField.APPLY_TAX.columnName()),
-        rs.getBoolean(RetailProductMasterField.APPLY_PROMOTION.columnName()));
+        rs.getLong(
+            RetailProductMasterSQLField.get(RetailProductMasterPolicyField.RETAIL_PRODUCT_MASTER_ID).columnName()),
+        rs.getBoolean(RetailProductMasterSQLField.get(RetailProductMasterPolicyField.DISCONTINUED).columnName()),
+        rs.getBoolean(RetailProductMasterSQLField.get(RetailProductMasterPolicyField.TRACK_INVENTORY).columnName()),
+        rs.getBoolean(
+            RetailProductMasterSQLField.get(RetailProductMasterPolicyField.ALLOW_NEGATIVE_INVENTORY).columnName()),
+        rs.getBoolean(RetailProductMasterSQLField.get(RetailProductMasterPolicyField.APPLY_TAX).columnName()),
+        rs.getBoolean(RetailProductMasterSQLField.get(RetailProductMasterPolicyField.APPLY_PROMOTION).columnName()));
   }
 
 }

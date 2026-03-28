@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.SQLInstantMapper;
 
 public final class UserRowMapper {
@@ -14,14 +15,14 @@ public final class UserRowMapper {
 
   public static User map(ResultSet rs) throws SQLException {
     return new User(
-        rs.getLong(UserField.ID.columnName()),
-        rs.getString(UserField.USER_NO.columnName()),
-        rs.getString(UserField.USER_NAME.columnName()),
-        rs.getBoolean(UserField.ENABLED.columnName()),
-        SQLInstantMapper.read(rs, UserField.CREATED_AT.columnName()),
-        rs.getLong(UserField.CREATED_BY_USER_ID.columnName()),
-        SQLInstantMapper.read(rs, UserField.UPDATED_AT.columnName()),
-        rs.getLong(UserField.UPDATED_BY_USER_ID.columnName()));
+        rs.getLong(UserSQLField.get(UserField.ID).columnName()),
+        rs.getString(UserSQLField.get(UserField.USER_NO).columnName()),
+        rs.getString(UserSQLField.get(UserField.USER_NAME).columnName()),
+        rs.getBoolean(UserSQLField.get(UserField.ENABLED).columnName()),
+        SQLInstantMapper.read(rs, UserSQLField.get(UserField.CREATED_AT).columnName()),
+        rs.getLong(UserSQLField.get(UserField.CREATED_BY_USER_ID).columnName()),
+        SQLInstantMapper.read(rs, UserSQLField.get(UserField.UPDATED_AT).columnName()),
+        rs.getLong(UserSQLField.get(UserField.UPDATED_BY_USER_ID).columnName()));
   }
 
 }

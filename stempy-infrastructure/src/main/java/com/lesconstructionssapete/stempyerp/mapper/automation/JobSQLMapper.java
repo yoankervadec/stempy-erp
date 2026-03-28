@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.mapper.automation;
 
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.field.automation.JobField;
+import com.lesconstructionssapete.stempyerp.field.automation.JobSQLField;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.util.DateTimeUtil;
 
@@ -19,17 +20,17 @@ public class JobSQLMapper {
 
   public static void bindUpdate(SQLBuilder builder, Job job) {
     builder
-        .bind(JobField.ENABLED, job.isEnabled())
-        .bind(JobField.DESCRIPTION, job.getDescription())
-        .bind(JobField.HANDLER_AS_STRING, job.getHandlerAsString())
-        .bind(JobField.RUN_BEFORE_JOB_ID, job.getRunBeforeJobId())
-        .bind(JobField.RUN_AFTER_JOB_ID, job.getRunAfterJobId())
-        .bind(JobField.ACTIVE, job.isActive())
-        .bind(JobField.DEACTIVATE_ON_FAILUE, job.isDeactivateOnFailure())
-        .bind(JobField.MAX_RETRIES, job.getMaxRetries())
-        .bind(JobField.INTERVAL_MINUTES, job.getIntervalMinutes())
-        .bind(JobField.RUN_TIMES_UTC, DateTimeUtil.toRunTimesJson(job.getRunTimesUTC()))
-        .bind(JobField.RUN_DAYS, DateTimeUtil.toRunDaysJson(job.getRunDaysOfWeek()));
+        .bind(JobSQLField.get(JobField.ENABLED), job.isEnabled())
+        .bind(JobSQLField.get(JobField.DESCRIPTION), job.getDescription())
+        .bind(JobSQLField.get(JobField.HANDLER_AS_STRING), job.getHandlerAsString())
+        .bind(JobSQLField.get(JobField.RUN_BEFORE_JOB_ID), job.getRunBeforeJobId())
+        .bind(JobSQLField.get(JobField.RUN_AFTER_JOB_ID), job.getRunAfterJobId())
+        .bind(JobSQLField.get(JobField.ACTIVE), job.isActive())
+        .bind(JobSQLField.get(JobField.DEACTIVATE_ON_FAILURE), job.isDeactivateOnFailure())
+        .bind(JobSQLField.get(JobField.MAX_RETRIES), job.getMaxRetries())
+        .bind(JobSQLField.get(JobField.INTERVAL_MINUTES), job.getIntervalMinutes())
+        .bind(JobSQLField.get(JobField.RUN_TIMES_UTC), DateTimeUtil.toRunTimesJson(job.getRunTimesUTC()))
+        .bind(JobSQLField.get(JobField.RUN_DAYS), DateTimeUtil.toRunDaysJson(job.getRunDaysOfWeek()));
   }
 
 }

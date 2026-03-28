@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+import com.lesconstructionssapete.stempyerp.field.SQLField;
 import com.lesconstructionssapete.stempyerp.query.SQLBuilder;
 
 public final class SQLInstantMapper {

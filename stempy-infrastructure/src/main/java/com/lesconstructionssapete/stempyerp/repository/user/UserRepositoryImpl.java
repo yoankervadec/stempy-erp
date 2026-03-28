@@ -7,7 +7,7 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.user.UserRowMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserField.all());
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserSQLField.all());
 
     translator.apply(builder, query);
 

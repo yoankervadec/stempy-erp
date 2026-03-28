@@ -11,6 +11,7 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
+import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
 import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
@@ -37,10 +38,10 @@ public class AuthServiceImpl implements AuthService {
         new FilterGroup(
             LogicalOperator.AND,
             List.of(
-                new FilterCondition("userId", ComparisonOperator.EQUALS, userId),
-                new FilterCondition("token", ComparisonOperator.EQUALS, refreshToken),
-                new FilterCondition("enabled", ComparisonOperator.EQUALS, true),
-                new FilterCondition("expiresAt", ComparisonOperator.GREATER_THAN, Instant.now()))),
+                new FilterCondition(RefreshTokenField.USER_ID, ComparisonOperator.EQUALS, userId),
+                new FilterCondition(RefreshTokenField.TOKEN, ComparisonOperator.EQUALS, refreshToken),
+                new FilterCondition(RefreshTokenField.ENABLED, ComparisonOperator.EQUALS, true),
+                new FilterCondition(RefreshTokenField.EXPIRES_AT, ComparisonOperator.GREATER_THAN, Instant.now()))),
         null,
         null);
 
@@ -62,8 +63,8 @@ public class AuthServiceImpl implements AuthService {
         new FilterGroup(
             LogicalOperator.AND,
             List.of(
-                new FilterCondition("userId", ComparisonOperator.EQUALS, userId),
-                new FilterCondition("enabled", ComparisonOperator.EQUALS, true))),
+                new FilterCondition(RefreshTokenField.USER_ID, ComparisonOperator.EQUALS, userId),
+                new FilterCondition(RefreshTokenField.ENABLED, ComparisonOperator.EQUALS, true))),
         null,
         null);
 

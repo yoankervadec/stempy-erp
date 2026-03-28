@@ -7,7 +7,7 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
+import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.auth.UserCredentialRowMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
@@ -24,7 +24,7 @@ public class UserCredentialRepositoryImpl implements UserCredentialRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserCredentialField.all());
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserCredentialSQLField.all());
 
     translator.apply(builder, query);
 

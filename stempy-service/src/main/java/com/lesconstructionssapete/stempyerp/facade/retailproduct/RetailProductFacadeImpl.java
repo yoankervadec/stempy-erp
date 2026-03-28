@@ -10,6 +10,7 @@ import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
 import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.service.sequence.numbering.EntityNumberGenerator;
@@ -68,7 +69,7 @@ public class RetailProductFacadeImpl
           // Check if the provided retail product master id exists
           var rpmQuery = new DomainQuery(
               new FilterCondition(
-                  "retailProductMasterId",
+                  RetailProductField.RETAIL_PRODUCT_MASTER_ID,
                   ComparisonOperator.EQUALS,
                   product.getRetailProductMasterId()),
               null,

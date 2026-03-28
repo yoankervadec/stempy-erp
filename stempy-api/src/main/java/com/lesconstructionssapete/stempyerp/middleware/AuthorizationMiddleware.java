@@ -9,6 +9,7 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
 import com.lesconstructionssapete.stempyerp.facade.auth.UserFacade;
+import com.lesconstructionssapete.stempyerp.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.http.contract.ApiRequest;
 
@@ -35,7 +36,7 @@ public class AuthorizationMiddleware implements Handler {
 
     DomainQuery userQuery = new DomainQuery(
         new FilterCondition(
-            "userNo",
+            UserField.USER_NO,
             ComparisonOperator.EQUALS,
             userNo),
         null,

@@ -10,7 +10,8 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterNode;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.exception.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.mapper.SQLField;
+import com.lesconstructionssapete.stempyerp.field.DomainField;
+import com.lesconstructionssapete.stempyerp.field.SQLField;
 
 /**
  * Translates a {@link DomainQuery} into SQL using {@link SQLBuilder}.
@@ -21,9 +22,9 @@ import com.lesconstructionssapete.stempyerp.mapper.SQLField;
  */
 public final class DomainQuerySQLTranslator {
 
-  private final Map<String, SQLField> fieldMap;
+  private final Map<DomainField, SQLField> fieldMap;
 
-  public DomainQuerySQLTranslator(Map<String, SQLField> fieldMap) {
+  public DomainQuerySQLTranslator(Map<DomainField, SQLField> fieldMap) {
     this.fieldMap = fieldMap;
   }
 
@@ -154,7 +155,7 @@ public final class DomainQuerySQLTranslator {
 
       case LIKE -> {
         String p = nextParam();
-        builder.bind(p, "%" + value + "%");
+        builder.bind(p, "%" + value + "%", field.sqlType());
         yield new ConditionFragment(column + " LIKE :" + p);
       }
 

@@ -7,7 +7,7 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
+import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.auth.RefreshTokenRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.auth.RefreshTokenSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
@@ -25,7 +25,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RefreshTokenField.all());
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RefreshTokenSQLField.all());
 
     translator.apply(builder, query);
 

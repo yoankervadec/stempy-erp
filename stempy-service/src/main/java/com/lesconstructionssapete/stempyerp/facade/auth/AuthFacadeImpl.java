@@ -13,6 +13,7 @@ import com.lesconstructionssapete.stempyerp.exception.InvalidCredentialsExceptio
 import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
+import com.lesconstructionssapete.stempyerp.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
 import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
@@ -41,7 +42,7 @@ public class AuthFacadeImpl implements AuthFacade {
 
     DomainQuery userQuery = new DomainQuery(
         new FilterCondition(
-            "userNo",
+            UserField.USER_NO,
             ComparisonOperator.EQUALS,
             userCredential.getUserNo()),
         null,
@@ -101,7 +102,7 @@ public class AuthFacadeImpl implements AuthFacade {
 
     DomainQuery userQuery = new DomainQuery(
         new FilterCondition(
-            "userNo",
+            UserField.USER_NO,
             ComparisonOperator.EQUALS,
             userNo),
         null,

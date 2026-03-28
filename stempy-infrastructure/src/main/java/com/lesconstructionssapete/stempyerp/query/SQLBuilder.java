@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.lesconstructionssapete.stempyerp.mapper.SQLField;
+import com.lesconstructionssapete.stempyerp.field.SQLField;
 import com.lesconstructionssapete.stempyerp.util.StringUtil;
 
 /**
@@ -76,8 +76,8 @@ public class SQLBuilder {
    * Bind a named parameter. The value's SQL type will be guessed based on its
    * Java type.
    */
-  public SQLBuilder bind(String name, Object value) {
-    params.put(name, new SQLParam(name, value));
+  public SQLBuilder bind(SQLField field, Object value) {
+    params.put(field.logicalName().logicalName(), new SQLParam(field.logicalName().logicalName(), value));
     return this;
   }
 
@@ -87,14 +87,6 @@ public class SQLBuilder {
   public SQLBuilder bind(String name, Object value, int sqlType) {
     params.put(name, new SQLParam(name, value, sqlType));
     return this;
-  }
-
-  /**
-   * Bind a parameter using an SQLField definition. The field's logical name is
-   * used as the parameter name, and its SQL type is used for binding.
-   */
-  public SQLBuilder bind(SQLField field, Object value) {
-    return bind(field.logicalName(), value, field.sqlType());
   }
 
   /**

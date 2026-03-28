@@ -8,6 +8,7 @@ import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductMasterRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.retailproduct.RetailProductMasterSQLMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
@@ -23,7 +24,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
     String sql = QueryCache.get(Query.SELECT_DOM_RETAIL_PRODUCT_MASTER);
 
     SQLBuilder builder = new SQLBuilder(sql);
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductMasterField.all());
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductMasterSQLField.all());
 
     translator.apply(builder, query);
 
@@ -69,7 +70,7 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
     RetailProductMasterSQLMapper.bindUpdate(builder, retailProductMaster);
 
     builder.where("retail_product_master.id = :id")
-        .bind(RetailProductMasterField.ID, retailProductMaster.getEntityId());
+        .bind(RetailProductMasterSQLField.get(RetailProductMasterField.ID), retailProductMaster.getEntityId());
 
     int rowsAffected = SQLExecutor.update(
         connection,
