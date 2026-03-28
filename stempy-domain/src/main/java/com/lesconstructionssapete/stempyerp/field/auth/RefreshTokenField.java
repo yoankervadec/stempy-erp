@@ -11,6 +11,7 @@ public enum RefreshTokenField implements DomainField {
   ENABLED("enabled"),
   CREATED_AT("createdAt");
 
+  private static final String PREFIX = "RefreshToken.";
   private final String logicalName;
 
   RefreshTokenField(String logicalName) {
@@ -19,7 +20,7 @@ public enum RefreshTokenField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

@@ -16,6 +16,7 @@ public enum RetailProductMasterField implements DomainField {
   RETAIL_CATEGORY_ID("retailCategoryId"),
   DEFAULT_PRICE("defaultPrice");
 
+  private static final String PREFIX = "RetailProductMaster.";
   private final String logicalName;
 
   RetailProductMasterField(String logicalName) {
@@ -24,7 +25,7 @@ public enum RetailProductMasterField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

@@ -11,6 +11,7 @@ public enum RetailProductMasterPolicyField implements DomainField {
   APPLY_TAX("applyTax"),
   APPLY_PROMOTION("applyPromotion");
 
+  private static final String PREFIX = "RetailProductMasterPolicy.";
   private final String logicalName;
 
   RetailProductMasterPolicyField(String logicalName) {
@@ -19,7 +20,7 @@ public enum RetailProductMasterPolicyField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

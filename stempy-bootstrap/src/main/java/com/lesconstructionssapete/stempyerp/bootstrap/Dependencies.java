@@ -18,6 +18,9 @@ import com.lesconstructionssapete.stempyerp.facade.auth.UserFacade;
 import com.lesconstructionssapete.stempyerp.facade.auth.UserFacadeImpl;
 import com.lesconstructionssapete.stempyerp.facade.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.facade.retailproduct.RetailProductFacadeImpl;
+import com.lesconstructionssapete.stempyerp.field.DefaultDomainFieldResolver;
+import com.lesconstructionssapete.stempyerp.field.DomainFieldResolver;
+import com.lesconstructionssapete.stempyerp.http.query.RequestQueryMapper;
 import com.lesconstructionssapete.stempyerp.repository.ConstantRepository;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
@@ -86,6 +89,11 @@ public class Dependencies {
         Duration.ofDays(7).toMillis());
 
     container.instance(TokenProvider.class, tokenProvider);
+
+    container.bind(DomainFieldResolver.class, DefaultDomainFieldResolver.class);
+
+    container.instance(RequestQueryMapper.class, new RequestQueryMapper(container.get(DomainFieldResolver.class)));
+
   }
 
   // ---------- Infrastructure ----------

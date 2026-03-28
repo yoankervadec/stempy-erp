@@ -12,6 +12,7 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterNode;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.PageSpec;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
+import com.lesconstructionssapete.stempyerp.field.DomainFieldResolver;
 import com.lesconstructionssapete.stempyerp.http.contract.RequestQuery;
 
 /**
@@ -23,11 +24,14 @@ import com.lesconstructionssapete.stempyerp.http.contract.RequestQuery;
  */
 public final class RequestQueryMapper {
 
-  private RequestQueryMapper() {
-    // Utility class
+  private final DomainFieldResolver fieldResolver;
+
+  public RequestQueryMapper(
+      DomainFieldResolver fieldResolver) {
+    this.fieldResolver = fieldResolver;
   }
 
-  public static DomainQuery map(RequestQuery requestQuery) {
+  public DomainQuery map(RequestQuery requestQuery) {
 
     FilterNode filters = parseFilters(requestQuery.getFilters());
     List<SortSpec> sorting = parseSorting(requestQuery.getSorting());
@@ -40,7 +44,7 @@ public final class RequestQueryMapper {
   // FILTER PARSING
   // ------------------------
 
-  private static FilterNode parseFilters(JsonNode node) {
+  private FilterNode parseFilters(JsonNode node) {
     if (node == null || node.isNull()) {
       return null;
     }
@@ -57,7 +61,7 @@ public final class RequestQueryMapper {
     }
 
     return new FilterCondition(
-        node.get("field").asText(),
+        fieldResolver.resolve(node.get("field").asText()),
         ComparisonOperator.valueOf(node.get("comparison").asText()),
         extractValue(node.get("value")));
   }
@@ -84,14 +88,14 @@ public final class RequestQueryMapper {
   // SORTING
   // ------------------------
 
-  private static List<SortSpec> parseSorting(JsonNode node) {
+  private List<SortSpec> parseSorting(JsonNode node) {
     if (node == null || node.isNull())
       return List.of();
 
     List<SortSpec> sorts = new ArrayList<>();
     for (JsonNode s : node) {
       sorts.add(new SortSpec(
-          s.get("field").asText(),
+          fieldResolver.resolve(s.get("field").asText()),
           s.get("direction").asText().equalsIgnoreCase("ASC")));
     }
 

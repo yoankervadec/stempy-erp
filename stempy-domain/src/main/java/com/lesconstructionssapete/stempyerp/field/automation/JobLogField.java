@@ -13,6 +13,7 @@ public enum JobLogField implements DomainField {
   ERROR("error"),
   MESSAGE("message");
 
+  private static final String PREFIX = "JobLog.";
   private final String logicalName;
 
   JobLogField(String logicalName) {
@@ -21,7 +22,7 @@ public enum JobLogField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

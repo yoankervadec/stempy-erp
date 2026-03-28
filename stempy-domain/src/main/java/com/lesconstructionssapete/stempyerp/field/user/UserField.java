@@ -13,6 +13,7 @@ public enum UserField implements DomainField {
   UPDATED_AT("updatedAt"),
   UPDATED_BY_USER_ID("updatedByUserId");
 
+  private static final String PREFIX = "User.";
   private final String logicalName;
 
   UserField(String logicalName) {
@@ -21,7 +22,7 @@ public enum UserField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

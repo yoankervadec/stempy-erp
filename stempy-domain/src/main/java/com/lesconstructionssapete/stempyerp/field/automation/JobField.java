@@ -19,6 +19,7 @@ public enum JobField implements DomainField {
   RUN_TIMES_UTC("runTimesUTC"),
   RUN_DAYS("runDaysOfWeek");
 
+  private static final String PREFIX = "Job.";
   private final String logicalName;
 
   JobField(String logicalName) {
@@ -27,7 +28,7 @@ public enum JobField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

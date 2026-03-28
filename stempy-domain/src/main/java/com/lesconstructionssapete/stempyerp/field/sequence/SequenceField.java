@@ -9,6 +9,7 @@ public enum SequenceField implements DomainField {
   ENABLED("enabled"),
   CREATED_AT("createdAt");
 
+  private static final String PREFIX = "Sequence.";
   private final String logicalName;
 
   SequenceField(String logicalName) {
@@ -17,7 +18,7 @@ public enum SequenceField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

@@ -10,6 +10,7 @@ public enum UserCredentialField implements DomainField {
   ENABLED("enabled"),
   CREATED_AT("createdAt");
 
+  private static final String PREFIX = "UserCredential.";
   private final String logicalName;
 
   UserCredentialField(String logicalName) {
@@ -18,7 +19,7 @@ public enum UserCredentialField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

@@ -16,6 +16,7 @@ public enum RetailProductField implements DomainField {
   UPDATED_AT("updatedAt"),
   UPDATED_BY_USER_ID("updatedByUserId");
 
+  private static final String PREFIX = "RetailProduct.";
   private final String logicalName;
 
   RetailProductField(String logicalName) {
@@ -24,7 +25,7 @@ public enum RetailProductField implements DomainField {
 
   @Override
   public String logicalName() {
-    return logicalName;
+    return PREFIX + logicalName;
   }
 
 }

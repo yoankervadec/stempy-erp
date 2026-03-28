@@ -18,8 +18,10 @@ import io.javalin.http.Context;
 public class RetailProductController {
 
   private final RetailProductFacade retailProductFacade;
+  private final RequestQueryMapper requestQueryMapper;
 
-  public RetailProductController(RetailProductFacade retailProductService) {
+  public RetailProductController(RequestQueryMapper requestQueryMapper, RetailProductFacade retailProductService) {
+    this.requestQueryMapper = requestQueryMapper;
     this.retailProductFacade = retailProductService;
   }
 
@@ -27,7 +29,7 @@ public class RetailProductController {
 
     ApiRequest request = ApiRequestContext.get(ctx);
 
-    var query = RequestQueryMapper.map(request.getQuery());
+    var query = requestQueryMapper.map(request.getQuery());
 
     List<RetailProduct> list = retailProductFacade.fetch(query);
 
