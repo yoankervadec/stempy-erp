@@ -3,6 +3,7 @@ package com.lesconstructionssapete.stempyerp.field;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lesconstructionssapete.stempyerp.exception.FieldNotFoundException;
 import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
 import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.field.automation.JobField;
@@ -29,15 +30,15 @@ public class DefaultDomainFieldResolver implements DomainFieldResolver {
   private final Map<String, DomainField> fields = new HashMap<>();
 
   public DefaultDomainFieldResolver() {
-    registerEnum(RefreshTokenField.class);
-    registerEnum(UserCredentialField.class);
-    registerEnum(JobField.class);
-    registerEnum(JobLogField.class);
-    registerEnum(RetailProductField.class);
-    registerEnum(RetailProductMasterField.class);
-    registerEnum(RetailProductMasterPolicyField.class);
-    registerEnum(SequenceField.class);
-    registerEnum(UserField.class);
+    register(RefreshTokenField.class);
+    register(UserCredentialField.class);
+    register(JobField.class);
+    register(JobLogField.class);
+    register(RetailProductField.class);
+    register(RetailProductMasterField.class);
+    register(RetailProductMasterPolicyField.class);
+    register(SequenceField.class);
+    register(UserField.class);
   }
 
   /**
@@ -53,7 +54,7 @@ public class DefaultDomainFieldResolver implements DomainFieldResolver {
    * @throws IllegalArgumentException if the provided class is not an enum or does
    *                                  not implement DomainField.
    */
-  private <E extends Enum<E> & DomainField> void registerEnum(Class<E> enumClass) {
+  private <E extends Enum<E> & DomainField> void register(Class<E> enumClass) {
     for (E constant : enumClass.getEnumConstants()) {
       if (fields.containsKey(constant.logicalName())) {
         throw new IllegalStateException(
@@ -66,12 +67,21 @@ public class DefaultDomainFieldResolver implements DomainFieldResolver {
     }
   }
 
+  /**
+   * Resolves a field name to its corresponding {@link DomainField} instance.
+   * If the field name is not registered, a {@link FieldNotFoundException} is
+   * thrown.
+   * 
+   * @param fieldName The logical name of the field to resolve.
+   * @return The corresponding {@link DomainField} instance.
+   * @throws FieldNotFoundException if the field name is not registered.
+   */
   @Override
   public DomainField resolve(String fieldName) {
     DomainField field = fields.get(fieldName);
 
     if (field == null) {
-      throw new IllegalArgumentException("Unknown field: " + fieldName);
+      throw new FieldNotFoundException("Unknown field: " + fieldName);
     }
 
     return field;
