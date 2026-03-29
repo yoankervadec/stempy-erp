@@ -12,4 +12,15 @@ INSERT INTO
     price
   )
 VALUES
-  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  (
+    :RetailProductMaster.retailProductMasterNo,
+    :RetailProductMaster.name,
+    :RetailProductMaster.description,
+    :RetailProductMaster.enabled,
+    :RetailProductMaster.createdAt,
+    :RetailProductMaster.createdByUserId,
+    :RetailProductMaster.updatedAt,
+    :RetailProductMaster.updatedByUserId,
+    :RetailProductMaster.retailCategoryId,
+    :RetailProductMaster.defaultPrice
+  )

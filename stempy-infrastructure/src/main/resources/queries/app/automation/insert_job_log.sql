@@ -6,10 +6,10 @@ INSERT INTO auto_job_log (
   error,
   message
 ) VALUES (
-  :jobId,
-  :startedAt,
-  :endedAt,
-  :executionTimeMs,
-  :error,
-  :message
+  :JobLog.jobId,
+  :JobLog.startedAt,
+  :JobLog.endedAt,
+  :JobLog.executionTimeMs,
+  :JobLog.error,
+  :JobLog.message
  )

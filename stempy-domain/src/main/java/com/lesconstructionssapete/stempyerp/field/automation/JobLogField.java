@@ -5,7 +5,7 @@ import com.lesconstructionssapete.stempyerp.field.DomainField;
 public enum JobLogField implements DomainField {
 
   ID("id"),
-  JOB_ID("autoJobId"),
+  JOB_ID("jobId"),
   CREATED_AT("createdAt"),
   STARTED_AT("startedAt"),
   ENDED_AT("endedAt"),
