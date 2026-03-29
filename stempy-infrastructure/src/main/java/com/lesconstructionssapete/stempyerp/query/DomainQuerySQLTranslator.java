@@ -109,7 +109,7 @@ public final class DomainQuerySQLTranslator {
     SQLField field = fieldMap.get(c.field());
 
     if (field == null) {
-      throw new FieldNotFoundException("Invalid field: " + c.field());
+      throw new FieldNotFoundException("Invalid field: " + c.field() + " (" + c.field().logicalName() + ")");
     }
 
     String column = field.qualifiedColumnName();

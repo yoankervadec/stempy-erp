@@ -6,8 +6,8 @@ INSERT INTO
     enabled
   )
 VALUES (
-  :userId,
-  :token,
-  :expiresAt,
-  :enabled
+  :RefreshToken.userId,
+  :RefreshToken.token,
+  :RefreshToken.expiresAt,
+  :RefreshToken.enabled
 );

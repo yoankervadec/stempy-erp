@@ -65,8 +65,8 @@ public class SQLBuilder {
   private final Map<String, SQLParam> params = new LinkedHashMap<>();
   private final List<String> paramOrder = new ArrayList<>();
 
-  // Named param support
-  private static final Pattern NAMED_PARAM_PATTERN = Pattern.compile(":(\\w+)");
+  // Named param support (expects ":Resource.logicalName" format)
+  private static final Pattern NAMED_PARAM_PATTERN = Pattern.compile(":(\\w+(?:\\.\\w+)*)");
 
   public SQLBuilder(String base) {
     this.base = base.trim();

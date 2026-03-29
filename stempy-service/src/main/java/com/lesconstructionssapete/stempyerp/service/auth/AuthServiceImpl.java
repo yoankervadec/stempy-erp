@@ -12,6 +12,7 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
 import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
+import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
 import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
@@ -63,8 +64,8 @@ public class AuthServiceImpl implements AuthService {
         new FilterGroup(
             LogicalOperator.AND,
             List.of(
-                new FilterCondition(RefreshTokenField.USER_ID, ComparisonOperator.EQUALS, userId),
-                new FilterCondition(RefreshTokenField.ENABLED, ComparisonOperator.EQUALS, true))),
+                new FilterCondition(UserCredentialField.USER_ID, ComparisonOperator.EQUALS, userId),
+                new FilterCondition(UserCredentialField.ENABLED, ComparisonOperator.EQUALS, true))),
         null,
         null);
 
