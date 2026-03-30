@@ -15,7 +15,8 @@ import com.lesconstructionssapete.stempyerp.util.StringUtil;
  * A simple SQL builder that supports:
  * - Base SQL with placeholders
  * - Adding WHERE, JOIN, GROUP BY, HAVING, ORDER BY clauses
- * - Binding named parameters (e.g. ":name") with automatic type inference
+ * - Binding named parameters (e.g. ":Resource.logicalName") with automatic type
+ * inference
  * - Generating final SQL with ? placeholders and ordered params list
  * - Debugging with inlined params for logging/testing
  */
@@ -50,6 +51,7 @@ public class SQLBuilder {
     }
   }
 
+  // Base SQL with placeholders (e.g. "SELECT * FROM table /*WHERE*/ /*ORDERBY*/")
   private final String base;
 
   // Clause holders
@@ -73,11 +75,20 @@ public class SQLBuilder {
   }
 
   /**
-   * Bind a named parameter. The value's SQL type will be guessed based on its
-   * Java type.
+   * Bind a named parameter using an SQLField. The field's logical name will be
+   * used as the parameter name (e.g. ":Resource.logicalName") and the SQL type
+   * will be inferred from the field definition. The condition in the WHERE clause
+   * should reference this named parameter (e.g. "table_name.column_name =
+   * :Resource.logicalName") for it to be properly replaced during SQL generation.
    */
   public SQLBuilder bind(SQLField field, Object value) {
-    params.put(field.logicalName().logicalName(), new SQLParam(field.logicalName().logicalName(), value));
+    params.put(
+        field.domainField().logicalName(),
+        new SQLParam(
+            field.domainField().logicalName(),
+            value,
+            field.sqlType()));
+
     return this;
   }
 
@@ -93,7 +104,7 @@ public class SQLBuilder {
    * Add a WHERE clause.
    * 
    * The condition can contain named parameters (e.g. "table_name.column_name =
-   * :logicalName") which should be
+   * :Resource.logicalName") which should be
    * bound using the {@link #bind(String, Object)} or
    * {@link #bind(SQLField, Object)} methods.
    */
@@ -105,7 +116,7 @@ public class SQLBuilder {
   /**
    * Add a WHERE clause using an SQLField. The condition should contain a named
    * parameter matching the field's logical name (e.g. "table_name.column_name =
-   * :logicalName").
+   * :Resource.logicalName").
    */
   public SQLBuilder where(SQLField field, String condition) {
     whereClauses.add(field.qualifiedColumnName() + " " + condition);

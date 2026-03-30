@@ -6,11 +6,7 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.LogicalOperator;
 import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
 import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
@@ -35,18 +31,15 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public boolean isValidRefreshToken(Connection connection, long userId, String refreshToken) {
 
-    DomainQuery query = new DomainQuery(
-        new FilterGroup(
-            LogicalOperator.AND,
-            List.of(
-                new FilterCondition(RefreshTokenField.USER_ID, ComparisonOperator.EQUALS, userId),
-                new FilterCondition(RefreshTokenField.TOKEN, ComparisonOperator.EQUALS, refreshToken),
-                new FilterCondition(RefreshTokenField.ENABLED, ComparisonOperator.EQUALS, true),
-                new FilterCondition(RefreshTokenField.EXPIRES_AT, ComparisonOperator.GREATER_THAN, Instant.now()))),
-        null,
-        null);
+    DomainQuery q = DomainQuery.builder()
+        .where(w -> w.and(
+            c -> c.equals(RefreshTokenField.USER_ID, userId),
+            c -> c.equals(RefreshTokenField.TOKEN, refreshToken),
+            c -> c.equals(RefreshTokenField.ENABLED, true),
+            c -> c.greaterThan(RefreshTokenField.EXPIRES_AT, Instant.now())))
+        .build();
 
-    List<AuthToken> tokens = refreshTokenRepository.fetch(connection, query);
+    List<AuthToken> tokens = refreshTokenRepository.fetch(connection, q);
 
     return !tokens.isEmpty();
   }
@@ -60,16 +53,13 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public boolean isValidCredential(Connection connection, long userId, String password) {
 
-    DomainQuery query = new DomainQuery(
-        new FilterGroup(
-            LogicalOperator.AND,
-            List.of(
-                new FilterCondition(UserCredentialField.USER_ID, ComparisonOperator.EQUALS, userId),
-                new FilterCondition(UserCredentialField.ENABLED, ComparisonOperator.EQUALS, true))),
-        null,
-        null);
+    DomainQuery q = DomainQuery.builder()
+        .where(w -> w.and(
+            c -> c.equals(UserCredentialField.USER_ID, userId),
+            c -> c.equals(UserCredentialField.ENABLED, true)))
+        .build();
 
-    List<UserCredential> credentials = userCredentialRepository.fetch(connection, query);
+    List<UserCredential> credentials = userCredentialRepository.fetch(connection, q);
 
     if (credentials.isEmpty()) {
       return false;

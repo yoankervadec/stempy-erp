@@ -7,9 +7,7 @@ import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
 import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceService;
@@ -67,15 +65,13 @@ public class RetailProductFacadeImpl
         connection -> {
 
           // Check if the provided retail product master id exists
-          var rpmQuery = new DomainQuery(
-              new FilterCondition(
-                  RetailProductField.RETAIL_PRODUCT_MASTER_ID,
-                  ComparisonOperator.EQUALS,
-                  product.getRetailProductMasterId()),
-              null,
-              null);
+          DomainQuery q = DomainQuery.builder()
+              .where(w -> w.and(
+                  c -> c.equals(
+                      RetailProductField.RETAIL_PRODUCT_MASTER_ID, product.getRetailProductMasterId())))
+              .build();
 
-          if (retailProductService.fetchMasters(connection, rpmQuery).isEmpty()) {
+          if (retailProductService.fetchMasters(connection, q).isEmpty()) {
             throw new IllegalArgumentException("Invalid retail product master id provided.");
           }
 

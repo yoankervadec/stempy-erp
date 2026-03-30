@@ -2,20 +2,20 @@ package com.lesconstructionssapete.stempyerp.field;
 
 public class SQLField {
 
-  private final DomainField logicalName; // logical field (DomainQuery)
+  private final DomainField domainField; // Logical field representation used in the application
   private final String tableName; // DB table name
   private final String columnName; // DB column name
   private final int sqlType;
 
-  public SQLField(DomainField logicalName, String tableName, String columnName, int sqlType) {
-    this.logicalName = logicalName;
+  public SQLField(DomainField domainField, String tableName, String columnName, int sqlType) {
+    this.domainField = domainField;
     this.tableName = tableName;
     this.columnName = columnName;
     this.sqlType = sqlType;
   }
 
-  public DomainField logicalName() {
-    return logicalName;
+  public DomainField domainField() {
+    return domainField;
   }
 
   public String tableName() {

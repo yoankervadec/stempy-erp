@@ -6,9 +6,7 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.exception.InvalidCredentialsException;
 import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
@@ -40,18 +38,16 @@ public class AuthFacadeImpl implements AuthFacade {
   @Override
   public AuthToken login(UserCredential userCredential) {
 
-    DomainQuery userQuery = new DomainQuery(
-        new FilterCondition(
-            UserField.USER_NO,
-            ComparisonOperator.EQUALS,
-            userCredential.getUserNo()),
-        null,
-        null);
+    DomainQuery q = DomainQuery.builder()
+        .where(w -> w.and(
+            c -> c.equals(UserField.USER_NO, userCredential.getUserNo()),
+            c -> c.equals(UserField.ENABLED, true)))
+        .build();
 
     AuthToken authToken = transaction.execute(
         TransactionPropagation.REQUIRED,
         con -> {
-          var users = userFacade.fetch(userQuery);
+          var users = userFacade.fetch(q);
           if (users.isEmpty()) {
             throw new UserNotFoundException("User not found!");
           }
@@ -100,19 +96,17 @@ public class AuthFacadeImpl implements AuthFacade {
       throw new InvalidRefreshTokenException("Invalid refresh token.");
     }
 
-    DomainQuery userQuery = new DomainQuery(
-        new FilterCondition(
-            UserField.USER_NO,
-            ComparisonOperator.EQUALS,
-            userNo),
-        null,
-        null);
+    DomainQuery q = DomainQuery.builder()
+        .where(w -> w.and(
+            c -> c.equals(UserField.USER_NO, userNo),
+            c -> c.equals(UserField.ENABLED, true)))
+        .build();
 
     AuthToken token = transaction.execute(
         TransactionPropagation.REQUIRED,
         con -> {
 
-          List<User> users = userFacade.fetch(userQuery);
+          List<User> users = userFacade.fetch(q);
 
           if (users.isEmpty()) {
             throw new UserNotFoundException("The user associated with the refresh token was not found.");

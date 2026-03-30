@@ -3,9 +3,7 @@ package com.lesconstructionssapete.stempyerp.middleware;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
 import com.lesconstructionssapete.stempyerp.facade.auth.UserFacade;
@@ -34,15 +32,12 @@ public class AuthorizationMiddleware implements Handler {
       throw new AuthenticationException(null, "No authenticated user found in the request context");
     }
 
-    DomainQuery userQuery = new DomainQuery(
-        new FilterCondition(
-            UserField.USER_NO,
-            ComparisonOperator.EQUALS,
-            userNo),
-        null,
-        null);
+    DomainQuery q = DomainQuery.builder()
+        .where(w -> w.and(
+            c -> c.equals(UserField.USER_NO, userNo)))
+        .build();
 
-    List<User> users = userFacade.fetch(userQuery);
+    List<User> users = userFacade.fetch(q);
 
     if (users.isEmpty()) {
       throw new UserNotFoundException("Authenticated user not found in the system");
