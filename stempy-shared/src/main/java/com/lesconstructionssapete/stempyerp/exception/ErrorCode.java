@@ -32,6 +32,7 @@ public enum ErrorCode {
   DATABASE_ACCESS_ERROR("DATABASE_ACCESS_ERROR", "A database access error occurred"),
   SEQUENCE_UPDATE_FAILURE("SEQUENCE_UPDATE_FAILURE", "Failed to update sequence"),
   TRANSACTION_FAILURE("TRANSACTION_FAILURE", "Transaction failed"),
+  ILLEGAL_FIELD("ILLEGAL_FIELD", "Illegal field provided"),
 
   // INTERNAL
   UNDEFINED_SYSTEM_ERROR("SYSTEM_ERROR", "Unexpected internal system error"),

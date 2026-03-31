@@ -10,6 +10,7 @@ import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.FilterNode;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.exception.FieldNotFoundException;
+import com.lesconstructionssapete.stempyerp.exception.IllegalFieldException;
 import com.lesconstructionssapete.stempyerp.field.DomainField;
 import com.lesconstructionssapete.stempyerp.field.SQLField;
 
@@ -109,7 +110,7 @@ public final class DomainQuerySQLTranslator {
     SQLField field = fieldMap.get(c.field());
 
     if (field == null) {
-      throw new FieldNotFoundException("Invalid field: " + c.field() + " (" + c.field().logicalName() + ")");
+      throw new IllegalFieldException("Illegal field: " + c.field() + " (" + c.field().logicalName() + ")");
     }
 
     String column = field.qualifiedColumnName();
@@ -208,7 +209,7 @@ public final class DomainQuerySQLTranslator {
 
       SQLField field = fieldMap.get(sort.field());
       if (field == null) {
-        throw new FieldNotFoundException("Invalid sort field: " + sort.field());
+        throw new IllegalFieldException("Illegal sort field: " + sort.field());
       }
       String column = field.qualifiedColumnName();
 
