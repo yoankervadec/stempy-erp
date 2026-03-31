@@ -16,6 +16,7 @@
 - [x] Built DomainQuerySQLTranslator
 - [x] Added field validation to prevent SQL injection
 - [x] Documented the full query system (docs/query.md)
+- [ ] Consider fully dynamic query generation for basic SELECT / INSERT / UPDATE instead of relying on query cache
 
 #### Automation System
 
