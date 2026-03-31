@@ -11,6 +11,7 @@ import com.lesconstructionssapete.stempyerp.exception.InvalidCredentialsExceptio
 import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
+import com.lesconstructionssapete.stempyerp.facade.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
@@ -47,16 +48,20 @@ public class AuthFacadeImpl implements AuthFacade {
     AuthToken authToken = transaction.execute(
         TransactionPropagation.REQUIRED,
         con -> {
+
+          // Fetch the user based on the provided user number and ensure they are enabled
           var users = userFacade.fetch(q);
           if (users.isEmpty()) {
-            throw new UserNotFoundException("User not found!");
+            throw new UserNotFoundException("No active user found with the provided user number.");
           }
           User u = users.get(0);
 
+          // Validate the provided password against the stored credentials for the user
           if (!authService.isValidCredential(con, u.getEntityId(), userCredential.getPassword())) {
-            throw new InvalidCredentialsException("Invalid credentials provided.");
+            throw new InvalidCredentialsException("Invalid user number or password.");
           }
 
+          // Generate a new access token and refresh token for the authenticated user
           String accessToken = tokenProvider
               .generateAccessToken(u.getEntityNo());
           String refreshToken = tokenProvider
@@ -73,6 +78,8 @@ public class AuthFacadeImpl implements AuthFacade {
               true,
               Instant.now());
 
+          // Store the refresh token in the database to allow for future validation and
+          // potential revocation
           authService.insert(con, token);
 
           return token;
@@ -88,8 +95,9 @@ public class AuthFacadeImpl implements AuthFacade {
       throw new InvalidRefreshTokenException("Refresh token is required.");
     }
 
+    // Validate the refresh token and extract the associated user number. If the
+    // token is invalid, an exception will be thrown.
     String userNo;
-
     try {
       userNo = tokenProvider.validateRefreshTokenAndGetUserNo(refreshToken);
     } catch (Exception e) {
@@ -106,18 +114,21 @@ public class AuthFacadeImpl implements AuthFacade {
         TransactionPropagation.REQUIRED,
         con -> {
 
+          // Fetch the user associated with the refresh token and ensure they are enabled.
+          // If no user is found, an exception will be thrown.
           List<User> users = userFacade.fetch(q);
-
           if (users.isEmpty()) {
             throw new UserNotFoundException("The user associated with the refresh token was not found.");
           }
-
           User user = users.get(0);
 
+          // Check if the provided refresh token has been revoked for the user. If it has
+          // been revoked, an exception will be thrown.
           if (!authService.isValidRefreshToken(con, user.getEntityId(), refreshToken)) {
             throw new RefreshTokenRevokedException("This refresh token has been revoked.");
           }
 
+          // Generate a new access token for the user. The refresh token remains the same.
           String newAccessToken = tokenProvider.generateAccessToken(user.getEntityNo());
 
           return new AuthToken(

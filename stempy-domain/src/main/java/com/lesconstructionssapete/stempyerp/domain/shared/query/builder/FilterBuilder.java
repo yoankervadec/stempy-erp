@@ -38,6 +38,10 @@ public class FilterBuilder {
     return new FilterCondition(field, ComparisonOperator.LESS_THAN, value);
   }
 
+  public FilterNode isNotNull(DomainField field) {
+    return new FilterCondition(field, ComparisonOperator.IS_NOT_NULL, null);
+  }
+
   // ---- grouping ----
   @SafeVarargs
   public final FilterNode and(Function<FilterBuilder, FilterNode>... expressions) {

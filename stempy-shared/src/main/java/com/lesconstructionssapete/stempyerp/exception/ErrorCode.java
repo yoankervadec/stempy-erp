@@ -25,6 +25,7 @@ public enum ErrorCode {
   QUERY_LOAD_EXCEPTION("QUERY_LOAD_EXCEPTION", "Failed to load SQL file"),
   FIELD_NOT_FOUND("FIELD_NOT_FOUND", "Field not found in query"),
   INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Invalid user credentials"),
+  UNIQUE_CONSTRAINT_VIOLATION("UNIQUE_CONSTRAINT_VIOLATION", "Unique constraint violation"),
 
   // INFRASTRUCTURE
   UNDEFINED_INFRASTRUCTURE_EXCEPTION("UNDEFINED_INFRASTRUCTURE_EXCEPTION", "Undefined infrastructure exception"),

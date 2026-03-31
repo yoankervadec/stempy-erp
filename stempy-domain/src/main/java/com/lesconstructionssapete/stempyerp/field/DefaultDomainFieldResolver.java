@@ -81,7 +81,7 @@ public class DefaultDomainFieldResolver implements DomainFieldResolver {
     DomainField field = fields.get(fieldName);
 
     if (field == null) {
-      throw new FieldNotFoundException("Unknown field: " + fieldName);
+      throw new FieldNotFoundException("The field '" + fieldName + "' is not supported for filtering or sorting.");
     }
 
     return field;

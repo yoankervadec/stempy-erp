@@ -8,6 +8,7 @@ import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.exception.UniqueConstraintException;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
 import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceService;
@@ -64,26 +65,50 @@ public class RetailProductFacadeImpl
         TransactionPropagation.REQUIRED,
         connection -> {
 
+          // Check if the provided retail product number is unique
+          // If the product number is null, we skip this check as it will be generated
+          // later in the process
+          DomainQuery rpvQuery = DomainQuery.builder()
+              .where(w -> w.and(
+                  c -> c.equals(
+                      RetailProductField.RETAIL_PRODUCT_NO, product.getRetailProductNo()),
+                  c -> c.isNotNull(
+                      RetailProductField.RETAIL_PRODUCT_NO)))
+              .build();
+
+          if (!retailProductService.fetch(connection, rpvQuery).isEmpty()) {
+            throw new UniqueConstraintException(
+                "The retail product '" + product.getRetailProductNo() + "' already exists.");
+          }
+
           // Check if the provided retail product master id exists
-          DomainQuery q = DomainQuery.builder()
+          DomainQuery rpmQuery = DomainQuery.builder()
               .where(w -> w.and(
                   c -> c.equals(
                       RetailProductField.RETAIL_PRODUCT_MASTER_ID, product.getRetailProductMasterId())))
               .build();
 
-          if (retailProductService.fetchMasters(connection, q).isEmpty()) {
+          if (retailProductService.fetchMasters(connection, rpmQuery).isEmpty()) {
             throw new IllegalArgumentException("Invalid retail product master id provided.");
           }
 
-          LiveSequence liveSequence = sequenceService.next(
-              connection,
-              product.getEntityName(),
-              user.getEntityId());
+          String entityNo = product.getRetailProductNo().trim();
+          // If the product number is not provided, we generate it using the entity number
+          // generator
+          if (entityNo == null) {
+            LiveSequence liveSequence = sequenceService.next(
+                connection,
+                product.getEntityName(),
+                user.getEntityId());
 
-          EntityNumberGenerator<RetailProduct> RPGenerator = entityGenerators
-              .getFor(liveSequence.getEntityType());
+            EntityNumberGenerator<RetailProduct> RPGenerator = entityGenerators
+                .getFor(liveSequence.getEntityType());
 
-          product.setEntityNo(RPGenerator.generate(product, liveSequence));
+            entityNo = RPGenerator.generate(product, liveSequence);
+            product.setRetailProductNo(entityNo);
+          }
+
+          product.setEntityNo(entityNo);
 
           RetailProduct result = retailProductService
               .insert(connection, product);

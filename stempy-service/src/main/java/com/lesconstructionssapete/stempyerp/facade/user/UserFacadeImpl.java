@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.facade.auth;
+package com.lesconstructionssapete.stempyerp.facade.user;
 
 import java.util.List;
 
