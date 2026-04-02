@@ -42,3 +42,4 @@
 - [ ] Define service patterns more strictly (facade vs service split)
 - [ ] Implement authorization with RBAC/ABAC permissions (use annotations?)
 - [ ] Review middleware chain
+- [x] Test
