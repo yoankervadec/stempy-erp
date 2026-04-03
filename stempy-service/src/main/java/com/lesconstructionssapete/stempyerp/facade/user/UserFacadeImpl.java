@@ -4,18 +4,18 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.UserRepository;
+import com.lesconstructionssapete.stempyerp.service.user.UserService;
 import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
 import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
 
 public class UserFacadeImpl implements UserFacade {
 
   private final TransactionRunner transaction;
-  private final UserRepository userRepository;
+  private final UserService userService;
 
-  public UserFacadeImpl(TransactionRunner transaction, UserRepository userRepository) {
+  public UserFacadeImpl(TransactionRunner transaction, UserService userService) {
     this.transaction = transaction;
-    this.userRepository = userRepository;
+    this.userService = userService;
   }
 
   @Override
@@ -24,7 +24,7 @@ public class UserFacadeImpl implements UserFacade {
     return transaction.execute(
         TransactionPropagation.REQUIRED,
         con -> {
-          return userRepository.fetch(con, query);
+          return userService.fetch(con, query);
         });
   }
 

@@ -49,6 +49,8 @@ import com.lesconstructionssapete.stempyerp.service.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.service.sequence.SequenceServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.sequence.numbering.DefaultEntityNumberGeneratorRegistry;
 import com.lesconstructionssapete.stempyerp.service.sequence.numbering.EntityNumberGeneratorRegistry;
+import com.lesconstructionssapete.stempyerp.service.user.UserService;
+import com.lesconstructionssapete.stempyerp.service.user.UserServiceImpl;
 import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -141,6 +143,7 @@ public class Dependencies {
 
     // Auth / User
     container.bind(AuthService.class, AuthServiceImpl.class);
+    container.bind(UserService.class, UserServiceImpl.class);
 
     // Sequence
     container.bind(SequenceService.class, SequenceServiceImpl.class);
