@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.config.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -17,22 +18,51 @@ import com.lesconstructionssapete.stempyerp.transaction.TransactionVoidCallback;
 
 /**
  * Manages database transactions with support for different propagation
- * behaviors.
- * 
+ * behaviors
+ * and isolation levels.
+ *
  * <p>
  * This class provides a simple API to execute code within transactional
  * boundaries, handling connection management, commit/rollback, and exception
  * classification.
+ *
+ * <p>
+ * Supports nested transactions with proper isolation:
+ * <ul>
+ * <li>REQUIRED: Joins existing transaction or creates new one</li>
+ * <li>REQUIRES_NEW: Always creates a new transaction, suspending any existing
+ * one</li>
+ * <li>SUPPORTS: Joins existing transaction if exists, otherwise executes
+ * non-transactionally</li>
+ * </ul>
+ *
  */
 
 public class TransactionManager implements TransactionRunner {
 
+  // Transaction context holding connection and state information
+  private static class TransactionContext {
+    final Connection connection;
+    boolean rollbackOnly;
+    Savepoint savepoint;
+    int savepointCounter = 0;
+
+    TransactionContext(Connection connection) {
+      this.connection = connection;
+    }
+  }
+
   private final ConnectionProvider provider;
 
-  private static final ThreadLocal<Deque<Connection>> CONNECTION_STACK = ThreadLocal.withInitial(ArrayDeque::new);
+  // Thread-local stack for managing nested transactions
+  private static final ThreadLocal<Deque<TransactionContext>> CONTEXT_STACK = ThreadLocal.withInitial(ArrayDeque::new);
 
-  private static final ThreadLocal<Deque<Boolean>> ROLLBACK_STACK = ThreadLocal.withInitial(ArrayDeque::new);
-
+  /**
+   * Creates a new TransactionManager with the given connection provider.
+   *
+   * @param provider the connection provider to use for acquiring database
+   *                 connections
+   */
   public TransactionManager(ConnectionProvider provider) {
     this.provider = provider;
   }
@@ -40,7 +70,7 @@ public class TransactionManager implements TransactionRunner {
   /**
    * Executes the given callback within a transaction according to the specified
    * propagation behavior.
-   * 
+   *
    * @param propagation the transaction propagation behavior
    * @param callback    the code to execute within the transaction
    * @return the result of the callback execution
@@ -52,19 +82,20 @@ public class TransactionManager implements TransactionRunner {
    *                                     exception
    * @throws DatabaseAccessException     if a database access error occurs
    */
+
   @Override
   public <T> T execute(
       TransactionPropagation propagation,
       TransactionCallback<T> callback) {
 
-    Deque<Connection> stack = CONNECTION_STACK.get();
-    Connection current = stack.peek();
+    Deque<TransactionContext> stack = CONTEXT_STACK.get();
+    TransactionContext currentContext = stack.peek();
 
     return switch (propagation) {
 
       case REQUIRED -> {
-        if (current != null) {
-          yield executeInExisting(current, callback);
+        if (currentContext != null) {
+          yield executeInExisting(currentContext, callback);
         }
         yield startNew(callback);
       }
@@ -74,10 +105,10 @@ public class TransactionManager implements TransactionRunner {
       }
 
       case SUPPORTS -> {
-        if (current == null) {
+        if (currentContext == null) {
           yield executeWithoutTransaction(callback);
         }
-        yield executeInExisting(current, callback);
+        yield executeInExisting(currentContext, callback);
       }
 
       default -> throw new TransactionFailureException("Unknown propagation type",
@@ -85,11 +116,13 @@ public class TransactionManager implements TransactionRunner {
     };
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void executeVoid(
       TransactionPropagation propagation,
       TransactionVoidCallback callback) {
-
     execute(propagation, connection -> {
       callback.execute(connection);
       return null;
@@ -101,13 +134,14 @@ public class TransactionManager implements TransactionRunner {
   // -------------------------
 
   private <T> T executeInExisting(
-      Connection connection,
+      TransactionContext context,
       TransactionCallback<T> callback) {
 
+    Connection connection = context.connection;
     try {
       return callback.execute(connection);
     } catch (Exception e) {
-      markRollbackOnly();
+      context.rollbackOnly = true;
       throw classify(e);
     }
   }
@@ -116,11 +150,9 @@ public class TransactionManager implements TransactionRunner {
       TransactionCallback<T> callback) {
 
     Connection connection = null;
-
     try {
       connection = provider.getConnection();
       return callback.execute(connection);
-
     } catch (Exception e) {
       throw classify(e);
     } finally {
@@ -131,20 +163,23 @@ public class TransactionManager implements TransactionRunner {
   private <T> T executeRequiresNew(
       TransactionCallback<T> callback) {
 
-    Deque<Connection> stack = CONNECTION_STACK.get();
-    Connection connection = null;
+    Deque<TransactionContext> stack = CONTEXT_STACK.get();
+    Deque<TransactionContext> suspendedStack = new ArrayDeque<>(stack);
+    stack.clear(); // Suspend current transaction stack
 
-    ROLLBACK_STACK.get().push(false); // isolate rollback state for this new transaction
+    Connection connection = null;
+    TransactionContext newContext = null;
 
     try {
       connection = provider.getConnection();
       connection.setAutoCommit(false);
 
-      stack.push(connection);
+      newContext = new TransactionContext(connection);
+      stack.push(newContext);
 
       T result = callback.execute(connection);
 
-      if (ROLLBACK_STACK.get().peek()) {
+      if (newContext.rollbackOnly) {
         connection.rollback();
       } else {
         connection.commit();
@@ -152,80 +187,91 @@ public class TransactionManager implements TransactionRunner {
 
       return result;
     } catch (Exception e) {
-      rollbackQuietly(connection);
+      if (connection != null) {
+        try {
+          connection.rollback();
+        } catch (SQLException sqle) {
+          System.err.println("Failed to rollback transaction: " + sqle.getMessage());
+        }
+      }
       throw classify(e);
     } finally {
-      stack.pop();
-      ROLLBACK_STACK.get().pop();
-      closeQuietly(connection);
-    }
+      if (stack.peek() == newContext) {
+        stack.pop();
+      }
 
+      // Restore suspended transaction if any
+      if (!suspendedStack.isEmpty()) {
+        stack.addAll(suspendedStack);
+      }
+
+      closeQuietly(connection);
+
+      // Clean up thread locals if stack is empty
+      if (stack.isEmpty()) {
+        CONTEXT_STACK.remove();
+      }
+    }
   }
 
-  private <T> T startNew(TransactionCallback<T> callback) {
+  private <T> T startNew(
+      TransactionCallback<T> callback) {
 
-    Deque<Connection> stack = CONNECTION_STACK.get();
+    Deque<TransactionContext> stack = CONTEXT_STACK.get();
     Connection connection = null;
-
-    ROLLBACK_STACK.get().push(false);
+    TransactionContext context = null;
 
     try {
       connection = provider.getConnection();
       connection.setAutoCommit(false);
 
-      stack.push(connection);
+      context = new TransactionContext(connection);
+      stack.push(context);
 
       T result = callback.execute(connection);
 
-      if (ROLLBACK_STACK.get().peek()) {
+      if (context.rollbackOnly) {
         connection.rollback();
       } else {
         connection.commit();
       }
 
       return result;
-
     } catch (Exception e) {
-      rollbackQuietly(connection);
+      if (connection != null) {
+        try {
+          connection.rollback();
+        } catch (SQLException sqle) {
+          System.err.println("Failed to rollback transaction: " + sqle.getMessage());
+        }
+      }
       throw classify(e);
-
     } finally {
-      stack.pop();
-      ROLLBACK_STACK.get().pop();
+      if (stack.peek() == context) {
+        stack.pop();
+      }
       closeQuietly(connection);
 
+      // Clean up thread locals if stack is empty
       if (stack.isEmpty()) {
-        CONNECTION_STACK.remove();
-        ROLLBACK_STACK.remove();
+        CONTEXT_STACK.remove();
       }
-
     }
   }
 
   // -------------------------
   // Helpers
   // -------------------------
-  private void markRollbackOnly() {
-    Deque<Boolean> stack = ROLLBACK_STACK.get();
-    if (!stack.isEmpty()) {
-      stack.pop();
-      stack.push(true);
-    }
 
-  }
-
+  /**
+   * Gets the current connection associated with the active transaction.
+   *
+   * @return the current connection or null if no transaction is active
+   */
   public Connection currentConnection() {
-    return CONNECTION_STACK.get().peek();
-  }
-
-  private void rollbackQuietly(Connection connection) {
-    if (connection != null) {
-      try {
-        connection.rollback();
-      } catch (SQLException e) {
-        System.err.println("Failed to rollback transaction: " + e.getMessage());
-      }
-    }
+    Deque<TransactionContext> stack = CONTEXT_STACK.get();
+    TransactionContext context = stack.peek();
+    return context != null ? context.connection : null;
   }
 
   private void closeQuietly(Connection connection) {
@@ -243,7 +289,6 @@ public class TransactionManager implements TransactionRunner {
   }
 
   private RuntimeException classify(Exception e) {
-
     if (e instanceof DomainException domainException) {
       return domainException;
     }
@@ -263,5 +308,4 @@ public class TransactionManager implements TransactionRunner {
         "Unexpected failure inside transactional boundary",
         e);
   }
-
 }
