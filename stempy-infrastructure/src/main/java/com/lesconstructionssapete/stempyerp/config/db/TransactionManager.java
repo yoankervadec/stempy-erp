@@ -18,9 +18,8 @@ import com.lesconstructionssapete.stempyerp.transaction.TransactionVoidCallback;
 
 /**
  * Manages database transactions with support for different propagation
- * behaviors
- * and isolation levels.
- *
+ * behaviors.
+ * 
  * <p>
  * This class provides a simple API to execute code within transactional
  * boundaries, handling connection management, commit/rollback, and exception
