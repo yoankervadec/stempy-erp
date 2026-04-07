@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.mapper.user;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.User;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.SQLInstantMapper;

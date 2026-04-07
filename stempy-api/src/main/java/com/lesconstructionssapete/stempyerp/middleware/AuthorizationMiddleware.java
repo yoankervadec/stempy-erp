@@ -2,8 +2,8 @@ package com.lesconstructionssapete.stempyerp.middleware;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
 import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
 import com.lesconstructionssapete.stempyerp.facade.user.UserFacade;

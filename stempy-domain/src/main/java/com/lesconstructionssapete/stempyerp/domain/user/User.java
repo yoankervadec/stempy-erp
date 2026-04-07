@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.domain.auth;
+package com.lesconstructionssapete.stempyerp.domain.user;
 
 import java.time.Instant;
 

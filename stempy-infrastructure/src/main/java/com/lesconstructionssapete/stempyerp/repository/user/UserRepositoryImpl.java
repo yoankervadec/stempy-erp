@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.config.db.SQLExecutor;
-import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.user.UserRowMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;

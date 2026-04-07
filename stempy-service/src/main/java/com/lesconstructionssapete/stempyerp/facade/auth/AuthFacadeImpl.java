@@ -4,9 +4,9 @@ import java.time.Instant;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.exception.InvalidCredentialsException;
 import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;

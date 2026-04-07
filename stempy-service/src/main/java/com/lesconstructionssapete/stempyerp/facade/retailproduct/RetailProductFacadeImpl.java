@@ -3,11 +3,11 @@ package com.lesconstructionssapete.stempyerp.facade.retailproduct;
 import java.time.Instant;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.User;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.exception.UniqueConstraintException;
 import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
 import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
