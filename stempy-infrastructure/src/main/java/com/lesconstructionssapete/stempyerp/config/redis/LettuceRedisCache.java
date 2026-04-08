@@ -3,7 +3,10 @@ package com.lesconstructionssapete.stempyerp.config.redis;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lesconstructionssapete.stempyerp.cache.RedisCache;
+import com.lesconstructionssapete.stempyerp.util.JsonUtil;
 
 import io.lettuce.core.KeyScanCursor;
 import io.lettuce.core.ScanArgs;
@@ -17,6 +20,8 @@ public class LettuceRedisCache implements RedisCache {
   public LettuceRedisCache(RedisCommands<String, String> commands) {
     this.commands = commands;
   }
+
+  private static final ObjectMapper MAPPER = JsonUtil.mapper();
 
   @Override
   public void hset(String key, Map<String, String> values) {
@@ -68,13 +73,34 @@ public class LettuceRedisCache implements RedisCache {
   @Override
   public void set(String key, String value) {
     commands.set(key, value);
-
   }
 
   @Override
   public void setex(String key, long seconds, String value) {
     commands.setex(key, seconds, value);
-
   }
 
+  @Override
+  public <T> T get(String key, Class<T> clazz) {
+    String json = commands.get(key);
+    if (json == null) {
+      return null;
+    }
+
+    try {
+      return MAPPER.readValue(json, clazz);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Failed to deserialize value for key: " + key, e);
+    }
+  }
+
+  @Override
+  public <T> void set(String key, T value) {
+    try {
+      String json = MAPPER.writeValueAsString(value);
+      commands.set(key, json);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("Failed to serialize value for key: " + key, e);
+    }
+  }
 }

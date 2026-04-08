@@ -21,4 +21,8 @@ public interface RedisCache {
 
   void setex(String key, long seconds, String value);
 
+  <T> T get(String key, Class<T> clazz);
+
+  <T> void set(String key, T value);
+
 }
