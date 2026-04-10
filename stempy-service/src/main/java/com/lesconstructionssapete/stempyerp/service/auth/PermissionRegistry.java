@@ -5,12 +5,12 @@ import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationAction;
 
-public class PermissionRegistry {
+class PermissionRegistry {
 
   private final Map<Long, Integer> permissionIdToIndex = new HashMap<>(); // permissionId -> index
   private final Map<String, Integer> keyToIndex = new HashMap<>(); // "resource:action" -> index
 
-  public void register(long permissionId, String resource, ApplicationAction action, int index) {
+  void register(long permissionId, String resource, ApplicationAction action, int index) {
     permissionIdToIndex.put(permissionId, index);
 
     String key = resource + ":" + action.name().toLowerCase();
@@ -21,11 +21,11 @@ public class PermissionRegistry {
     keyToIndex.put(key, index);
   }
 
-  public int getIndex(long permissionId) {
+  int getIndex(long permissionId) {
     return permissionIdToIndex.getOrDefault(permissionId, -1);
   }
 
-  public int getIndex(String key) {
+  int getIndex(String key) {
     return keyToIndex.getOrDefault(key, -1);
   }
 }

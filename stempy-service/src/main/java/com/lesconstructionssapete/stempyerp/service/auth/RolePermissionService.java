@@ -8,11 +8,11 @@ import java.util.Map;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
 
-public class RolePermissionService {
+class RolePermissionService {
 
   private final Map<Long, RolePermissions> roleCache = new HashMap<>(); // roleId -> permissions
 
-  public void initialize(List<ApplicationRole> rolePermissions, PermissionRegistry registry) {
+  void initialize(List<ApplicationRole> rolePermissions, PermissionRegistry registry) {
     Map<Long, BitSet> allowMap = new HashMap<>();
     Map<Long, BitSet> denyMap = new HashMap<>();
 
@@ -54,7 +54,7 @@ public class RolePermissionService {
    * @return A RolePermissions object containing the permissions of the role, or
    *         null if the role is not found.
    */
-  public RolePermissions get(long roleId) {
+  RolePermissions get(long roleId) {
     return roleCache.get(roleId);
   }
 

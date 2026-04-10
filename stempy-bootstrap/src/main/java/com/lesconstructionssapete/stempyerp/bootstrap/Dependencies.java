@@ -25,6 +25,8 @@ import com.lesconstructionssapete.stempyerp.repository.ConstantRepository;
 import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.repository.UserRepository;
+import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
+import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.auth.RefreshTokenRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
 import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepositoryImpl;
@@ -41,6 +43,8 @@ import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthServiceImpl;
+import com.lesconstructionssapete.stempyerp.service.auth.AuthorizationModule;
+import com.lesconstructionssapete.stempyerp.service.auth.AuthorizationService;
 import com.lesconstructionssapete.stempyerp.service.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.service.constant.ConstantServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.retailproduct.RetailProductService;
@@ -66,6 +70,11 @@ public class Dependencies {
     bindServices();
     bindCache();
     bindFacades();
+
+    container.instance(AuthorizationService.class, AuthorizationModule.initialize(
+        container.get(ConnectionProvider.class),
+        container.get(ApplicationPermissionRepository.class),
+        container.get(RedisCache.class)));
   }
 
   public Container container() {
@@ -123,6 +132,7 @@ public class Dependencies {
     container.bind(RefreshTokenRepository.class, RefreshTokenRepositoryImpl.class);
     container.bind(UserCredentialRepository.class, UserCredentialRepositoryImpl.class);
     container.bind(UserRepository.class, UserRepositoryImpl.class);
+    container.bind(ApplicationPermissionRepository.class, ApplicationPermissionRepositoryImpl.class);
 
     // Security
     container.bind(PasswordHashProvider.class, PBKDF2PasswordProvider.class);

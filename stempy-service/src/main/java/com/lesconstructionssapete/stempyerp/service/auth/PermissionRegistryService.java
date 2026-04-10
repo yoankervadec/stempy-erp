@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
 
-public class PermissionRegistryService {
+class PermissionRegistryService {
 
   private PermissionRegistry registry;
 
-  public void initialize(List<ApplicationPermission> permissions) {
+  void initialize(List<ApplicationPermission> permissions) {
 
     registry = new PermissionRegistry();
 
@@ -23,7 +23,7 @@ public class PermissionRegistryService {
 
   }
 
-  public PermissionRegistry get() {
+  PermissionRegistry get() {
     return registry;
   }
 

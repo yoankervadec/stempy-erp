@@ -4,12 +4,12 @@ import java.sql.Connection;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationAction;
 
-public class AuthorizationServiceImpl implements AuthorizationService {
+class AuthorizationServiceImpl implements AuthorizationService {
 
   private final UserPermissionService permissionService;
   private final PermissionRegistryService registryService;
 
-  public AuthorizationServiceImpl(
+  AuthorizationServiceImpl(
       UserPermissionService permissionService,
       PermissionRegistryService registryService) {
     this.permissionService = permissionService;

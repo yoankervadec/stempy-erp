@@ -9,14 +9,14 @@ import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
 import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
 
-public class UserPermissionService {
+class UserPermissionService {
 
   private final RolePermissionService roleService;
   private final PermissionRegistryService registryService;
   private final ApplicationPermissionRepository applicationPermissionRepository;
   private final RedisCache cache;
 
-  public UserPermissionService(
+  UserPermissionService(
       RolePermissionService roleService,
       PermissionRegistryService registryService,
       ApplicationPermissionRepository applicationPermissionRepository,
@@ -37,7 +37,7 @@ public class UserPermissionService {
    * @param userId     The ID of the user whose permissions are to be retrieved.
    * @return A UserPermissions object containing the permissions of the user.
    */
-  public UserPermissions getUserPermissions(Connection connection, long userId) {
+  UserPermissions getUserPermissions(Connection connection, long userId) {
 
     // 1. Try cache
     UserPermissions cached = cache.get("user_permissions:" + userId, UserPermissions.class);
@@ -46,7 +46,7 @@ public class UserPermissionService {
     }
 
     // 2. Load roles
-    List<ApplicationRole> roles = applicationPermissionRepository.fetchUserRoles(connection, null);
+    List<ApplicationRole> roles = applicationPermissionRepository.fetchApplicationRoles(connection, null);
 
     PermissionRegistry registry = registryService.get();
 

@@ -30,7 +30,8 @@ public class Container {
     try {
 
       if (implementation.getConstructors().length != 1) {
-        throw new RuntimeException("Class must have exactly one constructor");
+        throw new RuntimeException("Class must have exactly one constructor: " + implementation.getName() + " has "
+            + implementation.getConstructors().length + " constructors");
       }
 
       Constructor<?> constructor = implementation.getDeclaredConstructors()[0];
