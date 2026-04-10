@@ -1,8 +1,8 @@
 package com.lesconstructionssapete.stempyerp.domain.auth;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationRole {
   private final long id;
@@ -10,7 +10,7 @@ public class ApplicationRole {
   private final String description; // e.g., "Administrator role with full permissions"
   private final boolean enabled;
   private final Instant createdAt;
-  private final Map<ApplicationPermission, Boolean> permissions = new HashMap<>();
+  private final List<ApplicationPermissionSet> permissions = new ArrayList<>();
 
   public ApplicationRole(
       long id,
@@ -45,14 +45,12 @@ public class ApplicationRole {
     return createdAt;
   }
 
-  public Map<ApplicationPermission, Boolean> getPermissions() {
+  public List<ApplicationPermissionSet> getPermissions() {
     return permissions;
   }
 
-  public void setPermissions(Map<ApplicationPermission, Boolean> permissions) {
-    if (permissions.isEmpty()) {
-      throw new IllegalArgumentException("Permissions map cannot be empty");
-    }
-    this.permissions.putAll(permissions);
+  public void setPermissions(List<ApplicationPermissionSet> permissions) {
+    this.permissions.clear();
+    this.permissions.addAll(permissions);
   }
 }

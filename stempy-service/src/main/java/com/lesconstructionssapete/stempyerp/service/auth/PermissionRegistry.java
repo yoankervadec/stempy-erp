@@ -7,19 +7,25 @@ import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationAction;
 
 public class PermissionRegistry {
 
-  private final Map<Long, Integer> permissionIdToIndex = new HashMap<>();
-  private final Map<String, Integer> keyToIndex = new HashMap<>();
+  private final Map<Long, Integer> permissionIdToIndex = new HashMap<>(); // permissionId -> index
+  private final Map<String, Integer> keyToIndex = new HashMap<>(); // "resource:action" -> index
 
   public void register(long permissionId, String resource, ApplicationAction action, int index) {
     permissionIdToIndex.put(permissionId, index);
-    keyToIndex.put(resource + ":" + action.name().toLowerCase(), index);
+
+    String key = resource + ":" + action.name().toLowerCase();
+
+    if (keyToIndex.containsKey(key)) {
+      throw new IllegalArgumentException("Permission already registered for key: " + key);
+    }
+    keyToIndex.put(key, index);
   }
 
   public int getIndex(long permissionId) {
-    return permissionIdToIndex.get(permissionId);
+    return permissionIdToIndex.getOrDefault(permissionId, -1);
   }
 
   public int getIndex(String key) {
-    return keyToIndex.get(key);
+    return keyToIndex.getOrDefault(key, -1);
   }
 }

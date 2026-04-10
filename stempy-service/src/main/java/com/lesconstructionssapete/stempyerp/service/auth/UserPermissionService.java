@@ -3,10 +3,9 @@ package com.lesconstructionssapete.stempyerp.service.auth;
 import java.sql.Connection;
 import java.util.BitSet;
 import java.util.List;
-import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.cache.RedisCache;
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
 import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
 
@@ -46,13 +45,13 @@ public class UserPermissionService {
       return cached;
     }
 
+    // 2. Load roles
+    List<ApplicationRole> roles = applicationPermissionRepository.fetchUserRoles(connection, null);
+
     PermissionRegistry registry = registryService.get();
 
     BitSet allow = new BitSet();
     BitSet deny = new BitSet();
-
-    // 2. Load roles
-    List<ApplicationRole> roles = applicationPermissionRepository.fetchUserRoles(connection, null);
 
     for (ApplicationRole role : roles) {
       RolePermissions rp = roleService.get(role.getId());
@@ -65,15 +64,15 @@ public class UserPermissionService {
     }
 
     // 3. Apply user overrides
-    Map<ApplicationPermission, Boolean> overrides = applicationPermissionRepository.fetchUserPermissions(connection,
+    List<ApplicationPermissionSet> overrides = applicationPermissionRepository.fetchUserPermissions(connection,
         null);
 
-    for (Map.Entry<ApplicationPermission, Boolean> userPermission : overrides.entrySet()) {
-      int index = registry.getIndex(userPermission.getKey().getPermissionKey());
+    for (ApplicationPermissionSet userPermission : overrides) {
+      int index = registry.getIndex(userPermission.getPermissionKey());
       if (index == -1)
         continue;
 
-      if (userPermission.getValue()) {
+      if (userPermission.isAllow()) {
         allow.set(index);
         deny.clear(index);
       } else {

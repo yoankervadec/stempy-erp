@@ -23,6 +23,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     int idx = registryService.get().getIndex(resource + ":" + action.name().toLowerCase());
 
+    if (idx == -1)
+      return false; // Permission not registered
+
     return permissions.has(idx);
   }
 

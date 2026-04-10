@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
 
 public class RolePermissionService {
@@ -16,10 +16,12 @@ public class RolePermissionService {
     Map<Long, BitSet> allowMap = new HashMap<>();
     Map<Long, BitSet> denyMap = new HashMap<>();
 
+    roleCache.clear(); // Clear existing cache before initializing (prevent stale data)
+
     for (ApplicationRole role : rolePermissions) {
-      for (Map.Entry<ApplicationPermission, Boolean> entry : role.getPermissions().entrySet()) {
-        ApplicationPermission permission = entry.getKey();
-        boolean isAllow = entry.getValue();
+
+      for (ApplicationPermissionSet permission : role.getPermissions()) {
+        boolean isAllow = permission.isAllow();
         int index = registry.getIndex(permission.getId());
 
         BitSet allow = allowMap.computeIfAbsent(role.getId(), k -> new BitSet());
@@ -31,14 +33,15 @@ public class RolePermissionService {
           deny.set(index);
       }
 
-      for (Long roleId : allowMap.keySet()) {
-        roleCache.put(
-            roleId,
-            new RolePermissions(
-                roleId,
-                allowMap.getOrDefault(roleId, new BitSet()),
-                denyMap.getOrDefault(roleId, new BitSet())));
-      }
+    }
+
+    for (Long roleId : allowMap.keySet()) {
+      roleCache.put(
+          roleId,
+          new RolePermissions(
+              roleId,
+              allowMap.getOrDefault(roleId, new BitSet()),
+              denyMap.getOrDefault(roleId, new BitSet())));
     }
 
   }
