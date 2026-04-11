@@ -13,10 +13,12 @@ import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionSQLF
 import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRolePermissionSetSQLField;
 import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleSQLField;
 import com.lesconstructionssapete.stempyerp.field.auth.ApplicationUserPermissionSetSQLField;
+import com.lesconstructionssapete.stempyerp.field.auth.ApplicationUserRoleSQLField;
 import com.lesconstructionssapete.stempyerp.mapper.auth.ApplicationPermissionRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.auth.ApplicationRolePermissionSetRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.auth.ApplicationRoleRowMapper;
 import com.lesconstructionssapete.stempyerp.mapper.auth.ApplicationUserPermissionSetRowMapper;
+import com.lesconstructionssapete.stempyerp.mapper.auth.ApplicationUserRoleRowMapper;
 import com.lesconstructionssapete.stempyerp.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.query.Query;
 import com.lesconstructionssapete.stempyerp.query.QueryCache;
@@ -67,6 +69,30 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
           List<ApplicationRole> list = new ArrayList<>();
           while (rs.next()) {
             list.add(ApplicationRoleRowMapper.map(rs));
+          }
+          return list;
+        });
+  }
+
+  @Override
+  public List<ApplicationRole> fetchUserApplicationRoles(Connection connection, DomainQuery query) {
+
+    String sql = QueryCache.get(Query.SELECT_AUTH_USER_ROLE);
+
+    SQLBuilder builder = new SQLBuilder(sql);
+
+    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(ApplicationUserRoleSQLField.all());
+
+    translator.apply(builder, query);
+
+    return SQLExecutor.query(
+        connection,
+        builder.build(),
+        builder.getParams(),
+        rs -> {
+          List<ApplicationRole> list = new ArrayList<>();
+          while (rs.next()) {
+            list.add(ApplicationUserRoleRowMapper.map(rs));
           }
           return list;
         });

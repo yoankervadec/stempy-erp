@@ -49,7 +49,7 @@ public final class RefreshTokenSQLField {
       "created_at",
       Types.TIMESTAMP);
 
-  public final static Map<DomainField, SQLField> LOOKUP = Map.ofEntries(
+  private final static Map<DomainField, SQLField> LOOKUP = Map.ofEntries(
       Map.entry(RefreshTokenField.ID, ID),
       Map.entry(RefreshTokenField.USER_ID, USER_ID),
       Map.entry(RefreshTokenField.TOKEN, TOKEN),

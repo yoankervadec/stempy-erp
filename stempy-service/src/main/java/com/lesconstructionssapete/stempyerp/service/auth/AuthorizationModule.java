@@ -9,6 +9,9 @@ import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionField;
+import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleField;
 import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
 
 public final class AuthorizationModule {
@@ -25,14 +28,31 @@ public final class AuthorizationModule {
     List<ApplicationPermission> applicationPermissions;
     List<ApplicationRole> applicationRoles;
     List<ApplicationPermissionSet> rolePermissions;
+
     try (Connection connection = connectionProvider.getConnection()) {
-      applicationPermissions = permissionRepository.fetchApplicationPermissions(connection,
-          null);
-      applicationRoles = permissionRepository.fetchApplicationRoles(connection, null);
-      rolePermissions = permissionRepository.fetchRolePermissions(connection, null);
+
+      applicationPermissions = permissionRepository.fetchApplicationPermissions(
+          connection,
+          DomainQuery.builder()
+              .where(w -> w.and(
+                  c -> c.equals(ApplicationPermissionField.ENABLED, true)))
+              .build());
+
+      applicationRoles = permissionRepository.fetchApplicationRoles(
+          connection,
+          DomainQuery.builder()
+              .where(w -> w.and(
+                  c -> c.equals(ApplicationRoleField.ENABLED, true)))
+              .build());
+
+      rolePermissions = permissionRepository.fetchRolePermissions(
+          connection,
+          null); // Fetch all role permissions without filtering
+
     } catch (SQLException e) {
       throw new RuntimeException("Failed to initialize AuthorizationModule: " + e.getMessage(), e);
     }
+
     // 2. Map permissions to roles
     for (ApplicationRole role : applicationRoles) {
       for (ApplicationPermissionSet perm : rolePermissions) {

@@ -7,6 +7,10 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.cache.RedisCache;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionSetField;
+import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleField;
+import com.lesconstructionssapete.stempyerp.field.auth.ApplicationUserRoleField;
 import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
 
 class UserPermissionService {
@@ -46,7 +50,12 @@ class UserPermissionService {
     }
 
     // 2. Load roles
-    List<ApplicationRole> roles = applicationPermissionRepository.fetchApplicationRoles(connection, null);
+    List<ApplicationRole> roles = applicationPermissionRepository.fetchApplicationRoles(
+        connection, DomainQuery.builder()
+            .where(w -> w.and(
+                c -> c.equals(ApplicationRoleField.ENABLED, true),
+                c -> c.equals(ApplicationUserRoleField.USER_ID, userId)))
+            .build());
 
     PermissionRegistry registry = registryService.get();
 
@@ -64,8 +73,12 @@ class UserPermissionService {
     }
 
     // 3. Apply user overrides
-    List<ApplicationPermissionSet> overrides = applicationPermissionRepository.fetchUserPermissions(connection,
-        null);
+    List<ApplicationPermissionSet> overrides = applicationPermissionRepository.fetchUserPermissions(
+        connection,
+        DomainQuery.builder()
+            .where(w -> w.and(
+                c -> c.equals(ApplicationPermissionSetField.REFERENCE_ID, userId)))
+            .build());
 
     for (ApplicationPermissionSet userPermission : overrides) {
       int index = registry.getIndex(userPermission.getPermissionKey());

@@ -39,14 +39,13 @@ public enum Query {
   SELECT_AUTH_REFRESH_TOKENS("app/auth/select_auth_refresh_tokens.sql", true),
 
   // Auth / Users
-  AUTH_SELECT_USER("app/auth/select_user.sql", true),
-  AUTH_SELECT_USER_CREDENTIAL("app/auth/select_user_credential.sql", true),
-
+  SELECT_AUTH_USER("app/auth/select_user.sql", true),
+  SELECT_AUTH_USER_CREDENTIAL("app/auth/select_user_credential.sql", true),
   // Auth / Permissions & Roles
   SELECT_AUTH_PERMISSION("app/auth/select_auth_permission.sql", true),
   SELECT_AUTH_ROLE("app/auth/select_auth_role.sql", true),
-  SELECT_AUTH_ROLE_PERMISSION("app/auth/select_auth_role_permission.sql", true),
   SELECT_AUTH_USER_ROLE("app/auth/select_auth_user_role.sql", true),
+  SELECT_AUTH_ROLE_PERMISSION("app/auth/select_auth_role_permission.sql", true),
   SELECT_AUTH_USER_PERMISSION("app/auth/select_auth_user_permission.sql", true),
 
   /**

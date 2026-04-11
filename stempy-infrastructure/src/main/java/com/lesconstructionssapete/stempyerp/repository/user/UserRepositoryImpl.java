@@ -21,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
   public List<User> fetch(Connection connection, DomainQuery query) {
 
     String sql = QueryCache.get(
-        Query.AUTH_SELECT_USER);
+        Query.SELECT_AUTH_USER);
 
     SQLBuilder builder = new SQLBuilder(sql);
 

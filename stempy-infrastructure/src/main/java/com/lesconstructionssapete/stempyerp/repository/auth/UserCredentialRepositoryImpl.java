@@ -20,7 +20,7 @@ public class UserCredentialRepositoryImpl implements UserCredentialRepository {
   public List<UserCredential> fetch(Connection connection, DomainQuery query) {
 
     String sql = QueryCache.get(
-        Query.AUTH_SELECT_USER_CREDENTIAL);
+        Query.SELECT_AUTH_USER_CREDENTIAL);
 
     SQLBuilder builder = new SQLBuilder(sql);
 

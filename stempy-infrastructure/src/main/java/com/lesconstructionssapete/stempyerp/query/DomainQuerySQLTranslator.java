@@ -53,6 +53,9 @@ public final class DomainQuerySQLTranslator {
    */
   public void apply(SQLBuilder builder, DomainQuery query) {
 
+    if (query == null)
+      return;
+
     if (query.filters() != null) {
       ConditionFragment fragment = buildFragment(builder, query.filters());
       if (!fragment.sql().isBlank()) {

@@ -17,10 +17,15 @@ public final class ApplicationPermissionRowMapper {
   public static ApplicationPermission map(ResultSet rs) throws SQLException {
     return new ApplicationPermission(
         rs.getLong(ApplicationPermissionSQLField.get(ApplicationPermissionField.ID).columnName()),
+
         rs.getString(ApplicationPermissionSQLField.get(ApplicationPermissionField.RESOURCE).columnName()),
+
         ApplicationAction
-            .valueOf(rs.getString(ApplicationPermissionSQLField.get(ApplicationPermissionField.ACTION).columnName())),
+            .valueOf(rs.getString(ApplicationPermissionSQLField.get(ApplicationPermissionField.ACTION).columnName())
+                .toUpperCase()),
+
         rs.getBoolean(ApplicationPermissionSQLField.get(ApplicationPermissionField.ENABLED).columnName()),
+
         SQLInstantMapper.read(rs,
             ApplicationPermissionSQLField.get(ApplicationPermissionField.CREATED_AT).columnName()));
   }

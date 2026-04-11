@@ -14,6 +14,8 @@ public interface ApplicationPermissionRepository {
 
   List<ApplicationRole> fetchApplicationRoles(Connection connection, DomainQuery query);
 
+  List<ApplicationRole> fetchUserApplicationRoles(Connection connection, DomainQuery query);
+
   List<ApplicationPermissionSet> fetchRolePermissions(Connection connection, DomainQuery query);
 
   List<ApplicationPermissionSet> fetchUserPermissions(Connection connection, DomainQuery query);
