@@ -1,8 +1,6 @@
 package com.lesconstructionssapete.stempyerp.service.auth;
 
-import java.sql.Connection;
-
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
 
 class AuthorizationServiceImpl implements AuthorizationService {
 
@@ -17,9 +15,9 @@ class AuthorizationServiceImpl implements AuthorizationService {
   }
 
   @Override
-  public boolean has(Connection connection, long userId, String resource, ApplicationAction action) {
+  public boolean has(long userId, String resource, ApplicationAction action) {
 
-    UserPermissions permissions = permissionService.getUserPermissions(connection, userId);
+    UserPermissions permissions = permissionService.getUserPermissions(userId);
 
     int idx = registryService.get().getIndex(resource + ":" + action.name().toLowerCase());
 

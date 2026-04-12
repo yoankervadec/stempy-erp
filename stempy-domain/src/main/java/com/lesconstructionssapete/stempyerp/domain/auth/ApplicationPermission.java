@@ -2,6 +2,8 @@ package com.lesconstructionssapete.stempyerp.domain.auth;
 
 import java.time.Instant;
 
+import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+
 public class ApplicationPermission {
   private final long id;
   private final String resource; // e.g., "USER", "ORDER", "INVENTORY"

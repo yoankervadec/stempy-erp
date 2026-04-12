@@ -1,4 +1,4 @@
-package com.lesconstructionssapete.stempyerp.domain.auth;
+package com.lesconstructionssapete.stempyerp.annotation;
 
 public enum ApplicationAction {
   CREATE,

@@ -11,7 +11,8 @@ public class JwtAuthenticationMiddleware implements Handler {
 
   private final TokenProvider tokenProvider;
 
-  public JwtAuthenticationMiddleware(TokenProvider tokenProvider) {
+  public JwtAuthenticationMiddleware(
+      TokenProvider tokenProvider) {
     this.tokenProvider = tokenProvider;
   }
 

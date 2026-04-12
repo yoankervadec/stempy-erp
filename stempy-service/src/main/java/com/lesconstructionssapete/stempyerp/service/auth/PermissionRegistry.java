@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.service.auth;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
 
 class PermissionRegistry {
 

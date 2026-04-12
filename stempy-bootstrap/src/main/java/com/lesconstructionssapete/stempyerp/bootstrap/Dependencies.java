@@ -44,6 +44,7 @@ import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthService;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthorizationModule;
+import com.lesconstructionssapete.stempyerp.service.auth.AuthorizationProxyFactory;
 import com.lesconstructionssapete.stempyerp.service.auth.AuthorizationService;
 import com.lesconstructionssapete.stempyerp.service.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.service.constant.ConstantServiceImpl;
@@ -62,19 +63,22 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class Dependencies {
 
   private final Container container = new Container();
+  private final ServiceFactory serviceFactory;
 
   public Dependencies() {
     registerInstances();
     bindInfrastructure();
     bindRepositories();
+    bindAuthorization();
+
+    this.serviceFactory = new ServiceFactory(
+        container,
+        container.get(AuthorizationProxyFactory.class));
+
     bindServices();
     bindCache();
     bindFacades();
 
-    container.instance(AuthorizationService.class, AuthorizationModule.initialize(
-        container.get(ConnectionProvider.class),
-        container.get(ApplicationPermissionRepository.class),
-        container.get(RedisCache.class)));
   }
 
   public Container container() {
@@ -141,6 +145,19 @@ public class Dependencies {
     container.bind(SequenceRepository.class, SequenceRepositoryImpl.class);
   }
 
+  // ---------- Authorization ----------
+
+  private void bindAuthorization() {
+    container.instance(AuthorizationService.class, AuthorizationModule.initialize(
+        container.get(ConnectionProvider.class),
+        container.get(ApplicationPermissionRepository.class),
+        container.get(RedisCache.class)));
+
+    container.instance(
+        AuthorizationProxyFactory.class,
+        new AuthorizationProxyFactory(container.get(AuthorizationService.class)));
+  }
+
   // ---------- Services ----------
 
   private void bindServices() {
@@ -149,7 +166,9 @@ public class Dependencies {
     container.bind(ConstantService.class, ConstantServiceImpl.class);
 
     // Retail Product
-    container.bind(RetailProductService.class, RetailProductServiceImpl.class);
+    container.instance(
+        RetailProductService.class,
+        serviceFactory.secured(RetailProductService.class, RetailProductServiceImpl.class));
 
     // Auth / User
     container.bind(AuthService.class, AuthServiceImpl.class);

@@ -3,6 +3,8 @@ package com.lesconstructionssapete.stempyerp.service.retailproduct;
 import java.sql.Connection;
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.RequirePermission;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
@@ -22,6 +24,7 @@ public class RetailProductServiceImpl implements RetailProductService {
   }
 
   @Override
+  @RequirePermission(resource = "testresource", action = ApplicationAction.ASSIGN)
   public List<RetailProduct> fetch(Connection connection, DomainQuery query) {
 
     return variantRepository.fetch(connection, query);

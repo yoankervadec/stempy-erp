@@ -46,6 +46,7 @@ public class Container {
       Object instance = constructor.newInstance(params);
 
       instances.put(type, instance);
+      instances.put(implementation, instance);
 
       return (T) instance;
 

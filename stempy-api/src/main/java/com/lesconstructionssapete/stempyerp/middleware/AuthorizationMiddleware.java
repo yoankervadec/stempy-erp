@@ -2,6 +2,7 @@ package com.lesconstructionssapete.stempyerp.middleware;
 
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.context.SecurityContext;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
@@ -23,6 +24,7 @@ public class AuthorizationMiddleware implements Handler {
   }
 
   @Override
+  @Deprecated
   public void handle(Context ctx) {
 
     ApiRequest req = ApiRequestContext.get(ctx);
@@ -45,8 +47,7 @@ public class AuthorizationMiddleware implements Handler {
 
     User user = users.get(0);
     req.setContextUser(user);
-
-    // Further authorization logic will be added later
+    SecurityContext.setUserId(user.getEntityId());
 
   }
 

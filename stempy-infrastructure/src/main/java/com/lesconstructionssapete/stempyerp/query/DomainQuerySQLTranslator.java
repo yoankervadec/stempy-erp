@@ -53,6 +53,7 @@ public final class DomainQuerySQLTranslator {
    */
   public void apply(SQLBuilder builder, DomainQuery query) {
 
+    // TODO: avoid UPDATE without WHERE if query is null
     if (query == null)
       return;
 

@@ -1,13 +1,6 @@
 SELECT
   auth_user_permission.user_id,
   auth_user_permission.permission_id,
-  auth_user_permission.allow
-FROM
-  auth_user_permission
-
-  SELECT
-  auth_user_permission.user_id,
-  auth_user_permission.permission_id,
   auth_user_permission.allow,
   auth_permission.resource,
   auth_permission.action,

@@ -1,5 +1,6 @@
 package com.lesconstructionssapete.stempyerp.config;
 
+import com.lesconstructionssapete.stempyerp.context.SecurityContext;
 import com.lesconstructionssapete.stempyerp.facade.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.AuthorizationMiddleware;
@@ -49,6 +50,11 @@ public final class MiddlewareConfig {
       // Authorization
       authorizationMiddleware.handle(ctx);
 
+    });
+
+    app.after(ctx -> {
+      // Clear any thread-local context after the request is processed
+      SecurityContext.clear();
     });
 
   }

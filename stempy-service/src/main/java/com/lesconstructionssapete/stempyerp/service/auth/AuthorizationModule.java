@@ -78,6 +78,7 @@ public final class AuthorizationModule {
         roleService,
         registryService,
         permissionRepository,
+        connectionProvider,
         cache);
 
     // 6. Create and return the authorization service instance

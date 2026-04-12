@@ -17,4 +17,13 @@ class UserPermissions {
       return false;
     return allow.get(index);
   }
+
+  public BitSet getAllow() {
+    return allow;
+  }
+
+  public BitSet getDeny() {
+    return deny;
+  }
+
 }

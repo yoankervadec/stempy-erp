@@ -1,15 +1,16 @@
 package com.lesconstructionssapete.stempyerp.service.auth;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.BitSet;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.cache.RedisCache;
+import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
 import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionSetField;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleField;
 import com.lesconstructionssapete.stempyerp.field.auth.ApplicationUserRoleField;
 import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
 
@@ -18,16 +19,19 @@ class UserPermissionService {
   private final RolePermissionService roleService;
   private final PermissionRegistryService registryService;
   private final ApplicationPermissionRepository applicationPermissionRepository;
+  private final ConnectionProvider connectionProvider;
   private final RedisCache cache;
 
   UserPermissionService(
       RolePermissionService roleService,
       PermissionRegistryService registryService,
       ApplicationPermissionRepository applicationPermissionRepository,
+      ConnectionProvider connectionProvider,
       RedisCache cache) {
     this.roleService = roleService;
     this.registryService = registryService;
     this.applicationPermissionRepository = applicationPermissionRepository;
+    this.connectionProvider = connectionProvider;
     this.cache = cache;
   }
 
@@ -41,7 +45,7 @@ class UserPermissionService {
    * @param userId     The ID of the user whose permissions are to be retrieved.
    * @return A UserPermissions object containing the permissions of the user.
    */
-  UserPermissions getUserPermissions(Connection connection, long userId) {
+  UserPermissions getUserPermissions(long userId) {
 
     // 1. Try cache
     UserPermissions cached = cache.get("user_permissions:" + userId, UserPermissions.class);
@@ -50,12 +54,17 @@ class UserPermissionService {
     }
 
     // 2. Load roles
-    List<ApplicationRole> roles = applicationPermissionRepository.fetchApplicationRoles(
-        connection, DomainQuery.builder()
-            .where(w -> w.and(
-                c -> c.equals(ApplicationRoleField.ENABLED, true),
-                c -> c.equals(ApplicationUserRoleField.USER_ID, userId)))
-            .build());
+    List<ApplicationRole> roles;
+    try (Connection connection = connectionProvider.getConnection()) {
+
+      roles = applicationPermissionRepository.fetchUserApplicationRoles(
+          connection, DomainQuery.builder()
+              .where(w -> w.and(
+                  c -> c.equals(ApplicationUserRoleField.USER_ID, userId)))
+              .build());
+    } catch (SQLException e) {
+      throw new RuntimeException("Failed to fetch user roles: " + e.getMessage(), e);
+    }
 
     PermissionRegistry registry = registryService.get();
 
@@ -73,12 +82,17 @@ class UserPermissionService {
     }
 
     // 3. Apply user overrides
-    List<ApplicationPermissionSet> overrides = applicationPermissionRepository.fetchUserPermissions(
-        connection,
-        DomainQuery.builder()
-            .where(w -> w.and(
-                c -> c.equals(ApplicationPermissionSetField.REFERENCE_ID, userId)))
-            .build());
+    List<ApplicationPermissionSet> overrides;
+    try (Connection connection = connectionProvider.getConnection()) {
+      overrides = applicationPermissionRepository.fetchUserPermissions(
+          connection,
+          DomainQuery.builder()
+              .where(w -> w.and(
+                  c -> c.equals(ApplicationPermissionSetField.REFERENCE_ID, userId)))
+              .build());
+    } catch (SQLException e) {
+      throw new RuntimeException("Failed to fetch user permissions: " + e.getMessage(), e);
+    }
 
     for (ApplicationPermissionSet userPermission : overrides) {
       int index = registry.getIndex(userPermission.getPermissionKey());
