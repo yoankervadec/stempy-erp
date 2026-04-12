@@ -1,8 +1,8 @@
 package com.lesconstructionssapete.stempyerp.automation.definition;
 
+import com.lesconstructionssapete.stempyerp.automation.Job;
+import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 
 public interface JobExecutable {
 

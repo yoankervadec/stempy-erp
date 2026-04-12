@@ -12,11 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lesconstructionssapete.stempyerp.cache.RedisCache;
-import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.domain.constant.PaymentMethod;
-import com.lesconstructionssapete.stempyerp.domain.constant.RetailCategory;
-import com.lesconstructionssapete.stempyerp.domain.constant.TaxGroup;
-import com.lesconstructionssapete.stempyerp.service.constant.ConstantService;
+import com.lesconstructionssapete.stempyerp.service.spi.constant.ConstantService;
 import com.lesconstructionssapete.stempyerp.util.JsonUtil;
 
 /*

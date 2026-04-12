@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.lesconstructionssapete.stempyerp.automation.Job;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobFactory;
 import com.lesconstructionssapete.stempyerp.automation.scheduling.Scheduler;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.automation.AutomationRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.repository.automation.AutomationRepositoryImpl;
 
 /**
  * Central manager responsible for controlling automation jobs within the

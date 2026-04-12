@@ -3,11 +3,11 @@ package com.lesconstructionssapete.stempyerp.automation.handler;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.lesconstructionssapete.stempyerp.automation.Job;
+import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.execution.AutomationManager;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
 
 public class RefreshJobSchedule extends Job implements JobExecutable {

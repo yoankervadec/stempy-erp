@@ -2,9 +2,9 @@ package com.lesconstructionssapete.stempyerp.controller;
 
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.facade.auth.AuthFacade;
+import com.lesconstructionssapete.stempyerp.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.facade.spi.authentication.AuthFacade;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.http.BodyKey;
 import com.lesconstructionssapete.stempyerp.http.RequestMapper;

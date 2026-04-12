@@ -1,9 +1,9 @@
 package com.lesconstructionssapete.stempyerp.automation.handler;
 
+import com.lesconstructionssapete.stempyerp.automation.Job;
+import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 
 public class UpdateInventorySummary extends Job implements JobExecutable {
 

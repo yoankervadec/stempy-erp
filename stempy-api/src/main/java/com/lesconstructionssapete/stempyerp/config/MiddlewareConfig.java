@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.config;
 
 import com.lesconstructionssapete.stempyerp.context.SecurityContext;
-import com.lesconstructionssapete.stempyerp.facade.user.UserFacade;
+import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.AuthorizationMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.JwtAuthenticationMiddleware;

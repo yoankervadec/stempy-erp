@@ -12,7 +12,7 @@ import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
 import com.lesconstructionssapete.stempyerp.controller.AuthController;
 import com.lesconstructionssapete.stempyerp.controller.RetailProductController;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.facade.user.UserFacade;
+import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.routes.RouteRegistrar;
 import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 

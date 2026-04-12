@@ -2,8 +2,6 @@ package com.lesconstructionssapete.stempyerp.constant;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.constant.ConstantEntity;
-
 public class ConstantUtil {
 
   public static <T extends ConstantEntity> T findById(List<T> list, int id) {

@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.lesconstructionssapete.stempyerp.automation.Job;
+import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
 
 /**

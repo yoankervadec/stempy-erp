@@ -4,8 +4,8 @@ import java.sql.Connection;
 
 import com.lesconstructionssapete.stempyerp.automation.execution.AutomationManager;
 import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.automation.AutomationRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.repository.automation.AutomationRepositoryImpl;
 
 public class AutomationInitializer {
 

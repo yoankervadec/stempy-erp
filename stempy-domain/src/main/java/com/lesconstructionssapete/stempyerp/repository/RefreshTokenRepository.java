@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.repository;
 import java.sql.Connection;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.query.DomainQuery;
 
 public interface RefreshTokenRepository {
 

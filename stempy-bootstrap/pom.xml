@@ -49,6 +49,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- stempy-facade -->
+        <dependency>
+            <groupId>com.lesconstructionssapete.stempyerp</groupId>
+            <artifactId>stempy-facade</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- stempy-api -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>

@@ -3,10 +3,10 @@ package com.lesconstructionssapete.stempyerp.repository.auth;
 import java.sql.Connection;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
-import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.auth.ApplicationPermissionSet;
+import com.lesconstructionssapete.stempyerp.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.query.DomainQuery;
 
 public interface ApplicationPermissionRepository {
 

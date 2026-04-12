@@ -20,6 +20,7 @@
         <module>stempy-service</module>
         <module>stempy-automation</module>
         <module>stempy-bootstrap</module>
+        <module>stempy-facade</module>
     </modules>
 
     <properties>

@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.repository;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.sequence.LiveSequence;
 
 public interface SequenceRepository {
 

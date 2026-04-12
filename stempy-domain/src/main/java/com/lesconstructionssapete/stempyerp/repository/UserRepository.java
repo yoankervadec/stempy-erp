@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.repository;
 import java.sql.Connection;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.user.User;
+import com.lesconstructionssapete.stempyerp.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.user.User;
 
 public interface UserRepository {
 

@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.bootstrap;
 
-import com.lesconstructionssapete.stempyerp.service.auth.AuthorizationProxyFactory;
+import com.lesconstructionssapete.stempyerp.service.impl.authorization.AuthorizationProxyFactory;
 
 public class ServiceFactory {
 

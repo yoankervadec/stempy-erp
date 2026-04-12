@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.repository;
 import java.sql.Connection;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
-import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.automation.Job;
+import com.lesconstructionssapete.stempyerp.automation.JobLog;
 
 public interface AutomationRepository {
 

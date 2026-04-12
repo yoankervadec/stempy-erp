@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.repository.retailproduct;
 import java.sql.Connection;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.domain.shared.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
 
 public interface RetailProductRepository {
 

@@ -8,9 +8,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import com.lesconstructionssapete.stempyerp.automation.Job;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.execution.JobQueue;
-import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 
 public class Scheduler {
 
