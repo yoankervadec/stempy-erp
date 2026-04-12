@@ -2,7 +2,6 @@ package com.lesconstructionssapete.stempyerp.infrastructure.persistence;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Savepoint;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -43,8 +42,8 @@ public class TransactionManager implements TransactionRunner {
   private static class TransactionContext {
     final Connection connection;
     boolean rollbackOnly;
-    Savepoint savepoint;
-    int savepointCounter = 0;
+    // Savepoint savepoint;
+    // int savepointCounter = 0;
 
     TransactionContext(Connection connection) {
       this.connection = connection;
