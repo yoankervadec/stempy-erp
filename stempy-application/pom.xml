@@ -22,7 +22,6 @@
         </dependency>
 
         <!-- stempy-domain -->
-        <!-- TODO: remove dependency to domain, rely on stempy-api only -->
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-domain</artifactId>
@@ -33,13 +32,6 @@
         <dependency>
             <groupId>com.lesconstructionssapete.stempyerp</groupId>
             <artifactId>stempy-facade</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- stempy-automation -->
-        <dependency>
-            <groupId>com.lesconstructionssapete.stempyerp</groupId>
-            <artifactId>stempy-automation</artifactId>
             <version>${project.version}</version>
         </dependency>
 

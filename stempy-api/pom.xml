@@ -38,16 +38,16 @@
         </dependency>
 
         <!-- MySQL JDBC driver -->
-        <dependency>
+        <!-- <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- HikariCP connection pool -->
-        <dependency>
+        <!-- <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- SLF4J Logging -->
         <dependency>
@@ -56,10 +56,10 @@
         </dependency>
 
         <!-- .env -->
-        <dependency>
+        <!-- <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- Javalin -->
         <dependency>
