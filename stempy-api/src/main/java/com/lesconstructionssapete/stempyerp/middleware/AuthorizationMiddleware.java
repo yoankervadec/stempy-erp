@@ -24,7 +24,6 @@ public class AuthorizationMiddleware implements Handler {
   }
 
   @Override
-  @Deprecated
   public void handle(Context ctx) {
 
     ApiRequest req = ApiRequestContext.get(ctx);
