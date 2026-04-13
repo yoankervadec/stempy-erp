@@ -38,98 +38,320 @@ This is not meant to be a "magic framework" project. Most behavior is implemente
 
 ## Architecture Overview
 
-The application is structured around:
+The application follows a layered architecture with clear dependency direction:
 
-### Modules
-
-1. **stempy-domain** - Core domain entities and business logic
-2. **stempy-application** - Application entry point and bootstrap logic
-3. **stempy-infrastructure** - Database access and external service integration
-4. **stempy-api** - HTTP API layer using Javalin
-5. **stempy-service** - Business service implementations
-6. **stempy-automation** - Background job scheduling and execution
-7. **stempy-bootstrap** - Dependency injection container
-8. **stempy-shared** - Shared utilities and common components
-
-### Layer Responsibilities
-
-#### Domain Layer (`stempy-domain`)
-
-- Contains core business entities and value objects
-- Defines business rules and invariants
-- Independent of infrastructure concerns
-- Includes the query system for safe dynamic filtering
-
-#### Infrastructure Layer (`stempy-infrastructure`)
-
-- Implements data access through repositories
-- Handles database connections and transactions
-- Integrates with external services (Redis, etc.)
-- Contains SQL generation and database mapping logic
-
-#### Application Layer (`stempy-application`)
-
-- App entry point
-- Contains bootstrap and initialization logic
-
-#### Service Layer (`stempy-service`)
-
-**facade:**
-
-- Coordinates high-level business operations
-- Manages transaction boundaries
-- Composes services to fulfill use cases
-
-**service:**
-
-- Implements focused business operations
-- Contains service-specific business logic
-- Orchestrates domain entities and repositories
-
-#### API Layer (`stempy-api`)
-
-- Exposes RESTful endpoints
-- Maps HTTP requests to application services
-- Handles request/response transformation
-- Implements middleware for cross-cutting concerns
-
-#### Automation Layer (`stempy-automation`)
-
-- Provides background job scheduling and execution
-- Handles recurring and scheduled tasks
-- Implements job queuing and worker threads
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      stempy-api                                 │
+│              (HTTP layer, controllers, routes)                  │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                   stempy-application                           │
+│                  (Entry point, bootstrap)                       │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                     stempy-service                             │
+│         (Business logic, service interfaces & impls)            │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                 stempy-infrastructure                          │
+│      (Database access, repositories, external services)        │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                      stempy-domain                              │
+│         (Core entities, value objects, business rules)          │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Key Features
+## Modules
 
-### Safe Dynamic Query System
+### stempy-domain
 
-One of the standout features of Stempy ERP is its sophisticated query system that allows clients to send complex filtering, sorting, and pagination instructions which are safely translated into SQL.
+Core domain layer - contains business entities, value objects, and domain rules. No dependencies on infrastructure.
 
-#### Components
+**Package Structure:**
 
-1. **DomainQuery Model** - Database-agnostic representation of queries
-2. **Filter Tree Structure** - Enables complex nested filtering with AND/OR logic
-3. **SQL Translation Layer** - Converts domain queries to safe SQL with parameter binding
-4. **Field Validation** - Prevents SQL injection by validating field names against predefined mappings
+```
+com.lesconstructionssapete.stempyerp.domain
+├── auth/                  # Authentication domain objects
+│   ├── ApplicationPermission
+│   ├── ApplicationPermissionSet
+│   ├── ApplicationRole
+│   ├── AuthToken
+│   └── UserCredential
+├── automation/            # Job scheduling domain
+│   ├── Job
+│   └── JobLog
+├── common/                # Shared value objects
+│   ├── Address
+│   └── Contact
+├── constant/              # Reference/constant entities
+│   ├── ConstantEntity (interface)
+│   ├── DomainEntityType
+│   ├── PaymentMethod
+│   ├── RetailCategory
+│   ├── TaxGroup
+│   ├── TaxGroupLine
+│   └── TaxRate
+├── exception/             # Domain-specific exceptions
+│   ├── ConcurrencyConflictException
+│   ├── FieldNotFoundException
+│   ├── SequenceNotFoundException
+│   ├── ValidationException
+│   └── ...
+├── field/                 # Field definitions for filtering/sorting
+│   ├── DomainField (interface)
+│   ├── DomainFieldResolver (interface)
+│   ├── DefaultDomainFieldResolver
+│   ├── auth/              # Auth field enums
+│   ├── automation/        # Automation field enums
+│   ├── retailproduct/     # Retail product field enums
+│   ├── sequence/          # Sequence field enums
+│   └── user/             # User field enums
+├── generic/               # Base entity class
+│   └── GenericEntity
+├── query/                 # Query/filter/sort model
+│   ├── DomainQuery
+│   ├── FilterNode
+│   ├── FilterCondition
+│   ├── FilterGroup
+│   ├── SortSpec
+│   ├── PageSpec
+│   ├── ComparisonOperator
+│   ├── LogicalOperator
+│   └── builder/
+│       ├── DomainQueryBuilder
+│       └── FilterBuilder
+├── repository/            # Repository interfaces
+│   ├── SequenceRepository
+│   ├── AutomationRepository
+│   ├── ConstantRepository
+│   ├── UserRepository
+│   └── auth/
+│       └── UserCredentialRepository
+├── retailproduct/         # Retail product entities
+│   ├── RetailProduct
+│   ├── RetailProductMaster
+│   ├── RetailProductBarcode
+│   ├── RetailProductCost
+│   ├── RetailProductPrice
+│   └── RetailProductMasterPolicy
+├── sequence/              # Sequence domain object
+│   └── LiveSequence
+└── user/                  # User domain object
+    └── User
+```
 
-#### Security Features
+### stempy-service
 
-- All SQL parameters are properly bound (prevents injection)
-- Column names are validated against field maps
-- Complex nested filters are supported without manual string concatenation
-- Field-level access control prevents querying unauthorized fields
+Service layer - contains business logic, service interfaces, and implementations.
 
-### Automation Framework
+**Package Structure:**
 
-The automation module provides a lightweight job scheduling and execution framework:
+```
+com.lesconstructionssapete.stempyerp
+├── port/                  # Port interfaces (SPI)
+│   ├── cache/
+│   │   ├── CacheProvider
+│   │   └── ConstantCache
+│   ├── persistence/
+│   │   └── SQLConnectionProvider
+│   ├── security/
+│   │   ├── PasswordHashProvider
+│   │   └── TokenProvider
+│   └── transaction/
+│       ├── TransactionRunner
+│       ├── TransactionCallback
+│       └── TransactionPropagation
+└── service/
+    ├── spi/               # Service interfaces
+    │   ├── authentication/
+    │   │   └── AuthService
+    │   ├── authorization/
+    │   │   └── AuthorizationService
+    │   ├── constant/
+    │   │   └── ConstantService
+    │   ├── retailproduct/
+    │   │   └── RetailProductService
+    │   ├── sequence/
+    │   │   └── SequenceService
+    │   └── user/
+    │       └── UserService
+    ├── impl/              # Service implementations
+    │   ├── authentication/
+    │   │   └── AuthServiceImpl
+    │   ├── authorization/
+    │   │   ├── AuthorizationServiceImpl
+    │   │   ├── PermissionRegistry
+    │   │   ├── RolePermissionService
+    │   │   └── UserPermissionService
+    │   ├── constant/
+    │   │   └── ConstantServiceImpl
+    │   ├── retailproduct/
+    │   │   └── RetailProductServiceImpl
+    │   ├── sequence/
+    │   │   └── SequenceServiceImpl
+    │   └── user/
+    │       └── UserServiceImpl
+    └── numbering/         # Entity ID/number generation
+        ├── EntityNumberGenerator (interface)
+        ├── EntityNumberGeneratorRegistry (interface)
+        ├── DefaultEntityNumberGeneratorRegistry
+        ├── PaddedPrefixGenerator
+        └── RetailProductNumberGenerator
+```
 
-- Interval-based and fixed-time job scheduling
-- Thread-safe job queue for execution decoupling
-- Background worker threads for job processing
-- Dynamic job schedule refreshing
-- Dependency injection support for job implementations
+### stempy-infrastructure
+
+Infrastructure layer - implements persistence, external integrations, and infrastructure concerns.
+
+**Package Structure:**
+
+```
+com.lesconstructionssapete.stempyerp.infrastructure
+├── exception/             # Infrastructure exceptions
+│   ├── DatabaseAccessException
+│   ├── DuplicateKeyException
+│   ├── ForeignKeyViolationException
+│   ├── NotNullConstraintException
+│   ├── SequenceUpdateException
+│   └── TransactionFailureException
+├── field/                 # SQL field mappings
+│   ├── SQLField (base class)
+│   ├── authentication/
+│   ├── authorization/
+│   ├── automation/
+│   ├── retailproduct/
+│   ├── sequence/
+│   └── user/
+├── mapper/                # Row/SQL mappers
+│   ├── SQLInstantMapper
+│   ├── authentication/
+│   ├── authorization/
+│   ├── automation/
+│   ├── retailproduct/
+│   └── user/
+├── persistence/           # Core persistence
+│   ├── SQLExecutor
+│   ├── TransactionManager
+│   ├── HikariConnectionProvider
+│   └── repository/
+│       ├── authentication/
+│       ├── authorization/
+│       ├── automation/
+│       ├── constant/
+│       ├── retailproduct/
+│       ├── sequence/
+│       └── user/
+├── query/                 # Query translation
+│   ├── DomainQuerySQLTranslator
+│   ├── QueryCache
+│   ├── SQLBinder
+│   ├── SQLBuilder
+│   └── Query (enum)
+├── redis/                 # Redis infrastructure
+│   ├── RedisProvider
+│   ├── LettuceRedisCache
+│   └── constant/
+│       └── RedisConstantCache
+└── security/              # Security implementations
+    ├── JwtTokenProvider
+    └── PBKDF2PasswordProvider
+```
+
+### stempy-api
+
+HTTP API layer using Javalin - exposes REST endpoints.
+
+### stempy-application
+
+Application entry point and bootstrap logic.
+
+### stempy-automation
+
+Background job scheduling and execution framework.
+
+### stempy-bootstrap
+
+Dependency injection container and module wiring.
+
+### stempy-shared
+
+Shared utilities and common components.
+
+---
+
+## Key Design Patterns
+
+### Domain Field Pattern
+
+Each domain entity has a corresponding `*Field` enum implementing `DomainField`:
+
+```java
+public enum RetailProductField implements DomainField {
+    ENTITY_ID("entityId"),
+    NAME("name"),
+    DESCRIPTION("description"),
+    // ...
+    ;
+
+    @Override
+    public String logicalName() {
+        return "RetailProduct." + this.fieldName;
+    }
+}
+```
+
+These are used for:
+
+- Safe filtering in queries
+- Sorting specifications
+- Field validation
+
+### SQL Field Mapping
+
+Infrastructure maps domain fields to database columns:
+
+```java
+public class RetailProductSQLField extends SQLField {
+    // Maps DomainField to table.column with SQL type
+    public static Map<DomainField, SQLField> get(DomainField field) { ... }
+    public static Map<DomainField, SQLField> all() { ... }
+}
+```
+
+### Entity Numbering Pattern
+
+Entity IDs are generated using the numbering service:
+
+```java
+EntityNumberGenerator<T> - generates entity numbers
+├── generate(T entity, LiveSequence seq)
+EntityNumberGeneratorRegistry - looks up generators by entity type
+PaddedPrefixGenerator - default: "RP" + "000010" = "RP000010"
+```
+
+### Query System Flow
+
+```
+HTTP Request (JSON)
+       ↓
+RequestQueryMapper
+       ↓
+DomainQuery (domain.query)
+       ↓
+DomainQuerySQLTranslator (infrastructure.query)
+       ↓
+SQLBuilder
+       ↓
+Parameterized SQL
+```
 
 ---
 
