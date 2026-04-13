@@ -3,9 +3,9 @@ package com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct;
 import java.sql.Types;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.field.DomainField;
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterPolicyField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductMasterPolicyField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
 
 public final class RetailProductMasterSQLField {

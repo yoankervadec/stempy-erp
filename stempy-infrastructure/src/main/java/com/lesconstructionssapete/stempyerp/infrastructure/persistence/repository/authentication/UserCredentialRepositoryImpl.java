@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.UserCredentialRepository;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authentication.UserCredentialSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication.UserCredentialRowMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
@@ -12,8 +14,6 @@ import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLT
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
 
 public class UserCredentialRepositoryImpl implements UserCredentialRepository {
 

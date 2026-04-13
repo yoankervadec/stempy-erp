@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication;
 
-import com.lesconstructionssapete.stempyerp.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authentication.UserCredentialSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
 

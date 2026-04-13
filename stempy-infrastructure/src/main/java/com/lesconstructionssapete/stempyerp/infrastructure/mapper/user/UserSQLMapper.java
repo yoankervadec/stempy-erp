@@ -3,10 +3,10 @@ package com.lesconstructionssapete.stempyerp.infrastructure.mapper.user;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.domain.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.user.User;
 
 public final class UserSQLMapper {
 

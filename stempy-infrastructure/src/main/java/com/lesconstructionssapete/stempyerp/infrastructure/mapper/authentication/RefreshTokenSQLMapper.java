@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication;
 
-import com.lesconstructionssapete.stempyerp.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
+import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.RefreshTokenField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authentication.RefreshTokenSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
 

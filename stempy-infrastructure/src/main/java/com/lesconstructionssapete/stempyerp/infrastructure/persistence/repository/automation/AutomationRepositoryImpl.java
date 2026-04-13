@@ -4,9 +4,10 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.automation.Job;
-import com.lesconstructionssapete.stempyerp.automation.JobLog;
-import com.lesconstructionssapete.stempyerp.field.automation.JobField;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.domain.field.automation.JobField;
+import com.lesconstructionssapete.stempyerp.domain.repository.AutomationRepository;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.automation.JobSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobLogSQLMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobRowMapper;
@@ -15,7 +16,6 @@ import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecut
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
 
 public class AutomationRepositoryImpl implements AutomationRepository {
 

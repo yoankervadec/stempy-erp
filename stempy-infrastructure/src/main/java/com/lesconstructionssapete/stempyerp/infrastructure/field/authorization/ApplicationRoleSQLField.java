@@ -2,8 +2,8 @@ package com.lesconstructionssapete.stempyerp.infrastructure.field.authorization;
 
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.field.DomainField;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationRoleField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
 
 public final class ApplicationRoleSQLField {

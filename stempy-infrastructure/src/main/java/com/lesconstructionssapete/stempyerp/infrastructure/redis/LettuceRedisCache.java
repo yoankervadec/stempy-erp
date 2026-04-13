@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lesconstructionssapete.stempyerp.cache.RedisCache;
+import com.lesconstructionssapete.stempyerp.port.cache.CacheProvider;
 import com.lesconstructionssapete.stempyerp.util.JsonUtil;
 
 import io.lettuce.core.KeyScanCursor;
@@ -13,7 +13,7 @@ import io.lettuce.core.ScanArgs;
 import io.lettuce.core.ScanCursor;
 import io.lettuce.core.api.sync.RedisCommands;
 
-public class LettuceRedisCache implements RedisCache {
+public class LettuceRedisCache implements CacheProvider {
 
   private final RedisCommands<String, String> commands;
 

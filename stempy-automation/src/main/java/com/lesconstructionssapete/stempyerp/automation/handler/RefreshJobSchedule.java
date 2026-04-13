@@ -3,12 +3,12 @@ package com.lesconstructionssapete.stempyerp.automation.handler;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.automation.Job;
-import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.execution.AutomationManager;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.domain.repository.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 
 public class RefreshJobSchedule extends Job implements JobExecutable {
 
@@ -20,7 +20,7 @@ public class RefreshJobSchedule extends Job implements JobExecutable {
   }
 
   @Override
-  public JobLog execute(ConnectionProvider provider, JobLog log) {
+  public JobLog execute(SQLConnectionProvider provider, JobLog log) {
     Connection connection = null;
     try {
       connection = provider.getConnection();

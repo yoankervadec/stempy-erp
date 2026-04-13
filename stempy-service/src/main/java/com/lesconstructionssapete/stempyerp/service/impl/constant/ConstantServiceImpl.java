@@ -5,22 +5,22 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.constant.PaymentMethod;
-import com.lesconstructionssapete.stempyerp.constant.RetailCategory;
-import com.lesconstructionssapete.stempyerp.constant.TaxGroup;
-import com.lesconstructionssapete.stempyerp.constant.TaxGroupLine;
-import com.lesconstructionssapete.stempyerp.constant.TaxRate;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.repository.ConstantRepository;
+import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.domain.constant.PaymentMethod;
+import com.lesconstructionssapete.stempyerp.domain.constant.RetailCategory;
+import com.lesconstructionssapete.stempyerp.domain.constant.TaxGroup;
+import com.lesconstructionssapete.stempyerp.domain.constant.TaxGroupLine;
+import com.lesconstructionssapete.stempyerp.domain.constant.TaxRate;
+import com.lesconstructionssapete.stempyerp.domain.repository.ConstantRepository;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 import com.lesconstructionssapete.stempyerp.service.spi.constant.ConstantService;
 
 public class ConstantServiceImpl implements ConstantService {
 
-  private final ConnectionProvider provider;
+  private final SQLConnectionProvider provider;
   private final ConstantRepository constantRepository;
 
-  public ConstantServiceImpl(ConnectionProvider provider, ConstantRepository constantRepository) {
+  public ConstantServiceImpl(SQLConnectionProvider provider, ConstantRepository constantRepository) {
     this.provider = provider;
     this.constantRepository = constantRepository;
   }

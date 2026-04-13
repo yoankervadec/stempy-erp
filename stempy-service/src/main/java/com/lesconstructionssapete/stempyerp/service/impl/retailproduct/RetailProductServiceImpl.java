@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
 import com.lesconstructionssapete.stempyerp.annotation.RequirePermission;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepository;
-import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductRepository;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMaster;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductMasterRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductRepository;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.service.spi.retailproduct.RetailProductService;
 
 public class RetailProductServiceImpl implements RetailProductService {

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermissionSet;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
 
 class RolePermissionService {
 

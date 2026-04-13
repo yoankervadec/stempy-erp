@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation;
 
-import com.lesconstructionssapete.stempyerp.automation.Job;
-import com.lesconstructionssapete.stempyerp.field.automation.JobField;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.field.automation.JobField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.automation.JobSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
 import com.lesconstructionssapete.stempyerp.util.DateTimeUtil;

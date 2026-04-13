@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.config;
 
-import com.lesconstructionssapete.stempyerp.context.SecurityContext;
+import com.lesconstructionssapete.stempyerp.context.RequestContext;
 import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
 import com.lesconstructionssapete.stempyerp.middleware.ApiRequestMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.AuthorizationMiddleware;
@@ -8,7 +8,7 @@ import com.lesconstructionssapete.stempyerp.middleware.JwtAuthenticationMiddlewa
 import com.lesconstructionssapete.stempyerp.middleware.RequestOptionsMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.RequestQueryMiddleware;
 import com.lesconstructionssapete.stempyerp.middleware.ServerContextMiddleware;
-import com.lesconstructionssapete.stempyerp.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.security.TokenProvider;
 
 import io.javalin.Javalin;
 
@@ -54,7 +54,7 @@ public final class MiddlewareConfig {
 
     app.after(ctx -> {
       // Clear any thread-local context after the request is processed
-      SecurityContext.clear();
+      RequestContext.clear();
     });
 
   }

@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.infrastructure.field.sequence;
 import java.sql.Types;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.field.DomainField;
-import com.lesconstructionssapete.stempyerp.field.sequence.SequenceField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.sequence.SequenceField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
 
 public final class SequenceSQLField {

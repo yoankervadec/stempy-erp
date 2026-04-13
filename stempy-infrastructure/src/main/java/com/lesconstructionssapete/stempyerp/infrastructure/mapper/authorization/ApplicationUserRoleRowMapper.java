@@ -3,9 +3,9 @@ package com.lesconstructionssapete.stempyerp.infrastructure.mapper.authorization
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.auth.ApplicationRole;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleField;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationUserRoleField;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationRoleField;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationUserRoleField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authorization.ApplicationRoleSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authorization.ApplicationUserRoleSQLField;
 

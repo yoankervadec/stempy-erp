@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.middleware;
 
 import com.lesconstructionssapete.stempyerp.exception.UnauthorizedException;
-import com.lesconstructionssapete.stempyerp.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.security.TokenProvider;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;

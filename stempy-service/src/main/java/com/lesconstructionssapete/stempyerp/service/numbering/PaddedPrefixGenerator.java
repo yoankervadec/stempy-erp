@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.service.numbering;
 
-import com.lesconstructionssapete.stempyerp.generic.GenericEntity;
-import com.lesconstructionssapete.stempyerp.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
+import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 
 public final class PaddedPrefixGenerator
     implements EntityNumberGenerator<GenericEntity> {

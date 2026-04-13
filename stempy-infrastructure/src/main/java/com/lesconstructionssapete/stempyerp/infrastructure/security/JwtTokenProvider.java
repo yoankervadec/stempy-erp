@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
-import com.lesconstructionssapete.stempyerp.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.security.TokenProvider;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;

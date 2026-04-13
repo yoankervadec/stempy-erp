@@ -8,7 +8,7 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
+import com.lesconstructionssapete.stempyerp.port.security.PasswordHashProvider;
 
 public class PBKDF2PasswordProvider implements PasswordHashProvider {
 

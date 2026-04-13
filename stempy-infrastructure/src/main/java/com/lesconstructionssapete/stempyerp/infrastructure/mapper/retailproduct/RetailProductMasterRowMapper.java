@@ -3,10 +3,10 @@ package com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductMasterSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.SQLInstantMapper;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMaster;
 
 public class RetailProductMasterRowMapper {
 

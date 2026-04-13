@@ -2,20 +2,24 @@ package com.lesconstructionssapete.stempyerp.bootstrap;
 
 import java.time.Duration;
 
-import com.lesconstructionssapete.stempyerp.cache.RedisCache;
-import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
-import com.lesconstructionssapete.stempyerp.constant.RedisConstantCache;
 import com.lesconstructionssapete.stempyerp.controller.AuthController;
 import com.lesconstructionssapete.stempyerp.controller.RetailProductController;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.field.DefaultDomainFieldResolver;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldResolver;
+import com.lesconstructionssapete.stempyerp.domain.repository.ConstantRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.RefreshTokenRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.SequenceRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.UserRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.UserCredentialRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductMasterRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.facade.impl.authentication.AuthFacadeImpl;
 import com.lesconstructionssapete.stempyerp.facade.impl.retailproduct.RetailProductFacadeImpl;
 import com.lesconstructionssapete.stempyerp.facade.impl.user.UserFacadeImpl;
 import com.lesconstructionssapete.stempyerp.facade.spi.authentication.AuthFacade;
 import com.lesconstructionssapete.stempyerp.facade.spi.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
-import com.lesconstructionssapete.stempyerp.field.DefaultDomainFieldResolver;
-import com.lesconstructionssapete.stempyerp.field.DomainFieldResolver;
 import com.lesconstructionssapete.stempyerp.http.query.RequestQueryMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.HikariConnectionProvider;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.TransactionManager;
@@ -29,18 +33,15 @@ import com.lesconstructionssapete.stempyerp.infrastructure.persistence.repositor
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.user.UserRepositoryImpl;
 import com.lesconstructionssapete.stempyerp.infrastructure.redis.LettuceRedisCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.redis.RedisProvider;
+import com.lesconstructionssapete.stempyerp.infrastructure.redis.constant.RedisConstantCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.security.JwtTokenProvider;
 import com.lesconstructionssapete.stempyerp.infrastructure.security.PBKDF2PasswordProvider;
-import com.lesconstructionssapete.stempyerp.repository.ConstantRepository;
-import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
-import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
-import com.lesconstructionssapete.stempyerp.repository.UserRepository;
-import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
-import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
-import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepository;
-import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductRepository;
-import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
-import com.lesconstructionssapete.stempyerp.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.cache.CacheProvider;
+import com.lesconstructionssapete.stempyerp.port.cache.ConstantCache;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
+import com.lesconstructionssapete.stempyerp.port.security.PasswordHashProvider;
+import com.lesconstructionssapete.stempyerp.port.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionRunner;
 import com.lesconstructionssapete.stempyerp.service.impl.authentication.AuthServiceImpl;
 import com.lesconstructionssapete.stempyerp.service.impl.authorization.AuthorizationModule;
 import com.lesconstructionssapete.stempyerp.service.impl.authorization.AuthorizationProxyFactory;
@@ -56,7 +57,6 @@ import com.lesconstructionssapete.stempyerp.service.spi.constant.ConstantService
 import com.lesconstructionssapete.stempyerp.service.spi.retailproduct.RetailProductService;
 import com.lesconstructionssapete.stempyerp.service.spi.sequence.SequenceService;
 import com.lesconstructionssapete.stempyerp.service.spi.user.UserService;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -95,8 +95,8 @@ public class Dependencies {
     RedisProvider redisProvider = new RedisProvider();
     container.instance(RedisProvider.class, redisProvider);
 
-    RedisCache redisCache = new LettuceRedisCache(redisProvider.getConnection().sync());
-    container.instance(RedisCache.class, redisCache);
+    CacheProvider redisCache = new LettuceRedisCache(redisProvider.getConnection().sync());
+    container.instance(CacheProvider.class, redisCache);
 
     TokenProvider tokenProvider = new JwtTokenProvider(
         dotenv.get("JWT_SECRET"),
@@ -115,7 +115,7 @@ public class Dependencies {
 
   private void bindInfrastructure() {
 
-    container.bind(ConnectionProvider.class, HikariConnectionProvider.class);
+    container.bind(SQLConnectionProvider.class, HikariConnectionProvider.class);
     container.bind(TransactionRunner.class, TransactionManager.class);
 
     container.bind(EntityNumberGeneratorRegistry.class, DefaultEntityNumberGeneratorRegistry.class);
@@ -149,9 +149,9 @@ public class Dependencies {
 
   private void bindAuthorization() {
     container.instance(AuthorizationService.class, AuthorizationModule.initialize(
-        container.get(ConnectionProvider.class),
+        container.get(SQLConnectionProvider.class),
         container.get(ApplicationPermissionRepository.class),
-        container.get(RedisCache.class)));
+        container.get(CacheProvider.class)));
 
     container.instance(
         AuthorizationProxyFactory.class,

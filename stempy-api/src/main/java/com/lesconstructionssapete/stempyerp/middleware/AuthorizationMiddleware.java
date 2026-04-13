@@ -2,15 +2,15 @@ package com.lesconstructionssapete.stempyerp.middleware;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.context.SecurityContext;
+import com.lesconstructionssapete.stempyerp.context.RequestContext;
+import com.lesconstructionssapete.stempyerp.domain.exception.UserNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
-import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
 import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
-import com.lesconstructionssapete.stempyerp.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
 import com.lesconstructionssapete.stempyerp.http.contract.ApiRequest;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.user.User;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -46,7 +46,7 @@ public class AuthorizationMiddleware implements Handler {
 
     User user = users.get(0);
     req.setContextUser(user);
-    SecurityContext.setUserId(user.getEntityId());
+    RequestContext.setUserId(user.getEntityId());
 
   }
 

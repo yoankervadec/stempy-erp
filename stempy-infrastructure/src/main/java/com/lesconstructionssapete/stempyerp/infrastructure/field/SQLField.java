@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.field;
 
-import com.lesconstructionssapete.stempyerp.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
 
 public class SQLField {
 

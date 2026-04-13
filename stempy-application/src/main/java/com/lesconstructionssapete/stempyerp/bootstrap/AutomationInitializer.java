@@ -3,13 +3,13 @@ package com.lesconstructionssapete.stempyerp.bootstrap;
 import java.sql.Connection;
 
 import com.lesconstructionssapete.stempyerp.automation.execution.AutomationManager;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.repository.AutomationRepository;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.automation.AutomationRepositoryImpl;
-import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 
 public class AutomationInitializer {
 
-  public static void initialize(ConnectionProvider provider) {
+  public static void initialize(SQLConnectionProvider provider) {
     try (Connection con = provider.getConnection()) {
 
       AutomationRepository repo = new AutomationRepositoryImpl();

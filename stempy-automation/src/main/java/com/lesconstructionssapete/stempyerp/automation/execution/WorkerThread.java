@@ -6,20 +6,20 @@ import java.time.temporal.ChronoUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.handler.LogJobRuns;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 
 public class WorkerThread implements Runnable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WorkerThread.class);
 
-  private final ConnectionProvider provider;
+  private final SQLConnectionProvider provider;
   private final JobQueue queue;
   private volatile boolean running = true;
 
-  public WorkerThread(ConnectionProvider provider, JobQueue queue) {
+  public WorkerThread(SQLConnectionProvider provider, JobQueue queue) {
     this.provider = provider;
     this.queue = queue;
   }

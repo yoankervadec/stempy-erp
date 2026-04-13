@@ -3,21 +3,21 @@ package com.lesconstructionssapete.stempyerp.facade.impl.authentication;
 import java.time.Instant;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.exception.InvalidCredentialsException;
-import com.lesconstructionssapete.stempyerp.exception.InvalidRefreshTokenException;
-import com.lesconstructionssapete.stempyerp.exception.RefreshTokenRevokedException;
-import com.lesconstructionssapete.stempyerp.exception.UserNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.exception.InvalidCredentialsException;
+import com.lesconstructionssapete.stempyerp.domain.exception.InvalidRefreshTokenException;
+import com.lesconstructionssapete.stempyerp.domain.exception.RefreshTokenRevokedException;
+import com.lesconstructionssapete.stempyerp.domain.exception.UserNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.field.user.UserField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.facade.spi.authentication.AuthFacade;
 import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
-import com.lesconstructionssapete.stempyerp.field.user.UserField;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.security.TokenProvider;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionPropagation;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionRunner;
 import com.lesconstructionssapete.stempyerp.service.spi.authentication.AuthService;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
-import com.lesconstructionssapete.stempyerp.user.User;
 
 public class AuthFacadeImpl implements AuthFacade {
 

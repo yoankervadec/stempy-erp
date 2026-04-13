@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.lesconstructionssapete.stempyerp.automation.Job;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobFactory;
 import com.lesconstructionssapete.stempyerp.automation.scheduling.Scheduler;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.repository.AutomationRepository;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.automation.AutomationRepositoryImpl;
-import com.lesconstructionssapete.stempyerp.repository.AutomationRepository;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 
 /**
  * Central manager responsible for controlling automation jobs within the
@@ -51,7 +51,7 @@ public class AutomationManager {
    * @param jobs the initial set of jobs to manage
    * @return the singleton {@code AutomationManager} instance
    */
-  public static synchronized AutomationManager create(ConnectionProvider provider, List<Job> jobs) {
+  public static synchronized AutomationManager create(SQLConnectionProvider provider, List<Job> jobs) {
     if (instance == null) {
       instance = new AutomationManager(provider, jobs);
     }
@@ -105,7 +105,7 @@ public class AutomationManager {
    *
    * @param jobs initial set of jobs to manage
    */
-  private AutomationManager(ConnectionProvider provider, List<Job> jobs) {
+  private AutomationManager(SQLConnectionProvider provider, List<Job> jobs) {
     this.jobs = jobs;
 
     this.queue = new JobQueue();

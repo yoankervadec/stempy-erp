@@ -3,9 +3,9 @@ package com.lesconstructionssapete.stempyerp.service.numbering;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.generic.GenericEntity;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 
 public class DefaultEntityNumberGeneratorRegistry
     implements EntityNumberGeneratorRegistry {

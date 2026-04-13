@@ -3,9 +3,9 @@ package com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterPolicyField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductMasterPolicyField;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMasterPolicy;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductMasterSQLField;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMasterPolicy;
 
 public class RetailProductMasterPolicyRowMapper {
 

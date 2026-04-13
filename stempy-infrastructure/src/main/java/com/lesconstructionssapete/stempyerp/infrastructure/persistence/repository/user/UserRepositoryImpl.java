@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.UserRepository;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.user.UserSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.user.UserRowMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
@@ -11,9 +14,6 @@ import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLT
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.UserRepository;
-import com.lesconstructionssapete.stempyerp.user.User;
 
 public class UserRepositoryImpl implements UserRepository {
 

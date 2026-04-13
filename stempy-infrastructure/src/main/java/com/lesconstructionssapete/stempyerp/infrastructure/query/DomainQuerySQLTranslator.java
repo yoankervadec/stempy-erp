@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.exception.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.exception.FieldNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.domain.query.FilterGroup;
+import com.lesconstructionssapete.stempyerp.domain.query.FilterNode;
+import com.lesconstructionssapete.stempyerp.domain.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.IllegalFieldException;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.query.FilterCondition;
-import com.lesconstructionssapete.stempyerp.query.FilterGroup;
-import com.lesconstructionssapete.stempyerp.query.FilterNode;
-import com.lesconstructionssapete.stempyerp.query.SortSpec;
 
 /**
  * Translates a {@link DomainQuery} into SQL using {@link SQLBuilder}.

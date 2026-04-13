@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductMasterRepository;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductMasterSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductMasterRowMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductMasterSQLMapper;
@@ -13,9 +16,6 @@ import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLT
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.retailproduct.RetailProductMasterRepository;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMaster;
 
 public class RetailProductMasterRepositoryImpl implements RetailProductMasterRepository {
 

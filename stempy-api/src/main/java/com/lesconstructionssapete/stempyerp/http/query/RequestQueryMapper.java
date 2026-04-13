@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.lesconstructionssapete.stempyerp.field.DomainFieldResolver;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldResolver;
+import com.lesconstructionssapete.stempyerp.domain.query.ComparisonOperator;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.query.FilterCondition;
+import com.lesconstructionssapete.stempyerp.domain.query.FilterGroup;
+import com.lesconstructionssapete.stempyerp.domain.query.FilterNode;
+import com.lesconstructionssapete.stempyerp.domain.query.LogicalOperator;
+import com.lesconstructionssapete.stempyerp.domain.query.PageSpec;
+import com.lesconstructionssapete.stempyerp.domain.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.http.contract.RequestQuery;
-import com.lesconstructionssapete.stempyerp.query.ComparisonOperator;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.query.FilterCondition;
-import com.lesconstructionssapete.stempyerp.query.FilterGroup;
-import com.lesconstructionssapete.stempyerp.query.FilterNode;
-import com.lesconstructionssapete.stempyerp.query.LogicalOperator;
-import com.lesconstructionssapete.stempyerp.query.PageSpec;
-import com.lesconstructionssapete.stempyerp.query.SortSpec;
 
 /**
  * Utility class for mapping HTTP request queries to domain queries.

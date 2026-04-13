@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermission;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermissionSet;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authorization.ApplicationPermissionSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authorization.ApplicationRolePermissionSetSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authorization.ApplicationRoleSQLField;
@@ -22,8 +24,6 @@ import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLT
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
 
 public class ApplicationPermissionRepositoryImpl implements ApplicationPermissionRepository {
 

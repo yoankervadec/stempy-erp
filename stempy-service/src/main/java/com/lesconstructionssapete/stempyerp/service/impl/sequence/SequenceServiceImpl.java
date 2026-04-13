@@ -3,19 +3,19 @@ package com.lesconstructionssapete.stempyerp.service.impl.sequence;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.constant.ConstantUtil;
-import com.lesconstructionssapete.stempyerp.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.constant.RedisConstantCache;
-import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
-import com.lesconstructionssapete.stempyerp.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.ConstantUtil;
+import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.domain.repository.SequenceRepository;
+import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.port.cache.ConstantCache;
 import com.lesconstructionssapete.stempyerp.service.spi.sequence.SequenceService;
 
 public class SequenceServiceImpl implements SequenceService {
 
   private final SequenceRepository repository;
-  private final RedisConstantCache constantCache;
+  private final ConstantCache constantCache;
 
-  public SequenceServiceImpl(SequenceRepository repository, RedisConstantCache constantCache) {
+  public SequenceServiceImpl(SequenceRepository repository, ConstantCache constantCache) {
     this.repository = repository;
     this.constantCache = constantCache;
   }

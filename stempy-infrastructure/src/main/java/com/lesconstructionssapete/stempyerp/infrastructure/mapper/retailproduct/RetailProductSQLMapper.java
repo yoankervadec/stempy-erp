@@ -2,10 +2,10 @@ package com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct
 
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductField;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
 
 public final class RetailProductSQLMapper {
 

@@ -3,8 +3,8 @@ package com.lesconstructionssapete.stempyerp.infrastructure.field.authentication
 import java.sql.Types;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.field.DomainField;
-import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
 
 public final class UserCredentialSQLField {

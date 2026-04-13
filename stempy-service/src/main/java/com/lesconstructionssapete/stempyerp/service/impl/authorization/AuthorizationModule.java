@@ -4,15 +4,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermission;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermissionSet;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationRole;
-import com.lesconstructionssapete.stempyerp.cache.RedisCache;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionField;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationRoleField;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionField;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationRoleField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
+import com.lesconstructionssapete.stempyerp.port.cache.CacheProvider;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 import com.lesconstructionssapete.stempyerp.service.spi.authorization.AuthorizationService;
 
 public final class AuthorizationModule {
@@ -21,9 +21,9 @@ public final class AuthorizationModule {
   }
 
   public static AuthorizationService initialize(
-      ConnectionProvider connectionProvider,
+      SQLConnectionProvider connectionProvider,
       ApplicationPermissionRepository permissionRepository,
-      RedisCache cache) {
+      CacheProvider cache) {
 
     // 1. Fetch permissions and roles from the database
     List<ApplicationPermission> applicationPermissions;

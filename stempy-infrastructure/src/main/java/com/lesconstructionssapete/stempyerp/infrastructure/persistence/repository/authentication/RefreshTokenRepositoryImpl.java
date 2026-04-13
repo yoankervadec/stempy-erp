@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authentication.RefreshTokenSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication.RefreshTokenRowMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication.RefreshTokenSQLMapper;
@@ -13,8 +15,6 @@ import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLT
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
 
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 

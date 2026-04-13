@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.bootstrap;
 
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
+import com.lesconstructionssapete.stempyerp.port.cache.ConstantCache;
 
 public class ConstantCacheInitializer {
 

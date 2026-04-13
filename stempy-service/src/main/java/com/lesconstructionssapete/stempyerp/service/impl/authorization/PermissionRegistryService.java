@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.service.impl.authorization;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
 
 class PermissionRegistryService {
 

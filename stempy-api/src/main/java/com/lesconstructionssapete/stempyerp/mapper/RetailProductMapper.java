@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.mapper;
 
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.dto.RetailProductRequest;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
 
 public class RetailProductMapper {
 

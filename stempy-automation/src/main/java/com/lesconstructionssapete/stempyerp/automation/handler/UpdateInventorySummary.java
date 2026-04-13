@@ -1,9 +1,9 @@
 package com.lesconstructionssapete.stempyerp.automation.handler;
 
-import com.lesconstructionssapete.stempyerp.automation.Job;
-import com.lesconstructionssapete.stempyerp.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.automation.definition.JobExecutable;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 
 public class UpdateInventorySummary extends Job implements JobExecutable {
 
@@ -12,7 +12,7 @@ public class UpdateInventorySummary extends Job implements JobExecutable {
   }
 
   @Override
-  public JobLog execute(ConnectionProvider provider, JobLog log) {
+  public JobLog execute(SQLConnectionProvider provider, JobLog log) {
     System.out.println("UPDATING INVENTORY SUMMARY");
     return log;
   }

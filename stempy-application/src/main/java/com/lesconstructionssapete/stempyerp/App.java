@@ -8,13 +8,13 @@ import com.lesconstructionssapete.stempyerp.bootstrap.Dependencies;
 import com.lesconstructionssapete.stempyerp.config.ExceptionConfig;
 import com.lesconstructionssapete.stempyerp.config.JsonConfig;
 import com.lesconstructionssapete.stempyerp.config.MiddlewareConfig;
-import com.lesconstructionssapete.stempyerp.constant.ConstantCache;
 import com.lesconstructionssapete.stempyerp.controller.AuthController;
 import com.lesconstructionssapete.stempyerp.controller.RetailProductController;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
+import com.lesconstructionssapete.stempyerp.port.cache.ConstantCache;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
+import com.lesconstructionssapete.stempyerp.port.security.TokenProvider;
 import com.lesconstructionssapete.stempyerp.routes.RouteRegistrar;
-import com.lesconstructionssapete.stempyerp.security.TokenProvider;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
@@ -36,7 +36,7 @@ public class App {
     Container container = deps.container();
 
     ConstantCacheInitializer.initialize(container.get(ConstantCache.class));
-    AutomationInitializer.initialize(container.get(ConnectionProvider.class));
+    AutomationInitializer.initialize(container.get(SQLConnectionProvider.class));
 
     // Setup Javalin
     Javalin app = Javalin.create(config -> {

@@ -4,17 +4,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.constant.DomainEntityType;
-import com.lesconstructionssapete.stempyerp.exception.SequenceNotFoundException;
-import com.lesconstructionssapete.stempyerp.field.sequence.SequenceField;
+import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
+import com.lesconstructionssapete.stempyerp.domain.exception.SequenceNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.field.sequence.SequenceField;
+import com.lesconstructionssapete.stempyerp.domain.repository.SequenceRepository;
+import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.SequenceUpdateException;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.sequence.SequenceSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBinder;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.repository.SequenceRepository;
-import com.lesconstructionssapete.stempyerp.sequence.LiveSequence;
 
 /*
  * Returns LiveSequence and it's next value for a given EntityType then updates it (++1).

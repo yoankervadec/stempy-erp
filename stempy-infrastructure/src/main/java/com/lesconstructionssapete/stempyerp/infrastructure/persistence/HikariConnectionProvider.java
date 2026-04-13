@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
 
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class HikariConnectionProvider implements ConnectionProvider {
+public class HikariConnectionProvider implements SQLConnectionProvider {
 
   private final HikariDataSource dataSource;
 

@@ -5,7 +5,7 @@ import java.lang.reflect.Proxy;
 
 import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
 import com.lesconstructionssapete.stempyerp.annotation.RequirePermission;
-import com.lesconstructionssapete.stempyerp.context.SecurityContext;
+import com.lesconstructionssapete.stempyerp.context.RequestContext;
 import com.lesconstructionssapete.stempyerp.service.spi.authorization.AuthorizationService;
 
 public class AuthorizationProxyFactory {
@@ -47,7 +47,7 @@ public class AuthorizationProxyFactory {
 
     // If the annotation is present, check if the user has the required permission
     if (annotation != null) {
-      Long userId = SecurityContext.getUserId(); // Get the user ID from the security context
+      Long userId = RequestContext.getUserId(); // Get the user ID from the security context
 
       String resource = annotation.resource();
       ApplicationAction action = annotation.action(); // action is an enum

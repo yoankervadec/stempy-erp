@@ -5,29 +5,29 @@ import java.sql.SQLException;
 import java.util.BitSet;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermissionSet;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationRole;
-import com.lesconstructionssapete.stempyerp.cache.RedisCache;
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionSetField;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationUserRoleField;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.auth.ApplicationPermissionRepository;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionSetField;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationUserRoleField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
+import com.lesconstructionssapete.stempyerp.port.cache.CacheProvider;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
 
 class UserPermissionService {
 
   private final RolePermissionService roleService;
   private final PermissionRegistryService registryService;
   private final ApplicationPermissionRepository applicationPermissionRepository;
-  private final ConnectionProvider connectionProvider;
-  private final RedisCache cache;
+  private final SQLConnectionProvider connectionProvider;
+  private final CacheProvider cache;
 
   UserPermissionService(
       RolePermissionService roleService,
       PermissionRegistryService registryService,
       ApplicationPermissionRepository applicationPermissionRepository,
-      ConnectionProvider connectionProvider,
-      RedisCache cache) {
+      SQLConnectionProvider connectionProvider,
+      CacheProvider cache) {
     this.roleService = roleService;
     this.registryService = registryService;
     this.applicationPermissionRepository = applicationPermissionRepository;

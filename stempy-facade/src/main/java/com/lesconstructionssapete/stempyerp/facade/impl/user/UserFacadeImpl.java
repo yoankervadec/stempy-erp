@@ -2,12 +2,12 @@ package com.lesconstructionssapete.stempyerp.facade.impl.user;
 
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.facade.spi.user.UserFacade;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionPropagation;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionRunner;
 import com.lesconstructionssapete.stempyerp.service.spi.user.UserService;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
-import com.lesconstructionssapete.stempyerp.user.User;
 
 public class UserFacadeImpl implements UserFacade {
 

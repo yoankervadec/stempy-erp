@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.automation.Job;
+import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 
 public class JobFactory {
 

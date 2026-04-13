@@ -2,8 +2,8 @@ package com.lesconstructionssapete.stempyerp.facade.spi.user;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.user.User;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 
 public interface UserFacade {
 

@@ -5,15 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import com.lesconstructionssapete.stempyerp.db.ConnectionProvider;
 import com.lesconstructionssapete.stempyerp.exception.DomainException;
 import com.lesconstructionssapete.stempyerp.exception.InternalException;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.DatabaseAccessException;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.TransactionFailureException;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionCallback;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionVoidCallback;
+import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvider;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionCallback;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionPropagation;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionRunner;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionVoidCallback;
 
 /**
  * Manages database transactions with support for different propagation
@@ -50,7 +50,7 @@ public class TransactionManager implements TransactionRunner {
     }
   }
 
-  private final ConnectionProvider provider;
+  private final SQLConnectionProvider provider;
 
   // Thread-local stack for managing nested transactions
   private static final ThreadLocal<Deque<TransactionContext>> CONTEXT_STACK = ThreadLocal.withInitial(ArrayDeque::new);
@@ -61,7 +61,7 @@ public class TransactionManager implements TransactionRunner {
    * @param provider the connection provider to use for acquiring database
    *                 connections
    */
-  public TransactionManager(ConnectionProvider provider) {
+  public TransactionManager(SQLConnectionProvider provider) {
     this.provider = provider;
   }
 

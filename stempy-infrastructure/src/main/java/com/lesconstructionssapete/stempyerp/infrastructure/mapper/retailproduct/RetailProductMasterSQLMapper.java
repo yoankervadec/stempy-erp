@@ -1,9 +1,9 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct;
 
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductMasterField;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductMasterSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMaster;
 
 public final class RetailProductMasterSQLMapper {
 

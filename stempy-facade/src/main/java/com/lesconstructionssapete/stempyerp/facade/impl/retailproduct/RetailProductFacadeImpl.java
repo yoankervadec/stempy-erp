@@ -3,20 +3,20 @@ package com.lesconstructionssapete.stempyerp.facade.impl.retailproduct;
 import java.time.Instant;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.exception.UniqueConstraintException;
+import com.lesconstructionssapete.stempyerp.domain.exception.UniqueConstraintException;
+import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
+import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.facade.spi.retailproduct.RetailProductFacade;
-import com.lesconstructionssapete.stempyerp.field.retailproduct.RetailProductField;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMaster;
-import com.lesconstructionssapete.stempyerp.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionPropagation;
+import com.lesconstructionssapete.stempyerp.port.transaction.TransactionRunner;
 import com.lesconstructionssapete.stempyerp.service.numbering.EntityNumberGenerator;
 import com.lesconstructionssapete.stempyerp.service.numbering.EntityNumberGeneratorRegistry;
 import com.lesconstructionssapete.stempyerp.service.spi.retailproduct.RetailProductService;
 import com.lesconstructionssapete.stempyerp.service.spi.sequence.SequenceService;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionPropagation;
-import com.lesconstructionssapete.stempyerp.transaction.TransactionRunner;
-import com.lesconstructionssapete.stempyerp.user.User;
 
 public class RetailProductFacadeImpl
     implements RetailProductFacade {

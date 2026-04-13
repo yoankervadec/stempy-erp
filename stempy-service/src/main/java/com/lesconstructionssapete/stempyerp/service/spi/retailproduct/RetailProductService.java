@@ -3,9 +3,9 @@ package com.lesconstructionssapete.stempyerp.service.spi.retailproduct;
 import java.sql.Connection;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProductMaster;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 
 public interface RetailProductService {
 

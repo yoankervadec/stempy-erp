@@ -1,7 +1,7 @@
 package com.lesconstructionssapete.stempyerp.service.numbering;
 
-import com.lesconstructionssapete.stempyerp.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.sequence.LiveSequence;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 
 public final class RetailProductNumberGenerator
     implements EntityNumberGenerator<RetailProduct> {

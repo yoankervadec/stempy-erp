@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
-import com.lesconstructionssapete.stempyerp.auth.ApplicationPermission;
-import com.lesconstructionssapete.stempyerp.field.auth.ApplicationPermissionField;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionField;
 import com.lesconstructionssapete.stempyerp.infrastructure.field.authorization.ApplicationPermissionSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.SQLInstantMapper;
 

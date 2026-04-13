@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.time.Instant;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.field.auth.RefreshTokenField;
-import com.lesconstructionssapete.stempyerp.field.auth.UserCredentialField;
-import com.lesconstructionssapete.stempyerp.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.repository.RefreshTokenRepository;
-import com.lesconstructionssapete.stempyerp.repository.auth.UserCredentialRepository;
-import com.lesconstructionssapete.stempyerp.security.PasswordHashProvider;
+import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.RefreshTokenField;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.UserCredentialField;
+import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
+import com.lesconstructionssapete.stempyerp.domain.repository.RefreshTokenRepository;
+import com.lesconstructionssapete.stempyerp.domain.repository.auth.UserCredentialRepository;
+import com.lesconstructionssapete.stempyerp.port.security.PasswordHashProvider;
 import com.lesconstructionssapete.stempyerp.service.spi.authentication.AuthService;
 
 public class AuthServiceImpl implements AuthService {

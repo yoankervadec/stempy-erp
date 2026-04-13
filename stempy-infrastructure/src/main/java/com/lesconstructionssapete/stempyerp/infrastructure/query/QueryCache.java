@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import com.lesconstructionssapete.stempyerp.exception.QueryLoadException;
+import com.lesconstructionssapete.stempyerp.domain.exception.QueryLoadException;
 
 /**
  * Reads the .sql file from "resources/" (defined in Query enum) then returns
