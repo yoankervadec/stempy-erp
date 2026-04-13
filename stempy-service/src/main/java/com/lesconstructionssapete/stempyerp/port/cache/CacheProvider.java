@@ -15,14 +15,14 @@ public interface CacheProvider {
 
   void delByPattern(String pattern);
 
-  String get(String key);
+  String getRaw(String key);
 
-  void set(String key, String value);
+  void setRaw(String key, String value);
 
   void setex(String key, long seconds, String value);
 
-  <T> T get(String key, Class<T> clazz);
+  <T> T getObject(String key, Class<T> clazz);
 
-  <T> void set(String key, T value);
+  <T> void setObject(String key, T value);
 
 }

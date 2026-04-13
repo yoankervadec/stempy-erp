@@ -66,12 +66,12 @@ public class LettuceRedisCache implements CacheProvider {
   }
 
   @Override
-  public String get(String key) {
+  public String getRaw(String key) {
     return commands.get(key);
   }
 
   @Override
-  public void set(String key, String value) {
+  public void setRaw(String key, String value) {
     commands.set(key, value);
   }
 
@@ -81,7 +81,7 @@ public class LettuceRedisCache implements CacheProvider {
   }
 
   @Override
-  public <T> T get(String key, Class<T> clazz) {
+  public <T> T getObject(String key, Class<T> clazz) {
     String json = commands.get(key);
     if (json == null) {
       return null;
@@ -95,7 +95,7 @@ public class LettuceRedisCache implements CacheProvider {
   }
 
   @Override
-  public <T> void set(String key, T value) {
+  public <T> void setObject(String key, T value) {
     try {
       String json = MAPPER.writeValueAsString(value);
       commands.set(key, json);

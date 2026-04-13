@@ -22,7 +22,4 @@ class RolePermissions {
     return deny;
   }
 
-  long getRoleId() {
-    return roleId;
-  }
 }

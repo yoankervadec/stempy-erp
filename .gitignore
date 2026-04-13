@@ -16,6 +16,7 @@ bin/
 .mvn/
 build/
 !gradle-wrapper.jar
+effective-pom.xml
 
 # OS
 .DS_Store

@@ -168,7 +168,8 @@ public class Dependencies {
     // Retail Product
     container.instance(
         RetailProductService.class,
-        serviceFactory.secured(RetailProductService.class, RetailProductServiceImpl.class));
+        serviceFactory.secured(RetailProductService.class,
+            RetailProductServiceImpl.class));
 
     // Auth / User
     container.bind(AuthService.class, AuthServiceImpl.class);

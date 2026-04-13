@@ -48,7 +48,7 @@ class UserPermissionService {
   UserPermissions getUserPermissions(long userId) {
 
     // 1. Try cache
-    UserPermissions cached = cache.get("user_permissions:" + userId, UserPermissions.class);
+    UserPermissions cached = cache.getObject("user_permissions:" + userId, UserPermissions.class);
     if (cached != null) {
       return cached;
     }
@@ -110,7 +110,7 @@ class UserPermissionService {
 
     // 4. Cache
     UserPermissions result = new UserPermissions(allow, deny);
-    cache.set("user_permissions:" + userId, result);
+    cache.setObject("user_permissions:" + userId, result);
 
     return result;
   }

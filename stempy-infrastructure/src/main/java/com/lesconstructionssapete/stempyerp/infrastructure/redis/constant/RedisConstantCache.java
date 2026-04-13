@@ -48,7 +48,7 @@ public class RedisConstantCache implements ConstantCache {
       Supplier<List<T>> loader) {
 
     try {
-      String cached = redis.get(key);
+      String cached = redis.getRaw(key);
       if (cached != null && !cached.isBlank()) {
         return MAPPER.readValue(cached, type);
       }

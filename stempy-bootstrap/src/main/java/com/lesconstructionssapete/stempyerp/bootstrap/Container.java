@@ -53,7 +53,7 @@ public class Container {
     } catch (
         IllegalAccessException | IllegalArgumentException | InstantiationException | SecurityException
         | InvocationTargetException e) {
-      throw new RuntimeException("Failed to create " + type.getName(), e);
+      throw new RuntimeException("Failed to create " + type.getName() + " for " + implementation.getName(), e);
     }
   }
 
