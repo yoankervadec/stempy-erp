@@ -1,10 +1,13 @@
 package com.lesconstructionssapete.stempyerp.service.impl.authorization;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
-import com.lesconstructionssapete.stempyerp.annotation.RequirePermission;
+import com.lesconstructionssapete.stempyerp.annotation.AppAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppResource;
+import com.lesconstructionssapete.stempyerp.annotation.Permission;
+import com.lesconstructionssapete.stempyerp.annotation.RequirePermissions;
 import com.lesconstructionssapete.stempyerp.context.RequestContext;
 import com.lesconstructionssapete.stempyerp.domain.exception.PermissionDeniedException;
 import com.lesconstructionssapete.stempyerp.service.spi.authorization.AuthorizationService;
@@ -39,19 +42,19 @@ public class AuthorizationProxyFactory {
     return (T) Proxy.newProxyInstance(
         iface.getClassLoader(),
         new Class<?>[] { iface },
-        (proxy, methods, args) -> {
+        (proxy, method, args) -> {
 
-          RequirePermission annotation = resolvePermission(target, methods);
+          Permission[] permissions = resolvePermissions(target, method);
 
-          if (annotation != null) {
-            checkPermissions(annotation);
+          if (permissions != null) {
+            checkPermissions(permissions);
           }
 
-          return methods.invoke(target, args);
+          return method.invoke(target, args);
         });
   }
 
-  private RequirePermission resolvePermission(Object target, Method method) {
+  private Permission[] resolvePermissions(Object target, Method method) {
 
     Class<?> targetClass = target.getClass();
 
@@ -61,38 +64,58 @@ public class AuthorizationProxyFactory {
           method.getName(),
           method.getParameterTypes());
 
-      RequirePermission annotation = implMethod.getAnnotation(RequirePermission.class);
-      if (annotation != null) {
-        return annotation;
+      Permission[] permissions = extractPermissions(implMethod);
+      if (permissions != null) {
+        return permissions;
       }
     } catch (NoSuchMethodException | SecurityException e) {
       // Method not found in the implementation class, continue to check the interface
     }
 
     // 2. Interface method
-    RequirePermission annotation = method.getAnnotation(RequirePermission.class);
-    if (annotation != null) {
-      return annotation;
+    Permission[] permissions = extractPermissions(method);
+    if (permissions != null) {
+      return permissions;
     }
 
     // 3. Class level annotation
-    annotation = targetClass.getAnnotation(RequirePermission.class);
-    if (annotation != null) {
-      return annotation;
+    permissions = extractPermissions(targetClass);
+    if (permissions != null) {
+      return permissions;
     }
 
     return null;
   }
 
-  private void checkPermissions(RequirePermission annotation) {
+  private Permission[] extractPermissions(AnnotatedElement element) {
+
+    // Multiple permissions
+    RequirePermissions multiple = element.getAnnotation(RequirePermissions.class);
+    if (multiple != null) {
+      return multiple.value();
+    }
+
+    // Single permission
+    Permission single = element.getAnnotation(Permission.class);
+    if (single != null) {
+      return new Permission[] { single };
+    }
+
+    return null;
+  }
+
+  private void checkPermissions(Permission[] annotation) {
 
     Long userId = RequestContext.getUserId(); // Get the user ID from the security context
 
-    String resource = annotation.resource();
-    ApplicationAction action = annotation.action(); // action is an enum
+    for (Permission permission : annotation) {
+      AppResource resource = permission.resource();
+      AppAction action = permission.action();
 
-    if (!authorizationService.has(userId, resource, action)) {
-      throw new PermissionDeniedException(resource, action);
+      // TODO: Add check and logic for "allRequired" flag
+      if (!authorizationService.has(userId, resource, action)) {
+        throw new PermissionDeniedException(resource, action);
+      }
     }
   }
 

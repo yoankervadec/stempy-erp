@@ -16,6 +16,8 @@ import com.lesconstructionssapete.stempyerp.port.persistence.SQLConnectionProvid
 
 class UserPermissionService {
 
+  private static final String CACHE_KEY_PREFIX = "user_permissions:";
+
   private final RolePermissionService roleService;
   private final PermissionRegistryService registryService;
   private final ApplicationPermissionRepository applicationPermissionRepository;
@@ -48,7 +50,8 @@ class UserPermissionService {
   UserPermissions getUserPermissions(long userId) {
 
     // 1. Try cache
-    UserPermissions cached = cache.getObject("user_permissions:" + userId, UserPermissions.class);
+    UserPermissions cached = UserPermissions.UserPermissionsMapper
+        .fromCache(cache.getObject(CACHE_KEY_PREFIX + userId, UserPermissions.UserPermissionsCache.class));
     if (cached != null) {
       return cached;
     }
@@ -110,7 +113,7 @@ class UserPermissionService {
 
     // 4. Cache
     UserPermissions result = new UserPermissions(allow, deny);
-    cache.setObject("user_permissions:" + userId, result);
+    cache.setObject(CACHE_KEY_PREFIX + userId, UserPermissions.UserPermissionsMapper.toCache(result));
 
     return result;
   }

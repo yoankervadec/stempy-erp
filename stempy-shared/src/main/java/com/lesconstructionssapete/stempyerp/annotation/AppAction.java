@@ -1,6 +1,6 @@
 package com.lesconstructionssapete.stempyerp.annotation;
 
-public enum ApplicationAction {
+public enum AppAction {
   CREATE,
   READ,
   UPDATE,

@@ -1,6 +1,7 @@
 package com.lesconstructionssapete.stempyerp.service.impl.authorization;
 
-import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppResource;
 import com.lesconstructionssapete.stempyerp.service.spi.authorization.AuthorizationService;
 
 class AuthorizationServiceImpl implements AuthorizationService {
@@ -16,7 +17,7 @@ class AuthorizationServiceImpl implements AuthorizationService {
   }
 
   @Override
-  public boolean has(long userId, String resource, ApplicationAction action) {
+  public boolean has(long userId, AppResource resource, AppAction action) {
 
     UserPermissions permissions = permissionService.getUserPermissions(userId);
 

@@ -3,14 +3,14 @@ package com.lesconstructionssapete.stempyerp.service.impl.authorization;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppAction;
 
 class PermissionRegistry {
 
   private final Map<Long, Integer> permissionIdToIndex = new HashMap<>(); // permissionId -> index
   private final Map<String, Integer> keyToIndex = new HashMap<>(); // "resource:action" -> index
 
-  void register(long permissionId, String resource, ApplicationAction action, int index) {
+  void register(long permissionId, String resource, AppAction action, int index) {
     permissionIdToIndex.put(permissionId, index);
 
     String key = resource + ":" + action.name().toLowerCase();

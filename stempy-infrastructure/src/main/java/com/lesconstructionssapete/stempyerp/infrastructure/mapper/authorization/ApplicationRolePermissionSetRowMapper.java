@@ -3,7 +3,7 @@ package com.lesconstructionssapete.stempyerp.infrastructure.mapper.authorization
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppAction;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionField;
 import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionSetField;
@@ -23,7 +23,7 @@ public final class ApplicationRolePermissionSetRowMapper {
 
         rs.getString(ApplicationPermissionSQLField.get(ApplicationPermissionField.RESOURCE).columnName()),
 
-        ApplicationAction
+        AppAction
             .valueOf(rs.getString(ApplicationPermissionSQLField.get(ApplicationPermissionField.ACTION).columnName())
                 .toUpperCase()),
 

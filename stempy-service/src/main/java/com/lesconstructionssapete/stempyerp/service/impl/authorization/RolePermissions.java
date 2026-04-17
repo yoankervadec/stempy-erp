@@ -22,4 +22,8 @@ class RolePermissions {
     return deny;
   }
 
+  public long getRoleId() {
+    return roleId;
+  }
+
 }

@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.domain.auth;
 
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppAction;
 
 public class ApplicationPermissionSet extends ApplicationPermission {
   private final long referenceId; // ID of the referenced entity (e.g., Role, User)
@@ -11,7 +11,7 @@ public class ApplicationPermissionSet extends ApplicationPermission {
   public ApplicationPermissionSet(
       long id,
       String resource,
-      ApplicationAction action,
+      AppAction action,
       boolean enabled,
       Instant createdAt,
       long referenceId,

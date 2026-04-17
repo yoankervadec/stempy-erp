@@ -2,19 +2,19 @@ package com.lesconstructionssapete.stempyerp.domain.auth;
 
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.annotation.ApplicationAction;
+import com.lesconstructionssapete.stempyerp.annotation.AppAction;
 
 public class ApplicationPermission {
   private final long id;
   private final String resource; // e.g., "USER", "ORDER", "INVENTORY"
-  private final ApplicationAction action; // e.g., "CREATE", "READ", "UPDATE", "DELETE"
+  private final AppAction action; // e.g., "CREATE", "READ", "UPDATE", "DELETE"
   private final boolean enabled;
   private final Instant createdAt;
 
   public ApplicationPermission(
       long id,
       String resource,
-      ApplicationAction action,
+      AppAction action,
       boolean enabled,
       Instant createdAt) {
     this.id = id;
@@ -36,7 +36,7 @@ public class ApplicationPermission {
     return resource;
   }
 
-  public ApplicationAction getAction() {
+  public AppAction getAction() {
     return action;
   }
 
