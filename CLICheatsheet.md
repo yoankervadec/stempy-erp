@@ -120,3 +120,11 @@ mvn help:effective-pom
 # shove it in a file:
 mvn help:effective-pom > effective-pom.xml
 ```
+
+## General
+
+**Check who's hogging the fjkhsds port**
+
+```sh
+lsof -i :7070
+```
