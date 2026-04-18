@@ -20,6 +20,18 @@ public class AuthorizationProxyFactory {
     this.authorizationService = authorizationService;
   }
 
+  // Helper class to hold the required permissions and whether all of them are
+  // required or just one
+  final class RequiredPermissions {
+    final Permission[] permissions;
+    final boolean allRequired;
+
+    public RequiredPermissions(Permission[] permissions, boolean allRequired) {
+      this.permissions = permissions;
+      this.allRequired = allRequired;
+    }
+  }
+
   /**
    * Creates a proxy instance of the given target object that implements the
    * specified interface. The proxy will intercept method calls and check for
@@ -44,17 +56,17 @@ public class AuthorizationProxyFactory {
         new Class<?>[] { iface },
         (proxy, method, args) -> {
 
-          Permission[] permissions = resolvePermissions(target, method);
+          RequiredPermissions required = resolvePermissions(target, method);
 
-          if (permissions != null) {
-            checkPermissions(permissions);
+          if (required != null) {
+            checkPermissions(required);
           }
 
           return method.invoke(target, args);
         });
   }
 
-  private Permission[] resolvePermissions(Object target, Method method) {
+  private RequiredPermissions resolvePermissions(Object target, Method method) {
 
     Class<?> targetClass = target.getClass();
 
@@ -64,59 +76,76 @@ public class AuthorizationProxyFactory {
           method.getName(),
           method.getParameterTypes());
 
-      Permission[] permissions = extractPermissions(implMethod);
-      if (permissions != null) {
-        return permissions;
+      RequiredPermissions required = extractPermissions(implMethod);
+      if (required != null) {
+        return required;
       }
     } catch (NoSuchMethodException | SecurityException e) {
       // Method not found in the implementation class, continue to check the interface
     }
 
     // 2. Interface method
-    Permission[] permissions = extractPermissions(method);
-    if (permissions != null) {
-      return permissions;
+    RequiredPermissions required = extractPermissions(method);
+    if (required != null) {
+      return required;
     }
 
     // 3. Class level annotation
-    permissions = extractPermissions(targetClass);
-    if (permissions != null) {
-      return permissions;
+    required = extractPermissions(targetClass);
+    if (required != null) {
+      return required;
     }
 
     return null;
   }
 
-  private Permission[] extractPermissions(AnnotatedElement element) {
+  private RequiredPermissions extractPermissions(AnnotatedElement element) {
 
     // Multiple permissions
     RequirePermissions multiple = element.getAnnotation(RequirePermissions.class);
     if (multiple != null) {
-      return multiple.value();
+      return new RequiredPermissions(multiple.value(), multiple.allRequired());
     }
 
     // Single permission
     Permission single = element.getAnnotation(Permission.class);
     if (single != null) {
-      return new Permission[] { single };
+      return new RequiredPermissions(new Permission[] { single }, true);
     }
 
     return null;
   }
 
-  private void checkPermissions(Permission[] annotation) {
+  private void checkPermissions(RequiredPermissions required) {
 
-    Long userId = RequestContext.getUserId(); // Get the user ID from the security context
+    Long userId = RequestContext.getUserId(); // Get the user ID from the request context
 
-    for (Permission permission : annotation) {
+    Permission[] permissions = required.permissions;
+    boolean allRequired = required.allRequired;
+
+    if (allRequired) {
+      for (Permission permission : permissions) {
+        AppResource resource = permission.resource();
+        AppAction action = permission.action();
+
+        if (!authorizationService.has(userId, resource, action)) {
+          throw new PermissionDeniedException(resource, action);
+        }
+      }
+
+      return; // User has all required permissions, allow access
+    }
+
+    for (Permission permission : permissions) {
       AppResource resource = permission.resource();
       AppAction action = permission.action();
 
-      // TODO: Add check and logic for "allRequired" flag
-      if (!authorizationService.has(userId, resource, action)) {
-        throw new PermissionDeniedException(resource, action);
+      if (authorizationService.has(userId, resource, action)) {
+        return; // User has at least one of the required permissions, allow access
       }
     }
+
+    throw new PermissionDeniedException(permissions[0].resource(), permissions[0].action());
   }
 
 }
