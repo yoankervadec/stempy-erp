@@ -24,3 +24,6 @@ Thumbs.db
 
 # Database / env / sensitive files
 *.env
+
+# Logs
+logs/
