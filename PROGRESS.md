@@ -40,6 +40,6 @@
 - [ ] Standardize error handling across repositories and services
 - [ ] Define error codes strategy (domain vs infrastructure)
 - [ ] Define service patterns more strictly (facade vs service split)
-- [ ] Implement authorization with RBAC/ABAC permissions (use annotations?)
+- [x] Implement authorization with RBAC/ABAC permissions
 - [ ] Review middleware chain
 - [x] Test
