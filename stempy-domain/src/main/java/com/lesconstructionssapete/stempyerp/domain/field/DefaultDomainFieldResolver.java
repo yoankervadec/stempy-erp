@@ -78,6 +78,11 @@ public class DefaultDomainFieldResolver implements DomainFieldResolver {
    */
   @Override
   public DomainField resolve(String fieldName) {
+
+    if (fieldName == null || fieldName.trim().isEmpty()) {
+      throw new FieldNotFoundException("The field name cannot be null or empty.");
+    }
+
     DomainField field = fields.get(fieldName);
 
     if (field == null) {
