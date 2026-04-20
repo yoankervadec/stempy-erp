@@ -97,9 +97,10 @@ public class SQLBuilderTest {
 
     builder.build();
 
-    Assertions.assertThrows(
+    var exception = Assertions.assertThrows(
         IllegalStateException.class,
         builder::getParams);
+    Assertions.assertNotNull(exception);
   }
 
   @Test
@@ -162,9 +163,10 @@ public class SQLBuilderTest {
     builder.clearParams();
     builder.build();
 
-    Assertions.assertThrows(
+    var exception = Assertions.assertThrows(
         IllegalStateException.class,
         builder::getParams);
+    Assertions.assertNotNull(exception);
   }
 
   @Test
