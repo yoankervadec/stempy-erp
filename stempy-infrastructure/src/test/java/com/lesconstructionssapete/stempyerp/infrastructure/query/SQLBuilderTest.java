@@ -177,4 +177,67 @@ public class SQLBuilderTest {
     Assertions.assertEquals(Types.NULL, new SQLBuilder.SQLParam("a", null).sqlType());
   }
 
+  @Test
+  void shouldRequireWhereClauseForUpdate() {
+    SQLBuilder builder = new SQLBuilder("""
+        UPDATE users SET active = false
+        """);
+
+    var exception = Assertions.assertThrows(
+        IllegalStateException.class,
+        builder::build);
+    Assertions.assertNotNull(exception);
+  }
+
+  @Test
+  void shouldRequireWhereClauseForUpdateWithComment() {
+    SQLBuilder builder = new SQLBuilder("""
+        -- will this comment break it?
+        UPDATE users SET active = false
+        """);
+
+    var exception = Assertions.assertThrows(
+        IllegalStateException.class,
+        builder::build);
+    Assertions.assertNotNull(exception);
+  }
+
+  @Test
+  void shouldRequireWhereClauseForUpdateWithMultipleComments() {
+    SQLBuilder builder = new SQLBuilder("""
+        -- will this comment break it?
+
+        -- what about multiple comments?
+        UPDATE users SET active = false
+        """);
+
+    var exception = Assertions.assertThrows(
+        IllegalStateException.class,
+        builder::build);
+    Assertions.assertNotNull(exception);
+  }
+
+  @Test
+  void shouldRequireWhereClauseForUpdateWithCommentAndLineBreaks() {
+    SQLBuilder builder = new SQLBuilder("""
+
+        -- will this comment with extra line breaks break it?
+
+        UPDATE users SET active = false
+        """);
+
+    var exception = Assertions.assertThrows(
+        IllegalStateException.class,
+        builder::build);
+    Assertions.assertNotNull(exception);
+  }
+
+  @Test
+  void shouldNotRequireWhereClauseForSelect() {
+    SQLBuilder builder = new SQLBuilder("""
+        SELECT * FROM users
+        """);
+
+    Assertions.assertDoesNotThrow(builder::build);
+  }
 }

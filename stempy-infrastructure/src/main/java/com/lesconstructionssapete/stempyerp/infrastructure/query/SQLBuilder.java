@@ -69,9 +69,21 @@ public class SQLBuilder {
 
   // Named param support (expects ":Resource.logicalName" format)
   private static final Pattern NAMED_PARAM_PATTERN = Pattern.compile(":(\\w+(?:\\.\\w+)*)");
+  // Pattern to identify leading comments
+  private static final Pattern LEADING_COMMENTS = Pattern.compile(
+      "^(?:\\s*(?:--.*?(\\r?\\n|$)|/\\*.*?\\*/))*",
+      Pattern.DOTALL);
+  // Pattern to extract the first SQL keyword (e.g. SELECT, UPDATE) after comments
+  private static final Pattern FIRST_KEYWORD = Pattern.compile("^(\\w+)", Pattern.CASE_INSENSITIVE);
+
+  // If true, requires at least one WHERE clause to prevent accidental full-table
+  // updates.
+  private final boolean requireWhereClause;
+  private final String[] requireWhereForKeywords = { "UPDATE", "DELETE" };
 
   public SQLBuilder(String base) {
     this.base = base.trim();
+    this.requireWhereClause = detectRequireWhereClause(this.base);
   }
 
   /**
@@ -193,6 +205,11 @@ public class SQLBuilder {
 
     String sql = base;
 
+    if (requireWhereClause && whereClauses.isEmpty()) {
+      throw new IllegalStateException(
+          "UPDATE queries must have at least one WHERE clause to prevent accidental full-table updates.");
+    }
+
     if (!joinClauses.isEmpty()) {
       sql = StringUtil.replaceOrAppend(sql, "/*JOIN*/", String.join(" ", joinClauses));
     }
@@ -308,4 +325,31 @@ public class SQLBuilder {
     return sb.toString();
   }
 
+  private boolean detectRequireWhereClause(String sql) {
+
+    String trimmed = sql.trim();
+
+    // Remove leading comments
+    Matcher commentMatcher = LEADING_COMMENTS.matcher(trimmed);
+
+    // Trim the SQL to start after the leading comments
+    if (commentMatcher.find()) {
+      trimmed = trimmed.substring(commentMatcher.end()).trim();
+    }
+
+    Matcher keywordMatcher = FIRST_KEYWORD.matcher(trimmed);
+    if (!keywordMatcher.find()) {
+      return false; // No SQL keyword found, default to not requiring WHERE
+    }
+
+    String keyword = keywordMatcher.group(1);
+
+    for (String kw : requireWhereForKeywords) {
+      if (kw.equalsIgnoreCase(keyword)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
