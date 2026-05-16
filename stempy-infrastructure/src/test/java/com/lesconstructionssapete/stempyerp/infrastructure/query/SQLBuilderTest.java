@@ -18,17 +18,6 @@ public class SQLBuilderTest {
         /*ORDERBY*/
       """;
 
-  static String selectSQLWithWhere = """
-        SELECT
-          table.id,
-          table.name,
-          table.created_at
-        FROM table
-        WHERE table.name = :name
-        /*WHERE*/
-        /*ORDERBY*/
-      """;
-
   @Test
   void shouldBuildSimpleWhereClause() {
     SQLBuilder builder = new SQLBuilder(selectSQL);
