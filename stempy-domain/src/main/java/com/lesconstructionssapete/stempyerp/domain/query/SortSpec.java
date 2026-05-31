@@ -1,9 +1,9 @@
 package com.lesconstructionssapete.stempyerp.domain.query;
 
-import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
 
 public record SortSpec(
-    DomainField field,
+    DomainFieldProvider field,
     boolean ascending) {
 
 }

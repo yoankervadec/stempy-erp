@@ -19,7 +19,7 @@ public class DefaultDomainFieldResolverTest {
 
   @Test
   void registeredFieldIsResolved() {
-    DomainField field = resolver.resolve("RetailProduct.id");
+    DomainFieldProvider field = resolver.resolve("RetailProduct.id");
     Assertions.assertEquals(RetailProductField.ID, field);
   }
 

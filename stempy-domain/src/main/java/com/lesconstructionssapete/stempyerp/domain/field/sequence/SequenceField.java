@@ -1,24 +1,31 @@
 package com.lesconstructionssapete.stempyerp.domain.field.sequence;
 
 import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
 
-public enum SequenceField implements DomainField {
+public enum SequenceField implements DomainFieldProvider {
 
-  DOMAIN_ENTITY_ID("domainEntityId"),
-  NEXT("next"),
-  ENABLED("enabled"),
-  CREATED_AT("createdAt");
+  DOMAIN_ENTITY_ID(new DomainField("Sequence", "domainEntityId", Long.class, false, true, true, "domain_entity_id",
+      "core_domain_entity_sequence",
+      java.sql.Types.BIGINT)),
+  NEXT(new DomainField("Sequence", "next", Long.class, false, false, false, "next", "core_domain_entity_sequence",
+      java.sql.Types.BIGINT)),
+  ENABLED(new DomainField("Sequence", "enabled", Boolean.class, false, false, false, "enabled",
+      "core_domain_entity_sequence",
+      java.sql.Types.BOOLEAN)),
+  CREATED_AT(new DomainField("Sequence", "createdAt", java.sql.Timestamp.class, false, false, false, "created_at",
+      "core_domain_entity_sequence",
+      java.sql.Types.TIMESTAMP));
 
-  private static final String PREFIX = "Sequence.";
-  private final String logicalName;
+  private final DomainField attribute;
 
-  SequenceField(String logicalName) {
-    this.logicalName = logicalName;
+  SequenceField(DomainField attribute) {
+    this.attribute = attribute;
   }
 
   @Override
-  public String logicalName() {
-    return PREFIX + logicalName;
+  public DomainField attribute() {
+    return attribute;
   }
 
 }

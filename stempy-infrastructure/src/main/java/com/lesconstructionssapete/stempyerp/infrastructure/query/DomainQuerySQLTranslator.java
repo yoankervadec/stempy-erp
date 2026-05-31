@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.exception.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterGroup;
@@ -23,9 +23,9 @@ import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
  */
 public final class DomainQuerySQLTranslator {
 
-  private final Map<DomainField, SQLField> fieldMap;
+  private final Map<DomainFieldProvider, SQLField> fieldMap;
 
-  public DomainQuerySQLTranslator(Map<DomainField, SQLField> fieldMap) {
+  public DomainQuerySQLTranslator(Map<DomainFieldProvider, SQLField> fieldMap) {
     this.fieldMap = fieldMap;
   }
 
