@@ -8,9 +8,7 @@ import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailPro
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductRepository;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductSQLField;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductRowMapper;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductSQLMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -27,7 +25,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductSQLField.all());
+    DomainQuerySQLTranslator<RetailProductField> translator = new DomainQuerySQLTranslator<>(RetailProductField.class);
 
     translator.apply(builder, query);
 
@@ -37,8 +35,13 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         builder.getParams(),
         rs -> {
           List<RetailProduct> list = new ArrayList<>();
+          ResultSetMapper<RetailProduct> rsMapper = new ResultSetMapper<>(RetailProduct.class);
           while (rs.next()) {
-            list.add(RetailProductRowMapper.map(rs));
+            try {
+              list.add(rsMapper.mapRow(rs));
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
           return list;
         });

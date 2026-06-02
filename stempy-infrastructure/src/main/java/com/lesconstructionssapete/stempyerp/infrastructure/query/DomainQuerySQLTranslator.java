@@ -2,9 +2,9 @@ package com.lesconstructionssapete.stempyerp.infrastructure.query;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.exception.FieldNotFoundException;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
 import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterCondition;
@@ -12,7 +12,6 @@ import com.lesconstructionssapete.stempyerp.domain.query.FilterGroup;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterNode;
 import com.lesconstructionssapete.stempyerp.domain.query.SortSpec;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.IllegalFieldException;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
 
 /**
  * Translates a {@link DomainQuery} into SQL using {@link SQLBuilder}.
@@ -21,12 +20,12 @@ import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
  * - Applies sorting and pagination
  * - Throws {@link FieldNotFoundException} for invalid fields
  */
-public final class DomainQuerySQLTranslator {
+public final class DomainQuerySQLTranslator<E extends Enum<E> & DomainFieldProvider> {
 
-  private final Map<DomainFieldProvider, SQLField> fieldMap;
+  private final Class<E> fieldProviders;
 
-  public DomainQuerySQLTranslator(Map<DomainFieldProvider, SQLField> fieldMap) {
-    this.fieldMap = fieldMap;
+  public DomainQuerySQLTranslator(Class<E> fieldProviders) {
+    this.fieldProviders = fieldProviders;
   }
 
   record ConditionFragment(String sql) {
@@ -110,7 +109,9 @@ public final class DomainQuerySQLTranslator {
 
   private ConditionFragment buildCondition(SQLBuilder builder, FilterCondition c) {
 
-    SQLField field = fieldMap.get(c.field());
+    // TODO: check if field is in field map, throw exception if not
+
+    DomainField field = c.field().attribute();
 
     if (field == null) {
       throw new IllegalFieldException(
@@ -124,43 +125,43 @@ public final class DomainQuerySQLTranslator {
 
       case EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, field.sqlType);
         yield new ConditionFragment(column + " = :" + p);
       }
 
       case NOT_EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, field.sqlType);
         yield new ConditionFragment(column + " <> :" + p);
       }
 
       case GREATER_THAN -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, field.sqlType);
         yield new ConditionFragment(column + " > :" + p);
       }
 
       case LESS_THAN -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, field.sqlType);
         yield new ConditionFragment(column + " < :" + p);
       }
 
       case GREATER_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, field.sqlType);
         yield new ConditionFragment(column + " >= :" + p);
       }
 
       case LESS_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, field.sqlType);
         yield new ConditionFragment(column + " <= :" + p);
       }
 
       case LIKE -> {
         String p = nextParam();
-        builder.bind(p, "%" + value + "%", field.sqlType());
+        builder.bind(p, "%" + value + "%", field.sqlType);
         yield new ConditionFragment(column + " LIKE :" + p);
       }
 
@@ -180,7 +181,7 @@ public final class DomainQuerySQLTranslator {
 
           String p = nextParam();
 
-          builder.bind(p, v, field.sqlType());
+          builder.bind(p, v, field.sqlType);
 
           placeholders.add(":" + p);
         }
@@ -211,7 +212,7 @@ public final class DomainQuerySQLTranslator {
 
     for (SortSpec sort : query.sortSpec()) {
 
-      SQLField field = fieldMap.get(sort.field());
+      DomainField field = sort.field().attribute();
       if (field == null) {
         throw new IllegalFieldException(
             "Illegal sort field: " + sort.field() + " (" + sort.field().attribute().qualifiedLogicalName() + ")");
