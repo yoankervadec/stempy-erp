@@ -1,12 +1,14 @@
-package com.lesconstructionssapete.stempyerp.annotation;
+package com.lesconstructionssapete.stempyerp.domain.field;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.TYPE })
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FieldSet {
-  Class<? extends Enum<?>> value();
+public @interface MappedField {
+  Class<? extends DomainFieldProvider> provider();
+
+  String field();
 }

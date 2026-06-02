@@ -95,9 +95,9 @@ public class SQLBuilder {
    */
   public SQLBuilder bind(SQLField field, Object value) {
     params.put(
-        field.domainField().logicalName(),
+        field.domainField().attribute().qualifiedLogicalName(),
         new SQLParam(
-            field.domainField().logicalName(),
+            field.domainField().attribute().qualifiedLogicalName(),
             value,
             field.sqlType()));
 
