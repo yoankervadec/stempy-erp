@@ -8,9 +8,7 @@ import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailPro
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductMasterRepository;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.retailproduct.RetailProductMasterSQLField;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductMasterRowMapper;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductMasterSQLMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -25,7 +23,8 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
     String sql = QueryCache.get(Query.SELECT_DOM_RETAIL_PRODUCT_MASTER);
 
     SQLBuilder builder = new SQLBuilder(sql);
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RetailProductMasterSQLField.all());
+    DomainQuerySQLTranslator<RetailProductMasterField> translator = new DomainQuerySQLTranslator<>(
+        RetailProductMasterField.class);
 
     translator.apply(builder, query);
 
@@ -35,8 +34,13 @@ public class RetailProductMasterRepositoryImpl implements RetailProductMasterRep
         builder.getParams(),
         rs -> {
           List<RetailProductMaster> list = new ArrayList<>();
+          ResultSetMapper<RetailProductMaster> rsMapper = new ResultSetMapper<>(RetailProductMaster.class);
           while (rs.next()) {
-            list.add(RetailProductMasterRowMapper.map(rs));
+            try {
+              list.add(rsMapper.mapRow(rs));
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
           return list;
         });

@@ -10,7 +10,6 @@ import com.lesconstructionssapete.stempyerp.domain.field.sequence.SequenceField;
 import com.lesconstructionssapete.stempyerp.domain.repository.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.SequenceUpdateException;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.sequence.SequenceSQLField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBinder;
@@ -35,10 +34,10 @@ public class SequenceRepositoryImpl implements SequenceRepository {
         Query.SELECT_FOR_UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder selectBuilder = new SQLBuilder(sql)
-        .where(SequenceSQLField.get(SequenceField.DOMAIN_ENTITY_ID), "= :entityTypeId")
-        .and(SequenceSQLField.get(SequenceField.ENABLED), "= :enabled")
-        .bind(SequenceSQLField.get(SequenceField.DOMAIN_ENTITY_ID), entityType.getId())
-        .bind(SequenceSQLField.get(SequenceField.ENABLED), true);
+        .where(SequenceField.DOMAIN_ENTITY_ID.attribute(), "= :entityTypeId")
+        .and(SequenceField.ENABLED.attribute(), "= :enabled")
+        .bind(SequenceField.DOMAIN_ENTITY_ID.attribute(), entityType.getId())
+        .bind(SequenceField.ENABLED.attribute(), true);
 
     String sqlFinal = selectBuilder.build();
     List<SQLBuilder.SQLParam> params = selectBuilder.getParams();
@@ -62,10 +61,10 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     sql = QueryCache.get(Query.UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder updateBuilder = new SQLBuilder(sql)
-        .where(SequenceSQLField.get(SequenceField.DOMAIN_ENTITY_ID), "= :entityTypeId")
-        .and(SequenceSQLField.get(SequenceField.ENABLED), "= :enabled")
-        .bind(SequenceSQLField.get(SequenceField.DOMAIN_ENTITY_ID), entityType.getId())
-        .bind(SequenceSQLField.get(SequenceField.ENABLED), true);
+        .where(SequenceField.DOMAIN_ENTITY_ID.attribute(), "= :entityTypeId")
+        .and(SequenceField.ENABLED.attribute(), "= :enabled")
+        .bind(SequenceField.DOMAIN_ENTITY_ID.attribute(), entityType.getId())
+        .bind(SequenceField.ENABLED.attribute(), true);
 
     sqlFinal = updateBuilder.build();
     params = updateBuilder.getParams();

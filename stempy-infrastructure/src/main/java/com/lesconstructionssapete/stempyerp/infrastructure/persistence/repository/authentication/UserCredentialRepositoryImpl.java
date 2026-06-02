@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.auth.UserCredentialRepository;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.authentication.UserCredentialSQLField;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication.UserCredentialRowMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -25,7 +25,8 @@ public class UserCredentialRepositoryImpl implements UserCredentialRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(UserCredentialSQLField.all());
+    DomainQuerySQLTranslator<UserCredentialField> translator = new DomainQuerySQLTranslator<>(
+        UserCredentialField.class);
 
     translator.apply(builder, query);
 
@@ -35,8 +36,13 @@ public class UserCredentialRepositoryImpl implements UserCredentialRepository {
         builder.getParams(),
         rs -> {
           List<UserCredential> list = new ArrayList<>();
+          ResultSetMapper<UserCredential> rsMapper = new ResultSetMapper<>(UserCredential.class);
           while (rs.next()) {
-            list.add(UserCredentialRowMapper.map(rs));
+            try {
+              list.add(rsMapper.mapRow(rs));
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
           return list;
         });

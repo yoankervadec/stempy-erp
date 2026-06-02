@@ -8,10 +8,7 @@ import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.domain.field.automation.JobField;
 import com.lesconstructionssapete.stempyerp.domain.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.automation.JobSQLField;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobLogSQLMapper;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobRowMapper;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobSQLMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
@@ -33,8 +30,13 @@ public class AutomationRepositoryImpl implements AutomationRepository {
         builder.getParams(),
         rs -> {
           List<Job> list = new ArrayList<>();
+          ResultSetMapper<Job> rsMapper = new ResultSetMapper<>(Job.class);
           while (rs.next()) {
-            list.add(JobRowMapper.map(rs));
+            try {
+              list.add(rsMapper.mapRow(rs));
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
           return list;
         });

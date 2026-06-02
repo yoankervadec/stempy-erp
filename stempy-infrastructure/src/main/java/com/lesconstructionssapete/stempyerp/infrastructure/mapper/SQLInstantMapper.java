@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.infrastructure.field.SQLField;
+import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
 
 public final class SQLInstantMapper {
@@ -17,7 +17,7 @@ public final class SQLInstantMapper {
     return rs.getTimestamp(columnName).toInstant();
   }
 
-  public static void write(SQLBuilder builder, SQLField field, Instant instant) {
+  public static void write(SQLBuilder builder, DomainField field, Instant instant) {
     builder.bind(field, Timestamp.from(instant));
 
   }

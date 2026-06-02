@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
+import com.lesconstructionssapete.stempyerp.domain.field.auth.RefreshTokenField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.RefreshTokenRepository;
-import com.lesconstructionssapete.stempyerp.infrastructure.field.authentication.RefreshTokenSQLField;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication.RefreshTokenRowMapper;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.authentication.RefreshTokenSQLMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -25,7 +24,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator translator = new DomainQuerySQLTranslator(RefreshTokenSQLField.all());
+    DomainQuerySQLTranslator<RefreshTokenField> translator = new DomainQuerySQLTranslator<>(RefreshTokenField.class);
 
     translator.apply(builder, query);
 
@@ -35,8 +34,13 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
         builder.getParams(),
         rs -> {
           List<AuthToken> list = new ArrayList<>();
+          ResultSetMapper<AuthToken> rsMapper = new ResultSetMapper<>(AuthToken.class);
           while (rs.next()) {
-            list.add(RefreshTokenRowMapper.map(rs));
+            try {
+              list.add(rsMapper.mapRow(rs));
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
           }
           return list;
         });
