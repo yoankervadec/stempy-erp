@@ -5,12 +5,12 @@ import java.sql.SQLException;
 
 import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
 
-public final class ResultSetValueExtractor {
+final class ResultSetValueExtractor {
 
   private ResultSetValueExtractor() {
   }
 
-  public static Object extract(ResultSet rs, DomainField field) throws SQLException {
+  static Object extract(ResultSet rs, DomainField field) throws SQLException {
 
     String column = field.qualifiedColumnName();
 

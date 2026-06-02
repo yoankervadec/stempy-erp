@@ -11,6 +11,15 @@ public final class ResultSetRowMapper {
   private ResultSetRowMapper() {
   }
 
+  /**
+   * Maps a ResultSet row to a FieldValueMap using the provided field set.
+   *
+   * @param resultSet the ResultSet to map
+   * @param fieldSet  the field set class
+   * @param <E>       the type of the field set
+   * @return a FieldValueMap containing the mapped values
+   * @throws SQLException if a database access error occurs
+   */
   public static <E extends Enum<E> & DomainFieldProvider> FieldValueMap map(
       ResultSet resultSet,
       Class<E> fieldSet) throws SQLException {
