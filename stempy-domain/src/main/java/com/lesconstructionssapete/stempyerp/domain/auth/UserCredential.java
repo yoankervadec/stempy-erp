@@ -2,7 +2,53 @@ package com.lesconstructionssapete.stempyerp.domain.auth;
 
 import java.time.Instant;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
+import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
+
 public class UserCredential {
+
+  public enum Fields implements EntityField {
+    ID(FieldMeta.builder("UserCredential", "auth_user_credential")
+        .field("userCredentialId", "id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable().notUpdatable()
+        .build()),
+
+    USER_ID(FieldMeta.builder("UserCredential", "auth_user_credential")
+        .field("userId", "user_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable().notUpdatable()
+        .build()),
+
+    PASSWORD(FieldMeta.builder("UserCredential", "auth_user_credential")
+        .field("password", "password")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable().notUpdatable()
+        .build()),
+
+    ENABLED(FieldMeta.builder("UserCredential", "auth_user_credential")
+        .field("enabled", "enabled")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    CREATED_AT(FieldMeta.builder("UserCredential", "auth_user_credential")
+        .field("createdAt", "created_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build());
+
+    private final FieldMeta meta;
+
+    Fields(FieldMeta meta) {
+      this.meta = meta;
+    }
+
+    @Override
+    public FieldMeta meta() {
+      return meta;
+    }
+  }
 
   private final long userCredentialId;
   private final long userId;

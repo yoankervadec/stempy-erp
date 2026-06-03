@@ -2,6 +2,8 @@ package com.lesconstructionssapete.stempyerp.domain.user;
 
 import java.time.Instant;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
+import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
 /*
@@ -9,6 +11,68 @@ import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
  */
 
 public class User extends GenericEntity {
+
+  public enum Fields implements EntityField {
+
+    ID(FieldMeta.builder("User", "auth_user")
+        .field("id", "id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    USER_NO(FieldMeta.builder("User", "auth_user")
+        .field("userNo", "user_no")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    USER_NAME(FieldMeta.builder("User", "auth_user")
+        .field("userName", "user_name")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    ENABLED(FieldMeta.builder("User", "auth_user")
+        .field("enabled", "enabled")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    CREATED_AT(FieldMeta.builder("User", "auth_user")
+        .field("createdAt", "created_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build()),
+
+    CREATED_BY_USER_ID(FieldMeta.builder("User", "auth_user")
+        .field("createdByUserId", "created_by_user_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    UPDATED_AT(FieldMeta.builder("User", "auth_user")
+        .field("updatedAt", "updated_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build()),
+
+    UPDATED_BY_USER_ID(FieldMeta.builder("User", "auth_user")
+        .field("updatedByUserId", "updated_by_user_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build());
+
+    private final FieldMeta meta;
+
+    Fields(FieldMeta meta) {
+      this.meta = meta;
+    }
+
+    @Override
+    public FieldMeta meta() {
+      return meta;
+    }
+  }
 
   public static final String USER_ENTITY_NAME = "USER";
 

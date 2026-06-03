@@ -4,7 +4,55 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
+import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
+
 public class ApplicationRole {
+
+  public enum Fields implements EntityField {
+
+    ID(FieldMeta.builder("ApplicationRole", "auth_role")
+        .field("id", "id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    NAME(FieldMeta.builder("ApplicationRole", "auth_role")
+        .field("name", "name")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    DESCRIPTION(FieldMeta.builder("ApplicationRole", "auth_role")
+        .field("description", "description")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    ENABLED(FieldMeta.builder("ApplicationRole", "auth_role")
+        .field("enabled", "enabled")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    CREATED_AT(FieldMeta.builder("ApplicationRole", "auth_role")
+        .field("createdAt", "created_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build());
+
+    private final FieldMeta meta;
+
+    Fields(FieldMeta meta) {
+      this.meta = meta;
+    }
+
+    @Override
+    public FieldMeta meta() {
+      return meta;
+    }
+  }
+
   private final long id;
   private final String name; // e.g., "ADMIN", "USER", "MANAGER"
   private final String description; // e.g., "Administrator role with full permissions"

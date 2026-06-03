@@ -1,6 +1,59 @@
 package com.lesconstructionssapete.stempyerp.domain.retailproduct;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
+import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
+
 public class RetailProductMasterPolicy {
+
+  public enum Fields implements EntityField {
+
+    RETAIL_PRODUCT_MASTER_ID(FieldMeta.builder("RetailProductMasterPolicy", "dom_retail_product_master_policy")
+        .field("retailProductMasterId", "retail_product_master_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    DISCONTINUED(FieldMeta.builder("RetailProductMasterPolicy", "dom_retail_product_master_policy")
+        .field("discontinued", "discontinued")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    TRACK_INVENTORY(FieldMeta.builder("RetailProductMasterPolicy", "dom_retail_product_master_policy")
+        .field("trackInventory", "track_inventory")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    ALLOW_NEGATIVE_INVENTORY(FieldMeta.builder("RetailProductMasterPolicy", "dom_retail_product_master_policy")
+        .field("allowNegativeInventory", "allow_negative_inventory")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    APPLY_TAX(FieldMeta.builder("RetailProductMasterPolicy", "dom_retail_product_master_policy")
+        .field("applyTax", "apply_tax")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    APPLY_PROMOTION(FieldMeta.builder("RetailProductMasterPolicy", "dom_retail_product_master_policy")
+        .field("applyPromotion", "apply_promotion")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build());
+
+    private final FieldMeta meta;
+
+    Fields(FieldMeta meta) {
+      this.meta = meta;
+    }
+
+    @Override
+    public FieldMeta meta() {
+      return meta;
+    }
+  }
 
   private Long retailProductMasterId;
   private boolean discontiued;

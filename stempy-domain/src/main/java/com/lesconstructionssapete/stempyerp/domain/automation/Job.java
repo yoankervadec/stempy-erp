@@ -8,6 +8,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
+import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
+
 /**
  * Represents a scheduled job definition.
  * 
@@ -20,6 +23,99 @@ import java.util.List;
  * and workers manage execution.
  */
 public class Job {
+
+  public enum Fields implements EntityField {
+
+    ID(FieldMeta.builder("Job", "auto_job")
+        .field("id", "id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    NAME(FieldMeta.builder("Job", "auto_job")
+        .field("name", "name")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    ENABLED(FieldMeta.builder("Job", "auto_job")
+        .field("enabled", "enabled")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    CREATED_AT(FieldMeta.builder("Job", "auto_job")
+        .field("createdAt", "created_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build()),
+
+    DESCRIPTION(FieldMeta.builder("Job", "auto_job")
+        .field("description", "description")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    HANDLER_AS_STRING(FieldMeta.builder("Job", "auto_job")
+        .field("handlerAsString", "handler")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build()),
+
+    RUN_BEFORE_JOB_ID(FieldMeta.builder("Job", "auto_job")
+        .field("runBeforeJobId", "run_before_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .build()),
+
+    RUN_AFTER_JOB_ID(FieldMeta.builder("Job", "auto_job")
+        .field("runAfterJobId", "run_after_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .build()),
+
+    ACTIVE(FieldMeta.builder("Job", "auto_job")
+        .field("active", "active")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    DEACTIVATE_ON_FAILURE(FieldMeta.builder("Job", "auto_job")
+        .field("deactivateOnFailure", "deactivate_on_failure")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    MAX_RETRIES(FieldMeta.builder("Job", "auto_job")
+        .field("maxRetries", "max_retries")
+        .type(Integer.class, java.sql.Types.INTEGER)
+        .notNullable()
+        .build()),
+
+    INTERVAL_MINUTES(FieldMeta.builder("Job", "auto_job")
+        .field("intervalMinutes", "interval_minutes")
+        .type(Double.class, java.sql.Types.DOUBLE)
+        .build()),
+
+    RUN_TIMES_UTC(FieldMeta.builder("Job", "auto_job")
+        .field("runTimesUtc", "run_times_utc")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .build()),
+
+    RUN_DAYS(FieldMeta.builder("Job", "auto_job")
+        .field("runDays", "run_days")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .build());
+
+    private final FieldMeta meta;
+
+    Fields(FieldMeta meta) {
+      this.meta = meta;
+    }
+
+    @Override
+    public FieldMeta meta() {
+      return meta;
+    }
+  }
 
   // --- Core job metadata ---
   private final long id;

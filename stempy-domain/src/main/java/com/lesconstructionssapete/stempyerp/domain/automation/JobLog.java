@@ -3,7 +3,72 @@ package com.lesconstructionssapete.stempyerp.domain.automation;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
+import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
+
 public class JobLog {
+
+  public enum Fields implements EntityField {
+
+    ID(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("id", "id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    JOB_ID(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("jobId", "job_id")
+        .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    CREATED_AT(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("createdAt", "created_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build()),
+
+    STARTED_AT(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("startedAt", "started_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build()),
+
+    ENDED_AT(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("endedAt", "ended_at")
+        .type(Instant.class, java.sql.Types.TIMESTAMP)
+        .notNullable()
+        .build()),
+
+    EXECUTION_TIME_MS(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("executionTimeMs", "execution_time_ms")
+        .type(Integer.class, java.sql.Types.INTEGER)
+        .notNullable()
+        .build()),
+
+    ERROR(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("error", "error")
+        .type(Boolean.class, java.sql.Types.BOOLEAN)
+        .notNullable()
+        .build()),
+
+    MESSAGE(FieldMeta.builder("JobLog", "auto_job_log")
+        .field("message", "message")
+        .type(String.class, java.sql.Types.VARCHAR)
+        .notNullable()
+        .build());
+
+    private final FieldMeta meta;
+
+    Fields(FieldMeta meta) {
+      this.meta = meta;
+    }
+
+    @Override
+    public FieldMeta meta() {
+      return meta;
+    }
+  }
 
   private final long jobId;
   private final Instant startedAt = Instant.now();
