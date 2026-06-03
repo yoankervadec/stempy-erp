@@ -1,9 +1,9 @@
 package com.lesconstructionssapete.stempyerp.domain.query;
 
-import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 
 public record FilterCondition(
-    DomainFieldProvider field,
+    EntityField field,
     ComparisonOperator operator,
     Object value) implements FilterNode {
 

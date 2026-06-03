@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 import com.lesconstructionssapete.stempyerp.domain.query.ComparisonOperator;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterGroup;
@@ -15,30 +15,30 @@ public class FilterBuilder {
 
   // ---- simple conditions ----
 
-  public FilterNode equals(DomainFieldProvider field, Object value) {
+  public FilterNode equals(EntityField field, Object value) {
     return new FilterCondition(field, ComparisonOperator.EQUALS, value);
   }
 
-  public FilterNode equalsIfNotNull(DomainFieldProvider field, Object value) {
+  public FilterNode equalsIfNotNull(EntityField field, Object value) {
     if (value == null) {
       return null;
     }
     return equals(field, value);
   }
 
-  public FilterNode notEquals(DomainFieldProvider field, Object value) {
+  public FilterNode notEquals(EntityField field, Object value) {
     return new FilterCondition(field, ComparisonOperator.NOT_EQUALS, value);
   }
 
-  public FilterNode greaterThan(DomainFieldProvider field, Object value) {
+  public FilterNode greaterThan(EntityField field, Object value) {
     return new FilterCondition(field, ComparisonOperator.GREATER_THAN, value);
   }
 
-  public FilterNode lessThan(DomainFieldProvider field, Object value) {
+  public FilterNode lessThan(EntityField field, Object value) {
     return new FilterCondition(field, ComparisonOperator.LESS_THAN, value);
   }
 
-  public FilterNode isNotNull(DomainFieldProvider field) {
+  public FilterNode isNotNull(EntityField field) {
     return new FilterCondition(field, ComparisonOperator.IS_NOT_NULL, null);
   }
 
