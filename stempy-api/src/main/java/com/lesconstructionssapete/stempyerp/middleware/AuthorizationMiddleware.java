@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.context.RequestContext;
 import com.lesconstructionssapete.stempyerp.domain.exception.UserNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.exception.AuthenticationException;
@@ -35,7 +34,7 @@ public class AuthorizationMiddleware implements Handler {
 
     DomainQuery q = DomainQuery.builder()
         .where(w -> w.and(
-            c -> c.equals(UserField.USER_NO, userNo)))
+            c -> c.equals(User.Fields.USER_NO, userNo)))
         .build();
 
     List<User> users = userFacade.fetch(q);

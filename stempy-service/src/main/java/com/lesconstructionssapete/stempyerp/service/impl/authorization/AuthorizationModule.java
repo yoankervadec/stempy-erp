@@ -7,8 +7,6 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionField;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationRoleField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
 import com.lesconstructionssapete.stempyerp.port.cache.CacheProvider;
@@ -36,14 +34,14 @@ public final class AuthorizationModule {
           connection,
           DomainQuery.builder()
               .where(w -> w.and(
-                  c -> c.equals(ApplicationPermissionField.ENABLED, true)))
+                  c -> c.equals(ApplicationPermission.Fields.ENABLED, true)))
               .build());
 
       applicationRoles = permissionRepository.fetchApplicationRoles(
           connection,
           DomainQuery.builder()
               .where(w -> w.and(
-                  c -> c.equals(ApplicationRoleField.ENABLED, true)))
+                  c -> c.equals(ApplicationRole.Fields.ENABLED, true)))
               .build());
 
       rolePermissions = permissionRepository.fetchRolePermissions(

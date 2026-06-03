@@ -9,7 +9,6 @@ import com.lesconstructionssapete.stempyerp.domain.exception.InvalidCredentialsE
 import com.lesconstructionssapete.stempyerp.domain.exception.InvalidRefreshTokenException;
 import com.lesconstructionssapete.stempyerp.domain.exception.RefreshTokenRevokedException;
 import com.lesconstructionssapete.stempyerp.domain.exception.UserNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.user.User;
 import com.lesconstructionssapete.stempyerp.facade.spi.authentication.AuthFacade;
@@ -42,8 +41,8 @@ public class AuthFacadeImpl implements AuthFacade {
 
     DomainQuery q = DomainQuery.builder()
         .where(w -> w.and(
-            c -> c.equals(UserField.USER_NO, userCredential.getUserNo()),
-            c -> c.equals(UserField.ENABLED, true)))
+            c -> c.equals(User.Fields.USER_NO, userCredential.getUserNo()),
+            c -> c.equals(User.Fields.ENABLED, true)))
         .build();
 
     AuthToken authToken = transaction.execute(
@@ -107,8 +106,8 @@ public class AuthFacadeImpl implements AuthFacade {
 
     DomainQuery q = DomainQuery.builder()
         .where(w -> w.and(
-            c -> c.equals(UserField.USER_NO, userNo),
-            c -> c.equals(UserField.ENABLED, true)))
+            c -> c.equals(User.Fields.USER_NO, userNo),
+            c -> c.equals(User.Fields.ENABLED, true)))
         .build();
 
     AuthToken token = transaction.execute(

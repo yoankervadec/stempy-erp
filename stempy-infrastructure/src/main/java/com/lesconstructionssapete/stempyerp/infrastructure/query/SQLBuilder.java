@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 import com.lesconstructionssapete.stempyerp.util.StringUtil;
 
 /**
@@ -87,19 +87,19 @@ public class SQLBuilder {
   }
 
   /**
-   * Bind a named parameter using a DomainField. The field's logical name will be
+   * Bind a named parameter using an EntityField. The field's logical name will be
    * used as the parameter name (e.g. ":Resource.logicalName") and the SQL type
    * will be inferred from the field definition. The condition in the WHERE clause
    * should reference this named parameter (e.g. "table_name.column_name =
    * :Resource.logicalName") for it to be properly replaced during SQL generation.
    */
-  public SQLBuilder bind(DomainField field, Object value) {
+  public SQLBuilder bind(EntityField field, Object value) {
     params.put(
         field.qualifiedLogicalName(),
         new SQLParam(
             field.qualifiedLogicalName(),
             value,
-            field.sqlType));
+            field.sqlType()));
 
     return this;
   }
@@ -118,7 +118,7 @@ public class SQLBuilder {
    * The condition can contain named parameters (e.g. "table_name.column_name =
    * :Resource.logicalName") which should be
    * bound using the {@link #bind(String, Object)} or
-   * {@link #bind(DomainField, Object)} methods.
+   * {@link #bind(EntityField, Object)} methods.
    */
   public SQLBuilder where(String condition) {
     whereClauses.add(condition);
@@ -126,11 +126,11 @@ public class SQLBuilder {
   }
 
   /**
-   * Add a WHERE clause using a DomainField. The condition should contain a named
+   * Add a WHERE clause using an EntityField. The condition should contain a named
    * parameter matching the field's logical name (e.g. "table_name.column_name =
    * :Resource.logicalName").
    */
-  public SQLBuilder where(DomainField field, String condition) {
+  public SQLBuilder where(EntityField field, String condition) {
     whereClauses.add(field.qualifiedColumnName() + " " + condition);
     return this;
   }
@@ -143,9 +143,9 @@ public class SQLBuilder {
   }
 
   /**
-   * Add an AND condition to the WHERE clause using a DomainField.
+   * Add an AND condition to the WHERE clause using an EntityField.
    */
-  public SQLBuilder and(DomainField field, String condition) {
+  public SQLBuilder and(EntityField field, String condition) {
     return where(field, condition);
   }
 

@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.exception.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.field.DomainField;
-import com.lesconstructionssapete.stempyerp.domain.field.DomainFieldProvider;
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterCondition;
 import com.lesconstructionssapete.stempyerp.domain.query.FilterGroup;
@@ -20,7 +19,7 @@ import com.lesconstructionssapete.stempyerp.infrastructure.exception.IllegalFiel
  * - Applies sorting and pagination
  * - Throws {@link FieldNotFoundException} for invalid fields
  */
-public final class DomainQuerySQLTranslator<E extends Enum<E> & DomainFieldProvider> {
+public final class DomainQuerySQLTranslator<E extends Enum<E> & EntityField> {
 
   private final Class<E> fieldProviders;
 
@@ -111,11 +110,11 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & DomainFieldProvi
 
     // TODO: check if field is in field map, throw exception if not
 
-    DomainField field = c.field().attribute();
+    EntityField field = c.field();
 
     if (field == null) {
       throw new IllegalFieldException(
-          "Illegal field: " + c.field() + " (" + c.field().attribute().qualifiedLogicalName() + ")");
+          "Illegal field: " + c.field() + " (" + c.field().qualifiedLogicalName() + ")");
     }
 
     String column = field.qualifiedColumnName();
@@ -125,43 +124,43 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & DomainFieldProvi
 
       case EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " = :" + p);
       }
 
       case NOT_EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " <> :" + p);
       }
 
       case GREATER_THAN -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " > :" + p);
       }
 
       case LESS_THAN -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " < :" + p);
       }
 
       case GREATER_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " >= :" + p);
       }
 
       case LESS_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType);
+        builder.bind(p, value, field.sqlType());
         yield new ConditionFragment(column + " <= :" + p);
       }
 
       case LIKE -> {
         String p = nextParam();
-        builder.bind(p, "%" + value + "%", field.sqlType);
+        builder.bind(p, "%" + value + "%", field.sqlType());
         yield new ConditionFragment(column + " LIKE :" + p);
       }
 
@@ -181,7 +180,7 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & DomainFieldProvi
 
           String p = nextParam();
 
-          builder.bind(p, v, field.sqlType);
+          builder.bind(p, v, field.sqlType());
 
           placeholders.add(":" + p);
         }
@@ -212,10 +211,10 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & DomainFieldProvi
 
     for (SortSpec sort : query.sortSpec()) {
 
-      DomainField field = sort.field().attribute();
+      EntityField field = sort.field();
       if (field == null) {
         throw new IllegalFieldException(
-            "Illegal sort field: " + sort.field() + " (" + sort.field().attribute().qualifiedLogicalName() + ")");
+            "Illegal sort field: " + sort.field() + " (" + sort.field().qualifiedLogicalName() + ")");
       }
       String column = field.qualifiedColumnName();
 

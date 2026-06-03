@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
 import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.RefreshTokenField;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.UserCredentialField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.RefreshTokenRepository;
 import com.lesconstructionssapete.stempyerp.domain.repository.auth.UserCredentialRepository;
@@ -34,10 +32,10 @@ public class AuthServiceImpl implements AuthService {
 
     DomainQuery q = DomainQuery.builder()
         .where(w -> w.and(
-            c -> c.equals(RefreshTokenField.USER_ID, userId),
-            c -> c.equals(RefreshTokenField.TOKEN, refreshToken),
-            c -> c.equals(RefreshTokenField.ENABLED, true),
-            c -> c.greaterThan(RefreshTokenField.EXPIRES_AT, Instant.now())))
+            c -> c.equals(AuthToken.Fields.USER_ID, userId),
+            c -> c.equals(AuthToken.Fields.TOKEN, refreshToken),
+            c -> c.equals(AuthToken.Fields.ENABLED, true),
+            c -> c.greaterThan(AuthToken.Fields.REFRESH_TOKEN_EXPIRES_AT, Instant.now())))
         .build();
 
     List<AuthToken> tokens = refreshTokenRepository.fetch(connection, q);
@@ -56,8 +54,8 @@ public class AuthServiceImpl implements AuthService {
 
     DomainQuery q = DomainQuery.builder()
         .where(w -> w.and(
-            c -> c.equals(UserCredentialField.USER_ID, userId),
-            c -> c.equals(UserCredentialField.ENABLED, true)))
+            c -> c.equals(UserCredential.Fields.USER_ID, userId),
+            c -> c.equals(UserCredential.Fields.ENABLED, true)))
         .build();
 
     List<UserCredential> credentials = userCredentialRepository.fetch(connection, q);

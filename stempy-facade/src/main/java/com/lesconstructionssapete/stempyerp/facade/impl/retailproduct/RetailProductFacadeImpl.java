@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.exception.UniqueConstraintException;
-import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
@@ -72,9 +71,9 @@ public class RetailProductFacadeImpl
           DomainQuery rpvQuery = DomainQuery.builder()
               .where(w -> w.and(
                   c -> c.equals(
-                      RetailProductField.RETAIL_PRODUCT_NO, product.getRetailProductNo()),
+                      RetailProduct.Fields.RETAIL_PRODUCT_VARIANT_NO, product.getRetailProductNo()),
                   c -> c.isNotNull(
-                      RetailProductField.RETAIL_PRODUCT_NO)))
+                      RetailProduct.Fields.RETAIL_PRODUCT_VARIANT_NO)))
               .build();
 
           if (!retailProductService.fetch(connection, rpvQuery).isEmpty()) {
@@ -86,7 +85,7 @@ public class RetailProductFacadeImpl
           DomainQuery rpmQuery = DomainQuery.builder()
               .where(w -> w.and(
                   c -> c.equals(
-                      RetailProductField.RETAIL_PRODUCT_MASTER_ID, product.getRetailProductMasterId())))
+                      RetailProduct.Fields.RETAIL_PRODUCT_MASTER_ID, product.getRetailProductMasterId())))
               .build();
 
           if (retailProductService.fetchMasters(connection, rpmQuery).isEmpty()) {
