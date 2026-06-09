@@ -8,7 +8,7 @@ import com.lesconstructionssapete.stempyerp.domain.auth.UserCredential;
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
 import com.lesconstructionssapete.stempyerp.domain.exception.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMasterPolicy;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
@@ -34,7 +34,7 @@ public class DefaultDomainFieldResolver implements DomainFieldResolver {
     register(UserCredential.Fields.class);
     register(Job.Fields.class);
     register(JobLog.Fields.class);
-    register(RetailProduct.Fields.class);
+    register(RetailProductVariant.Fields.class);
     register(RetailProductMaster.Fields.class);
     register(RetailProductMasterPolicy.Fields.class);
     register(LiveSequence.Fields.class);

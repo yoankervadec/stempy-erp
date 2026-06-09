@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 
 public class DefaultEntityNumberGeneratorRegistry
     implements EntityNumberGeneratorRegistry {
@@ -23,7 +23,7 @@ public class DefaultEntityNumberGeneratorRegistry
 
   private void registerDefaults() {
 
-    generators.put(RetailProduct.RETAIL_PRODUCT_ENTITY_NAME, new RetailProductNumberGenerator());
+    generators.put(RetailProductVariant.RETAIL_PRODUCT_ENTITY_NAME, new RetailProductNumberGenerator());
     // Register other default generators for different EntityTypes as needed
   }
 

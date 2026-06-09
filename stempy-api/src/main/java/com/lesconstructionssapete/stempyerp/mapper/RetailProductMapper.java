@@ -1,12 +1,12 @@
 package com.lesconstructionssapete.stempyerp.mapper;
 
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 import com.lesconstructionssapete.stempyerp.dto.RetailProductRequest;
 
 public class RetailProductMapper {
 
-  public static RetailProduct toDomain(RetailProductRequest dto) {
-    return new RetailProduct(
+  public static RetailProductVariant toDomain(RetailProductRequest dto) {
+    return new RetailProductVariant(
         dto.retailProductId,
         dto.retailProductMasterId,
         dto.retailProductNo,

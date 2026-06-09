@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.exception.UniqueConstraintException;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.domain.user.User;
@@ -37,7 +37,7 @@ public class RetailProductFacadeImpl
   }
 
   @Override
-  public List<RetailProduct> fetch(DomainQuery query) {
+  public List<RetailProductVariant> fetch(DomainQuery query) {
 
     return transaction.execute(
         TransactionPropagation.REQUIRED,
@@ -59,7 +59,7 @@ public class RetailProductFacadeImpl
   }
 
   @Override
-  public RetailProduct insert(User user, RetailProduct product) {
+  public RetailProductVariant insert(User user, RetailProductVariant product) {
 
     return transaction.execute(
         TransactionPropagation.REQUIRED,
@@ -71,9 +71,9 @@ public class RetailProductFacadeImpl
           DomainQuery rpvQuery = DomainQuery.builder()
               .where(w -> w.and(
                   c -> c.equals(
-                      RetailProduct.Fields.RETAIL_PRODUCT_VARIANT_NO, product.getRetailProductNo()),
+                      RetailProductVariant.Fields.RETAIL_PRODUCT_VARIANT_NO, product.getRetailProductNo()),
                   c -> c.isNotNull(
-                      RetailProduct.Fields.RETAIL_PRODUCT_VARIANT_NO)))
+                      RetailProductVariant.Fields.RETAIL_PRODUCT_VARIANT_NO)))
               .build();
 
           if (!retailProductService.fetch(connection, rpvQuery).isEmpty()) {
@@ -85,7 +85,7 @@ public class RetailProductFacadeImpl
           DomainQuery rpmQuery = DomainQuery.builder()
               .where(w -> w.and(
                   c -> c.equals(
-                      RetailProduct.Fields.RETAIL_PRODUCT_MASTER_ID, product.getRetailProductMasterId())))
+                      RetailProductVariant.Fields.RETAIL_PRODUCT_MASTER_ID, product.getRetailProductMasterId())))
               .build();
 
           if (retailProductService.fetchMasters(connection, rpmQuery).isEmpty()) {
@@ -101,7 +101,7 @@ public class RetailProductFacadeImpl
                 product.getEntityName(),
                 user.getEntityId());
 
-            EntityNumberGenerator<RetailProduct> RPGenerator = entityGenerators
+            EntityNumberGenerator<RetailProductVariant> RPGenerator = entityGenerators
                 .getFor(liveSequence.getEntityType());
 
             entityNo = RPGenerator.generate(product, liveSequence);
@@ -110,7 +110,7 @@ public class RetailProductFacadeImpl
 
           product.setEntityNo(entityNo);
 
-          RetailProduct result = retailProductService
+          RetailProductVariant result = retailProductService
               .insert(connection, product);
 
           return result;

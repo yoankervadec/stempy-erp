@@ -1,14 +1,14 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.retailproduct;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.field.retailproduct.RetailProductField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductRepository;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct.RetailProductMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -18,14 +18,15 @@ import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
 public class RetailProductRepositoryImpl implements RetailProductRepository {
 
   @Override
-  public List<RetailProduct> fetch(Connection connection, DomainQuery query) {
+  public List<RetailProductVariant> fetch(Connection connection, DomainQuery query) {
 
     String sql = QueryCache.get(
         Query.SELECT_DOM_RETAIL_PRODUCT_VARIANT);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<RetailProductField> translator = new DomainQuerySQLTranslator<>(RetailProductField.class);
+    DomainQuerySQLTranslator<RetailProductVariant.Fields> translator = new DomainQuerySQLTranslator<>(
+        RetailProductVariant.Fields.class);
 
     translator.apply(builder, query);
 
@@ -34,12 +35,11 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         builder.build(),
         builder.getParams(),
         rs -> {
-          List<RetailProduct> list = new ArrayList<>();
-          ResultSetMapper<RetailProduct> rsMapper = new ResultSetMapper<>(RetailProduct.class);
+          List<RetailProductVariant> list = new ArrayList<>();
           while (rs.next()) {
             try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
+              list.add(RetailProductMapper.fromResultSet(rs));
+            } catch (SQLException e) {
               e.printStackTrace();
             }
           }
@@ -49,14 +49,14 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   }
 
   @Override
-  public long insert(Connection connection, RetailProduct retailProduct) {
+  public long insert(Connection connection, RetailProductVariant retailProduct) {
 
     String sql = QueryCache.get(
         Query.INSERT_DOM_RETAIL_PRODUCT_VARIANT);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RetailProductSQLMapper.bindInsert(builder, retailProduct);
+    RetailProductMapper.bind(builder, retailProduct);
 
     long generatedId = SQLExecutor.insert(
         connection,
@@ -67,17 +67,17 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
   }
 
   @Override
-  public int save(Connection connection, RetailProduct retailProduct) {
+  public int save(Connection connection, RetailProductVariant retailProduct) {
 
     String sql = QueryCache.get(
         Query.UPDATE_DOM_RETAIL_PRODUCT_VARIANT);
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RetailProductSQLMapper.bindUpdate(builder, retailProduct);
+    RetailProductMapper.bind(builder, retailProduct);
 
     builder.where("retail_product_variant.id = :id")
-        .bind(RetailProductSQLField.get(RetailProductField.ID), retailProduct.getEntityId());
+        .bind(RetailProductVariant.Fields.ID, retailProduct.getEntityId());
 
     int rowsAffected = SQLExecutor.update(
         connection,

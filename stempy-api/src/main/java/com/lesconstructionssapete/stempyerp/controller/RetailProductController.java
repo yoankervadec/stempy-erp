@@ -2,7 +2,7 @@ package com.lesconstructionssapete.stempyerp.controller;
 
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 import com.lesconstructionssapete.stempyerp.dto.RetailProductRequest;
 import com.lesconstructionssapete.stempyerp.facade.spi.retailproduct.RetailProductFacade;
 import com.lesconstructionssapete.stempyerp.http.ApiRequestContext;
@@ -31,7 +31,7 @@ public class RetailProductController {
 
     var query = requestQueryMapper.map(request.getQuery());
 
-    List<RetailProduct> list = retailProductFacade.fetch(query);
+    List<RetailProductVariant> list = retailProductFacade.fetch(query);
 
     Response.ok(ctx, null, list);
 
@@ -44,7 +44,7 @@ public class RetailProductController {
     var payload = RequestMapper.map(
         request.getBody(), RetailProductRequest.class, BodyKey.PAYLOAD);
 
-    RetailProduct result = retailProductFacade.insert(
+    RetailProductVariant result = retailProductFacade.insert(
         request.getContext().getUser(),
         RetailProductMapper.toDomain(payload));
 

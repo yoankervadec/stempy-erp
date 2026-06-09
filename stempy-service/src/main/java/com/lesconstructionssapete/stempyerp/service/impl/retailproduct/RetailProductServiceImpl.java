@@ -6,7 +6,7 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductMasterRepository;
 import com.lesconstructionssapete.stempyerp.domain.repository.retailproduct.RetailProductRepository;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductMaster;
 import com.lesconstructionssapete.stempyerp.service.spi.retailproduct.RetailProductService;
 
@@ -23,7 +23,7 @@ public class RetailProductServiceImpl implements RetailProductService {
   }
 
   @Override
-  public List<RetailProduct> fetch(Connection connection, DomainQuery query) {
+  public List<RetailProductVariant> fetch(Connection connection, DomainQuery query) {
 
     return variantRepository.fetch(connection, query);
   }
@@ -34,7 +34,7 @@ public class RetailProductServiceImpl implements RetailProductService {
   }
 
   @Override
-  public RetailProduct insert(Connection connection, RetailProduct retailProduct) {
+  public RetailProductVariant insert(Connection connection, RetailProductVariant retailProduct) {
     long generatedId = variantRepository.insert(connection, retailProduct);
     retailProduct.setEntityId(generatedId);
     return retailProduct;
@@ -48,7 +48,7 @@ public class RetailProductServiceImpl implements RetailProductService {
   }
 
   @Override
-  public int save(Connection connection, RetailProduct retailProduct) {
+  public int save(Connection connection, RetailProductVariant retailProduct) {
     return variantRepository.save(connection, retailProduct);
   }
 

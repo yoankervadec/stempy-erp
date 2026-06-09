@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.lesconstructionssapete.stempyerp.domain.exception.FieldNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 
 public class DefaultDomainFieldResolverTest {
 
@@ -20,7 +20,7 @@ public class DefaultDomainFieldResolverTest {
   @Test
   void registeredFieldIsResolved() {
     EntityField field = resolver.resolve("RetailProduct.id");
-    Assertions.assertEquals(RetailProduct.Fields.ID, field);
+    Assertions.assertEquals(RetailProductVariant.Fields.ID, field);
   }
 
   @Test

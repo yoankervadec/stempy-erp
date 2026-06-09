@@ -6,7 +6,7 @@ import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
 import com.lesconstructionssapete.stempyerp.domain.generic.GenericEntity;
 
-public class RetailProduct extends GenericEntity {
+public class RetailProductVariant extends GenericEntity {
 
   public enum Fields implements EntityField {
 
@@ -19,6 +19,12 @@ public class RetailProduct extends GenericEntity {
     RETAIL_PRODUCT_MASTER_ID(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
         .field("retailProductMasterId", "retail_product_master_id")
         .type(Long.class, java.sql.Types.BIGINT)
+        .notNullable()
+        .build()),
+
+    RETAIL_PRODUCT_NO(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+        .field("retailProductNo", "retail_product_no")
+        .type(String.class, java.sql.Types.VARCHAR)
         .notNullable()
         .build()),
 
@@ -82,6 +88,10 @@ public class RetailProduct extends GenericEntity {
     }
   }
 
+  public EntityField[] getAllFields() {
+    return Fields.values();
+  }
+
   public static final String RETAIL_PRODUCT_ENTITY_NAME = "RETAIL PRODUCT";
 
   private Long retailProductMasterId;
@@ -97,7 +107,7 @@ public class RetailProduct extends GenericEntity {
   private Instant updatedAt;
   private Long updatedByUserId;
 
-  public RetailProduct(
+  public RetailProductVariant(
       Long retailProductId,
       Long retailProductMasterId,
       String retailProductNo,

@@ -16,6 +16,17 @@ import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 
 public final class EntityMapper {
 
+  /**
+   * Reads a value from the ResultSet based on the EntityField's Java type and
+   * qualified column name.
+   * 
+   * @param <T>   The type of the value to be read.
+   * @param rs    The ResultSet from which to read the value.
+   * @param field The EntityField representing the column to read.
+   * @return The value read from the ResultSet.
+   * @throws SQLException If a database access error occurs.
+   * 
+   */
   @SuppressWarnings("unchecked")
   public static <T> T read(ResultSet rs, EntityField field) throws SQLException {
 
@@ -42,6 +53,16 @@ public final class EntityMapper {
     return (T) rs.getObject(col);
   }
 
+  /**
+   * Binds a value to a PreparedStatement based on the specified SQL type.
+   * 
+   * @param ps      The PreparedStatement to which the value will be bound.
+   * @param index   The parameter index (1-based) to which the value will be
+   *                bound.
+   * @param sqlType The SQL type of the parameter (e.g., Types.VARCHAR).
+   * @param value   The value to be bound to the PreparedStatement.
+   * @throws SQLException If a database access error occurs.
+   */
   public static void bind(PreparedStatement ps, int index,
       int sqlType, Object value) throws SQLException {
     if (value == null) {

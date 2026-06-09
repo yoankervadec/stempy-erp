@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
-import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProduct;
+import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 
 public interface RetailProductRepository {
 
-  List<RetailProduct> fetch(Connection connection, DomainQuery query);
+  List<RetailProductVariant> fetch(Connection connection, DomainQuery query);
 
-  long insert(Connection connection, RetailProduct retailProduct);
+  long insert(Connection connection, RetailProductVariant retailProduct);
 
-  int save(Connection connection, RetailProduct retailProduct);
+  int save(Connection connection, RetailProductVariant retailProduct);
 }
