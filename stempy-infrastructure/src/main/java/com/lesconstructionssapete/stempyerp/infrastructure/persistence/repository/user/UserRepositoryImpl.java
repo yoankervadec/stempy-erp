@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lesconstructionssapete.stempyerp.domain.field.user.UserField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.UserRepository;
 import com.lesconstructionssapete.stempyerp.domain.user.User;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.user.UserMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -25,7 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<UserField> translator = new DomainQuerySQLTranslator<>(UserField.class);
+    DomainQuerySQLTranslator<User.Fields> translator = new DomainQuerySQLTranslator<>(User.Fields.class);
 
     translator.apply(builder, query);
 
@@ -35,13 +34,8 @@ public class UserRepositoryImpl implements UserRepository {
         builder.getParams(),
         rs -> {
           List<User> list = new ArrayList<>();
-          ResultSetMapper<User> rsMapper = new ResultSetMapper<>(User.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(UserMapper.fromResultSet(rs));
           }
           return list;
         });

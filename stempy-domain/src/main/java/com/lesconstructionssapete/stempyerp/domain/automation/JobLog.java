@@ -80,6 +80,19 @@ public class JobLog {
     this.jobId = jobId;
   }
 
+  public JobLog(
+      long jobId,
+      Instant createdAt,
+      Instant startedAt,
+      Instant endedAt,
+      boolean error,
+      String message) {
+    this.jobId = jobId;
+    this.endedAt = endedAt;
+    this.error = error;
+    this.message = new StringBuilder(message);
+  }
+
   public void save() {
     appendMessage("Execution time: " + getDurationMs() + "ms");
   }

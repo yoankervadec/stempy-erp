@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.automation.Job;
 import com.lesconstructionssapete.stempyerp.domain.automation.JobLog;
-import com.lesconstructionssapete.stempyerp.domain.field.automation.JobField;
 import com.lesconstructionssapete.stempyerp.domain.repository.AutomationRepository;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobLogMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.automation.JobMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.QueryCache;
@@ -30,13 +30,8 @@ public class AutomationRepositoryImpl implements AutomationRepository {
         builder.getParams(),
         rs -> {
           List<Job> list = new ArrayList<>();
-          ResultSetMapper<Job> rsMapper = new ResultSetMapper<>(Job.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(JobMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -55,7 +50,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     for (JobLog log : jobLogs) {
       builder.clearParams();
 
-      JobLogSQLMapper.bindInsert(builder, log);
+      JobLogMapper.bind(log, builder::bindInsert);
 
       batchParams.add(builder.getParams());
     }
@@ -71,10 +66,10 @@ public class AutomationRepositoryImpl implements AutomationRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    JobSQLMapper.bindUpdate(builder, job);
+    JobMapper.bind(job, builder::bindUpdate);
 
-    builder.where("auto_job.id = :id")
-        .bind(JobSQLField.get(JobField.ID), job.getId());
+    builder.where(Job.Fields.ID, " = :id")
+        .bind(Job.Fields.ID, job.getId());
 
     int rowsAffected = SQLExecutor.update(connection, builder.build(), builder.getParams());
 

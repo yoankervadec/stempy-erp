@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.constant.DomainEntityType;
 import com.lesconstructionssapete.stempyerp.domain.exception.SequenceNotFoundException;
-import com.lesconstructionssapete.stempyerp.domain.field.sequence.SequenceField;
 import com.lesconstructionssapete.stempyerp.domain.repository.SequenceRepository;
 import com.lesconstructionssapete.stempyerp.domain.sequence.LiveSequence;
 import com.lesconstructionssapete.stempyerp.infrastructure.exception.SequenceUpdateException;
@@ -34,10 +33,10 @@ public class SequenceRepositoryImpl implements SequenceRepository {
         Query.SELECT_FOR_UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder selectBuilder = new SQLBuilder(sql)
-        .where(SequenceField.DOMAIN_ENTITY_ID.attribute(), "= :entityTypeId")
-        .and(SequenceField.ENABLED.attribute(), "= :enabled")
-        .bind(SequenceField.DOMAIN_ENTITY_ID.attribute(), entityType.getId())
-        .bind(SequenceField.ENABLED.attribute(), true);
+        .where(LiveSequence.Fields.DOMAIN_ENTITY_ID, "= :entityTypeId")
+        .and(LiveSequence.Fields.ENABLED, "= :enabled")
+        .bind(LiveSequence.Fields.DOMAIN_ENTITY_ID, entityType.getId())
+        .bind(LiveSequence.Fields.ENABLED, true);
 
     String sqlFinal = selectBuilder.build();
     List<SQLBuilder.SQLParam> params = selectBuilder.getParams();
@@ -61,10 +60,10 @@ public class SequenceRepositoryImpl implements SequenceRepository {
     sql = QueryCache.get(Query.UPDATE_CORE_DOMAIN_ENTITY_SEQUENCE);
 
     SQLBuilder updateBuilder = new SQLBuilder(sql)
-        .where(SequenceField.DOMAIN_ENTITY_ID.attribute(), "= :entityTypeId")
-        .and(SequenceField.ENABLED.attribute(), "= :enabled")
-        .bind(SequenceField.DOMAIN_ENTITY_ID.attribute(), entityType.getId())
-        .bind(SequenceField.ENABLED.attribute(), true);
+        .where(LiveSequence.Fields.DOMAIN_ENTITY_ID, "= :entityTypeId")
+        .and(LiveSequence.Fields.ENABLED, "= :enabled")
+        .bind(LiveSequence.Fields.DOMAIN_ENTITY_ID, entityType.getId())
+        .bind(LiveSequence.Fields.ENABLED, true);
 
     sqlFinal = updateBuilder.build();
     params = updateBuilder.getParams();
