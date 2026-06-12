@@ -1,7 +1,6 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.persistence.repository.retailproduct;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +36,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
         rs -> {
           List<RetailProductVariant> list = new ArrayList<>();
           while (rs.next()) {
-            try {
-              list.add(RetailProductMapper.fromResultSet(rs));
-            } catch (SQLException e) {
-              e.printStackTrace();
-            }
+            list.add(RetailProductMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -56,7 +51,7 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RetailProductMapper.bind(builder, retailProduct);
+    RetailProductMapper.bind(retailProduct, builder::bindInsert);
 
     long generatedId = SQLExecutor.insert(
         connection,
@@ -74,9 +69,9 @@ public class RetailProductRepositoryImpl implements RetailProductRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RetailProductMapper.bind(builder, retailProduct);
+    RetailProductMapper.bind(retailProduct, builder::bindUpdate);
 
-    builder.where("retail_product_variant.id = :id")
+    builder.where(RetailProductVariant.Fields.ID, "= :id")
         .bind(RetailProductVariant.Fields.ID, retailProduct.getEntityId());
 
     int rowsAffected = SQLExecutor.update(

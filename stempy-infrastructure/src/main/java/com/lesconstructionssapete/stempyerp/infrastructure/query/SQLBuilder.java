@@ -86,29 +86,38 @@ public class SQLBuilder {
     this.requireWhereClause = detectRequireWhereClause(this.base);
   }
 
-  /**
-   * Bind a named parameter using an EntityField. The field's logical name will be
-   * used as the parameter name (e.g. ":Resource.logicalName") and the SQL type
-   * will be inferred from the field definition. The condition in the WHERE clause
-   * should reference this named parameter (e.g. "table_name.column_name =
-   * :Resource.logicalName") for it to be properly replaced during SQL generation.
-   */
-  public SQLBuilder bind(EntityField field, Object value) {
-    params.put(
-        field.qualifiedLogicalName(),
-        new SQLParam(
-            field.qualifiedLogicalName(),
-            value,
-            field.sqlType()));
-
+  // Internal method to bind a parameter and track its order. Returns this for
+  // chaining.
+  private SQLBuilder bindParam(EntityField field, Object value) {
+    if (!field.isVirtual()) {
+      params.put(
+          field.qualifiedLogicalName(),
+          new SQLParam(field.qualifiedLogicalName(), value, field.sqlType()));
+    }
     return this;
   }
 
-  /**
-   * Bind a named parameter with a specific SQL type.
-   */
+  public SQLBuilder bind(EntityField field, Object value) {
+    return bindParam(field, value);
+  }
+
+  @Deprecated
   public SQLBuilder bind(String name, Object value, int sqlType) {
     params.put(name, new SQLParam(name, value, sqlType));
+    return this;
+  }
+
+  public SQLBuilder bindInsert(EntityField field, Object value) {
+    if (!field.isVirtual() && field.isInsertable()) {
+      return bindParam(field, value);
+    }
+    return this;
+  }
+
+  public SQLBuilder bindUpdate(EntityField field, Object value) {
+    if (!field.isVirtual() && field.isUpdatable()) {
+      return bindParam(field, value);
+    }
     return this;
   }
 
@@ -118,8 +127,9 @@ public class SQLBuilder {
    * The condition can contain named parameters (e.g. "table_name.column_name =
    * :Resource.logicalName") which should be
    * bound using the {@link #bind(String, Object)} or
-   * {@link #bind(EntityField, Object)} methods.
+   * {@link #bindParam(EntityField, Object)} methods.
    */
+  @Deprecated
   public SQLBuilder where(String condition) {
     whereClauses.add(condition);
     return this;
@@ -138,6 +148,7 @@ public class SQLBuilder {
   /**
    * Add an AND condition to the WHERE clause.
    */
+  @Deprecated
   public SQLBuilder and(String condition) {
     return where(condition);
   }

@@ -1,18 +1,18 @@
 package com.lesconstructionssapete.stempyerp.infrastructure.mapper.retailproduct;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.function.BiConsumer;
 
+import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 import com.lesconstructionssapete.stempyerp.domain.retailproduct.RetailProductVariant;
 import com.lesconstructionssapete.stempyerp.infrastructure.mapper.EntityMapper;
-import com.lesconstructionssapete.stempyerp.infrastructure.query.SQLBuilder;
 
 public final class RetailProductMapper {
 
   private RetailProductMapper() {
   }
 
-  public static RetailProductVariant fromResultSet(ResultSet rs) throws SQLException {
+  public static RetailProductVariant fromResultSet(ResultSet rs) {
     return new RetailProductVariant(
         EntityMapper.read(rs, RetailProductVariant.Fields.ID),
         EntityMapper.read(rs, RetailProductVariant.Fields.RETAIL_PRODUCT_MASTER_ID),
@@ -27,14 +27,18 @@ public final class RetailProductMapper {
         EntityMapper.read(rs, RetailProductVariant.Fields.UPDATED_BY_USER_ID));
   }
 
-  public static void bind(SQLBuilder builder, RetailProductVariant retailProduct) {
-
-    builder.bind(RetailProductVariant.Fields.RETAIL_PRODUCT_MASTER_ID, retailProduct.getRetailProductMasterId());
-    builder.bind(RetailProductVariant.Fields.RETAIL_PRODUCT_NO, retailProduct.getRetailProductNo());
-    builder.bind(RetailProductVariant.Fields.RETAIL_PRODUCT_VARIANT_NO, retailProduct.getRetailProductVariantNo());
-    builder.bind(RetailProductVariant.Fields.NAME, retailProduct.getName());
-    builder.bind(RetailProductVariant.Fields.DESCRIPTION, retailProduct.getDescription());
-    builder.bind(RetailProductVariant.Fields.ENABLED, retailProduct.isEnabled());
+  public static void bind(RetailProductVariant rp, BiConsumer<EntityField, Object> binder) {
+    binder.accept(RetailProductVariant.Fields.ID, rp.getEntityId());
+    binder.accept(RetailProductVariant.Fields.RETAIL_PRODUCT_MASTER_ID, rp.getRetailProductMasterId());
+    binder.accept(RetailProductVariant.Fields.RETAIL_PRODUCT_NO, rp.getRetailProductNo());
+    binder.accept(RetailProductVariant.Fields.RETAIL_PRODUCT_VARIANT_NO, rp.getRetailProductVariantNo());
+    binder.accept(RetailProductVariant.Fields.NAME, rp.getName());
+    binder.accept(RetailProductVariant.Fields.DESCRIPTION, rp.getDescription());
+    binder.accept(RetailProductVariant.Fields.ENABLED, rp.isEnabled());
+    binder.accept(RetailProductVariant.Fields.CREATED_AT, rp.getCreatedAt());
+    binder.accept(RetailProductVariant.Fields.CREATED_BY_USER_ID, rp.getCreatedByUserId());
+    binder.accept(RetailProductVariant.Fields.UPDATED_AT, rp.getUpdatedAt());
+    binder.accept(RetailProductVariant.Fields.UPDATED_BY_USER_ID, rp.getUpdatedByUserId());
   }
 
 }

@@ -28,29 +28,33 @@ public final class EntityMapper {
    * 
    */
   @SuppressWarnings("unchecked")
-  public static <T> T read(ResultSet rs, EntityField field) throws SQLException {
+  public static <T> T read(ResultSet rs, EntityField field) {
 
     String col = field.qualifiedColumnName();
     Class<?> type = field.javaType();
 
-    if (type == Long.class || type == long.class)
-      return (T) (Long) rs.getLong(col);
-    if (type == Integer.class || type == int.class)
-      return (T) (Integer) rs.getInt(col);
-    if (type == String.class)
-      return (T) rs.getString(col);
-    if (type == BigDecimal.class)
-      return (T) rs.getBigDecimal(col);
-    if (type == Boolean.class || type == boolean.class)
-      return (T) (Boolean) rs.getBoolean(col);
-    if (type == LocalDate.class)
-      return (T) rs.getObject(col, LocalDate.class);
-    if (type == Instant.class) {
-      Timestamp ts = rs.getTimestamp(col);
-      return (T) (ts != null ? ts.toInstant() : null);
-    }
+    try {
+      if (type == Long.class || type == long.class)
+        return (T) (Long) rs.getLong(col);
+      if (type == Integer.class || type == int.class)
+        return (T) (Integer) rs.getInt(col);
+      if (type == String.class)
+        return (T) rs.getString(col);
+      if (type == BigDecimal.class)
+        return (T) rs.getBigDecimal(col);
+      if (type == Boolean.class || type == boolean.class)
+        return (T) (Boolean) rs.getBoolean(col);
+      if (type == LocalDate.class)
+        return (T) rs.getObject(col, LocalDate.class);
+      if (type == Instant.class) {
+        Timestamp ts = rs.getTimestamp(col);
+        return (T) (ts != null ? ts.toInstant() : null);
+      }
 
-    return (T) rs.getObject(col);
+      return (T) rs.getObject(col);
+    } catch (SQLException e) {
+      throw new RuntimeException("Error reading field " + field.qualifiedColumnName() + " from ResultSet", e);
+    }
   }
 
   /**
@@ -64,27 +68,33 @@ public final class EntityMapper {
    * @throws SQLException If a database access error occurs.
    */
   public static void bind(PreparedStatement ps, int index,
-      int sqlType, Object value) throws SQLException {
-    if (value == null) {
-      ps.setNull(index, sqlType);
-      return;
+      int sqlType, Object value) {
+
+    try {
+      if (value == null) {
+        ps.setNull(index, sqlType);
+        return;
+      }
+      switch (sqlType) {
+        case Types.BIGINT -> ps.setLong(index, (Long) value);
+        case Types.INTEGER -> ps.setInt(index, (Integer) value);
+        case Types.VARCHAR,
+            Types.CHAR ->
+          ps.setString(index, (String) value);
+        case Types.DECIMAL,
+            Types.NUMERIC ->
+          ps.setBigDecimal(index, (BigDecimal) value);
+        case Types.BOOLEAN -> ps.setBoolean(index, (Boolean) value);
+        case Types.TIMESTAMP -> ps.setTimestamp(index,
+            Timestamp.from((Instant) value));
+        case Types.DATE -> ps.setDate(index,
+            Date.valueOf((LocalDate) value));
+        default -> ps.setObject(index, value, sqlType);
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException("Error binding value to PreparedStatement at index " + index, e);
     }
-    switch (sqlType) {
-      case Types.BIGINT -> ps.setLong(index, (Long) value);
-      case Types.INTEGER -> ps.setInt(index, (Integer) value);
-      case Types.VARCHAR,
-          Types.CHAR ->
-        ps.setString(index, (String) value);
-      case Types.DECIMAL,
-          Types.NUMERIC ->
-        ps.setBigDecimal(index, (BigDecimal) value);
-      case Types.BOOLEAN -> ps.setBoolean(index, (Boolean) value);
-      case Types.TIMESTAMP -> ps.setTimestamp(index,
-          Timestamp.from((Instant) value));
-      case Types.DATE -> ps.setDate(index,
-          Date.valueOf((LocalDate) value));
-      default -> ps.setObject(index, value, sqlType);
-    }
+
   }
 
   public static <F extends Enum<F> & EntityField> List<F> insertableFields(Class<F> entityEnum) {

@@ -14,6 +14,7 @@ public class RetailProductVariant extends GenericEntity {
         .field("id", "id")
         .type(Long.class, java.sql.Types.BIGINT)
         .notNullable()
+        .notUpdatable().notInsertable()
         .build()),
 
     RETAIL_PRODUCT_MASTER_ID(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
