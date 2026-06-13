@@ -61,12 +61,12 @@ public class ApplicationPermission {
   public ApplicationPermission(
       long id,
       String resource,
-      AppAction action,
+      String action,
       boolean enabled,
       Instant createdAt) {
     this.id = id;
     this.resource = resource;
-    this.action = action;
+    this.action = AppAction.valueOf(action);
     this.enabled = enabled;
     this.createdAt = createdAt;
   }

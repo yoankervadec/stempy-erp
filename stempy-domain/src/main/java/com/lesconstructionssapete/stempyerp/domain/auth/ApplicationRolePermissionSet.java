@@ -2,7 +2,6 @@ package com.lesconstructionssapete.stempyerp.domain.auth;
 
 import java.time.Instant;
 
-import com.lesconstructionssapete.stempyerp.annotation.AppAction;
 import com.lesconstructionssapete.stempyerp.domain.field.EntityField;
 import com.lesconstructionssapete.stempyerp.domain.field.FieldMeta;
 
@@ -43,7 +42,7 @@ public class ApplicationRolePermissionSet extends ApplicationPermissionSet {
   public ApplicationRolePermissionSet(
       long id,
       String resource,
-      AppAction action,
+      String action,
       boolean enabled,
       Instant createdAt,
       long roleId,

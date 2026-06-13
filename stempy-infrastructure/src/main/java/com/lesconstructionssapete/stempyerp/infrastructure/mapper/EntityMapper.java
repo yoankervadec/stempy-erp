@@ -40,6 +40,8 @@ public final class EntityMapper {
         return (T) (Integer) rs.getInt(col);
       if (type == String.class)
         return (T) rs.getString(col);
+      if (type == Double.class || type == double.class)
+        return (T) (Double) rs.getDouble(col);
       if (type == BigDecimal.class)
         return (T) rs.getBigDecimal(col);
       if (type == Boolean.class || type == boolean.class)
