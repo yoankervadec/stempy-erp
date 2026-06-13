@@ -10,68 +10,68 @@ public class RetailProductVariant extends GenericEntity {
 
   public enum Fields implements EntityField {
 
-    ID(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    ID(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("id", "id")
         .type(Long.class, java.sql.Types.BIGINT)
         .notNullable()
         .notUpdatable().notInsertable()
         .build()),
 
-    RETAIL_PRODUCT_MASTER_ID(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    RETAIL_PRODUCT_MASTER_ID(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("retailProductMasterId", "retail_product_master_id")
         .type(Long.class, java.sql.Types.BIGINT)
         .notNullable()
         .build()),
 
-    RETAIL_PRODUCT_NO(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    RETAIL_PRODUCT_NO(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("retailProductNo", "retail_product_no")
         .type(String.class, java.sql.Types.VARCHAR)
         .notNullable()
         .build()),
 
-    RETAIL_PRODUCT_VARIANT_NO(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    RETAIL_PRODUCT_VARIANT_NO(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("retailProductVariantNo", "retail_product_variant_no")
         .type(String.class, java.sql.Types.VARCHAR)
         .notNullable()
         .build()),
 
-    NAME(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    NAME(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("name", "name")
         .type(String.class, java.sql.Types.VARCHAR)
         .notNullable()
         .build()),
 
-    DESCRIPTION(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    DESCRIPTION(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("description", "description")
         .type(String.class, java.sql.Types.VARCHAR)
         .notNullable()
         .build()),
 
-    ENABLED(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    ENABLED(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("enabled", "enabled")
         .type(Boolean.class, java.sql.Types.BOOLEAN)
         .notNullable()
         .build()),
 
-    CREATED_AT(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    CREATED_AT(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("createdAt", "created_at")
         .type(Instant.class, java.sql.Types.TIMESTAMP)
         .notNullable()
         .build()),
 
-    CREATED_BY_USER_ID(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    CREATED_BY_USER_ID(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("createdByUserId", "created_by_user_id")
         .type(Long.class, java.sql.Types.BIGINT)
         .notNullable()
         .build()),
 
-    UPDATED_AT(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    UPDATED_AT(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("updatedAt", "updated_at")
         .type(Instant.class, java.sql.Types.TIMESTAMP)
         .notNullable()
         .build()),
 
-    UPDATED_BY_USER_ID(FieldMeta.builder("RetailProduct", "dom_retail_product_variant")
+    UPDATED_BY_USER_ID(FieldMeta.builder("RetailProductVariant", "dom_retail_product_variant")
         .field("updatedByUserId", "updated_by_user_id")
         .type(Long.class, java.sql.Types.BIGINT)
         .notNullable()
