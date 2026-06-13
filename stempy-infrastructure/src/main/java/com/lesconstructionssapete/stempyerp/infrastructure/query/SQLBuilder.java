@@ -101,7 +101,6 @@ public class SQLBuilder {
     return bindParam(field, value);
   }
 
-  @Deprecated
   public SQLBuilder bind(String name, Object value, int sqlType) {
     params.put(name, new SQLParam(name, value, sqlType));
     return this;
@@ -129,7 +128,6 @@ public class SQLBuilder {
    * bound using the {@link #bind(String, Object)} or
    * {@link #bindParam(EntityField, Object)} methods.
    */
-  @Deprecated
   public SQLBuilder where(String condition) {
     whereClauses.add(condition);
     return this;
@@ -148,7 +146,6 @@ public class SQLBuilder {
   /**
    * Add an AND condition to the WHERE clause.
    */
-  @Deprecated
   public SQLBuilder and(String condition) {
     return where(condition);
   }

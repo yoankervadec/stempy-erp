@@ -108,59 +108,61 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & EntityField> {
 
   private ConditionFragment buildCondition(SQLBuilder builder, FilterCondition c) {
 
-    // TODO: check if field is in field map, throw exception if not
-
     EntityField field = c.field();
 
-    if (field == null) {
+    if (!fieldProviders.isInstance(field)) {
       throw new IllegalFieldException(
-          "Illegal field: " + c.field() + " (" + c.field().qualifiedLogicalName() + ")");
+          "Illegal field: " + field + " — expected a " + fieldProviders.getSimpleName()
+              + " but got " + field.getClass().getSimpleName());
+
     }
 
-    String column = field.qualifiedColumnName();
+    E typedField = fieldProviders.cast(field);
+
+    String column = typedField.qualifiedColumnName();
     Object value = c.value();
 
     return switch (c.operator()) {
 
       case EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, typedField.sqlType());
         yield new ConditionFragment(column + " = :" + p);
       }
 
       case NOT_EQUALS -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, typedField.sqlType());
         yield new ConditionFragment(column + " <> :" + p);
       }
 
       case GREATER_THAN -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, typedField.sqlType());
         yield new ConditionFragment(column + " > :" + p);
       }
 
       case LESS_THAN -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, typedField.sqlType());
         yield new ConditionFragment(column + " < :" + p);
       }
 
       case GREATER_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, typedField.sqlType());
         yield new ConditionFragment(column + " >= :" + p);
       }
 
       case LESS_OR_EQUAL -> {
         String p = nextParam();
-        builder.bind(p, value, field.sqlType());
+        builder.bind(p, value, typedField.sqlType());
         yield new ConditionFragment(column + " <= :" + p);
       }
 
       case LIKE -> {
         String p = nextParam();
-        builder.bind(p, "%" + value + "%", field.sqlType());
+        builder.bind(p, "%" + value + "%", typedField.sqlType());
         yield new ConditionFragment(column + " LIKE :" + p);
       }
 
@@ -180,7 +182,7 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & EntityField> {
 
           String p = nextParam();
 
-          builder.bind(p, v, field.sqlType());
+          builder.bind(p, v, typedField.sqlType());
 
           placeholders.add(":" + p);
         }
@@ -212,11 +214,20 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & EntityField> {
     for (SortSpec sort : query.sortSpec()) {
 
       EntityField field = sort.field();
+
       if (field == null) {
         throw new IllegalFieldException(
             "Illegal sort field: " + sort.field() + " (" + sort.field().qualifiedLogicalName() + ")");
       }
-      String column = field.qualifiedColumnName();
+
+      if (!fieldProviders.isInstance(field)) {
+        throw new IllegalFieldException(
+            "Illegal sort field: " + field + " — expected a " + fieldProviders.getSimpleName()
+                + " but got " + field.getClass().getSimpleName());
+      }
+
+      E typedField = fieldProviders.cast(field);
+      String column = typedField.qualifiedColumnName();
 
       builder.orderBy(column + (sort.ascending() ? " ASC" : " DESC"));
     }
