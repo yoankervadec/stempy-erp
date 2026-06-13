@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationUserPermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserRole;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
 import com.lesconstructionssapete.stempyerp.port.cache.CacheProvider;
@@ -61,7 +63,8 @@ class UserPermissionService {
       roles = applicationPermissionRepository.fetchUserApplicationRoles(
           connection, DomainQuery.builder()
               .where(w -> w.and(
-                  c -> c.equals(ApplicationUserRole.Fields.USER_ID, userId)))
+                  c -> c.equals(
+                      UserRole.Fields.USER_ID, userId)))
               .build());
     } catch (SQLException e) {
       throw new RuntimeException("Failed to fetch user roles: " + e.getMessage(), e);
@@ -89,7 +92,7 @@ class UserPermissionService {
           connection,
           DomainQuery.builder()
               .where(w -> w.and(
-                  c -> c.equals(ApplicationUserRole.Fields.USER_ID, userId)))
+                  c -> c.equals(ApplicationUserPermissionSet.Fields.USER_ID, userId)))
               .build());
     } catch (SQLException e) {
       throw new RuntimeException("Failed to fetch user permissions: " + e.getMessage(), e);

@@ -5,6 +5,7 @@ import java.time.Instant;
 import com.lesconstructionssapete.stempyerp.annotation.AppAction;
 
 public abstract class ApplicationPermissionSet extends ApplicationPermission {
+
   private final long referenceId; // ID of the referenced entity (e.g., Role, User)
   private final boolean allow;
 

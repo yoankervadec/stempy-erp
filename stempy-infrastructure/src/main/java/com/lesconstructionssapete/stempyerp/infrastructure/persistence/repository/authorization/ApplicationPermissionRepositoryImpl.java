@@ -7,14 +7,16 @@ import java.util.List;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermission;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationPermissionSet;
 import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRole;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationPermissionField;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationRoleField;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationRolePermissionSetField;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationUserPermissionSetField;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.ApplicationUserRoleField;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationRolePermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.ApplicationUserPermissionSet;
+import com.lesconstructionssapete.stempyerp.domain.auth.UserRole;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.auth.ApplicationPermissionRepository;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.auth.ApplicationPermissionMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.auth.ApplicationRoleMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.auth.ApplicationRolePermissionSetMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.auth.ApplicationUserPermissionSetMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.auth.UserRoleMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -30,8 +32,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<ApplicationPermissionField> translator = new DomainQuerySQLTranslator<>(
-        ApplicationPermissionField.class);
+    DomainQuerySQLTranslator<ApplicationPermission.Fields> translator = new DomainQuerySQLTranslator<>(
+        ApplicationPermission.Fields.class);
 
     translator.apply(builder, query);
 
@@ -41,13 +43,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
         builder.getParams(),
         rs -> {
           List<ApplicationPermission> list = new ArrayList<>();
-          ResultSetMapper<ApplicationPermission> rsMapper = new ResultSetMapper<>(ApplicationPermission.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(ApplicationPermissionMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -60,8 +57,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<ApplicationRoleField> translator = new DomainQuerySQLTranslator<>(
-        ApplicationRoleField.class);
+    DomainQuerySQLTranslator<ApplicationRole.Fields> translator = new DomainQuerySQLTranslator<>(
+        ApplicationRole.Fields.class);
 
     translator.apply(builder, query);
 
@@ -71,13 +68,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
         builder.getParams(),
         rs -> {
           List<ApplicationRole> list = new ArrayList<>();
-          ResultSetMapper<ApplicationRole> rsMapper = new ResultSetMapper<>(ApplicationRole.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(ApplicationRoleMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -90,8 +82,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<ApplicationUserRoleField> translator = new DomainQuerySQLTranslator<>(
-        ApplicationUserRoleField.class);
+    DomainQuerySQLTranslator<UserRole.Fields> translator = new DomainQuerySQLTranslator<>(
+        UserRole.Fields.class);
 
     translator.apply(builder, query);
 
@@ -101,13 +93,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
         builder.getParams(),
         rs -> {
           List<ApplicationRole> list = new ArrayList<>();
-          ResultSetMapper<ApplicationRole> rsMapper = new ResultSetMapper<>(ApplicationRole.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(UserRoleMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -120,8 +107,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<ApplicationRolePermissionSetField> translator = new DomainQuerySQLTranslator<>(
-        ApplicationRolePermissionSetField.class);
+    DomainQuerySQLTranslator<ApplicationRolePermissionSet.Fields> translator = new DomainQuerySQLTranslator<>(
+        ApplicationRolePermissionSet.Fields.class);
 
     translator.apply(builder, query);
 
@@ -131,13 +118,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
         builder.getParams(),
         rs -> {
           List<ApplicationPermissionSet> list = new ArrayList<>();
-          ResultSetMapper<ApplicationPermissionSet> rsMapper = new ResultSetMapper<>(ApplicationPermissionSet.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(ApplicationRolePermissionSetMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -149,8 +131,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<ApplicationUserPermissionSetField> translator = new DomainQuerySQLTranslator<>(
-        ApplicationUserPermissionSetField.class);
+    DomainQuerySQLTranslator<ApplicationUserPermissionSet.Fields> translator = new DomainQuerySQLTranslator<>(
+        ApplicationUserPermissionSet.Fields.class);
 
     translator.apply(builder, query);
 
@@ -160,13 +142,8 @@ public class ApplicationPermissionRepositoryImpl implements ApplicationPermissio
         builder.getParams(),
         rs -> {
           List<ApplicationPermissionSet> list = new ArrayList<>();
-          ResultSetMapper<ApplicationPermissionSet> rsMapper = new ResultSetMapper<>(ApplicationPermissionSet.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(ApplicationUserPermissionSetMapper.fromResultSet(rs));
           }
           return list;
         });

@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lesconstructionssapete.stempyerp.domain.auth.AuthToken;
-import com.lesconstructionssapete.stempyerp.domain.field.auth.RefreshTokenField;
 import com.lesconstructionssapete.stempyerp.domain.query.DomainQuery;
 import com.lesconstructionssapete.stempyerp.domain.repository.RefreshTokenRepository;
-import com.lesconstructionssapete.stempyerp.infrastructure.mapper.ResultSetMapper;
+import com.lesconstructionssapete.stempyerp.infrastructure.mapper.auth.AuthTokenMapper;
 import com.lesconstructionssapete.stempyerp.infrastructure.persistence.SQLExecutor;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.DomainQuerySQLTranslator;
 import com.lesconstructionssapete.stempyerp.infrastructure.query.Query;
@@ -24,7 +23,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    DomainQuerySQLTranslator<RefreshTokenField> translator = new DomainQuerySQLTranslator<>(RefreshTokenField.class);
+    DomainQuerySQLTranslator<AuthToken.Fields> translator = new DomainQuerySQLTranslator<>(AuthToken.Fields.class);
 
     translator.apply(builder, query);
 
@@ -34,13 +33,8 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
         builder.getParams(),
         rs -> {
           List<AuthToken> list = new ArrayList<>();
-          ResultSetMapper<AuthToken> rsMapper = new ResultSetMapper<>(AuthToken.class);
           while (rs.next()) {
-            try {
-              list.add(rsMapper.mapRow(rs));
-            } catch (Exception e) {
-              e.printStackTrace();
-            }
+            list.add(AuthTokenMapper.fromResultSet(rs));
           }
           return list;
         });
@@ -53,7 +47,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     SQLBuilder builder = new SQLBuilder(sql);
 
-    RefreshTokenSQLMapper.bindInsert(builder, token);
+    AuthTokenMapper.bind(token, builder::bindInsert);
 
     long generatedId = SQLExecutor.insert(
         connection,
