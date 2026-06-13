@@ -215,15 +215,10 @@ public final class DomainQuerySQLTranslator<E extends Enum<E> & EntityField> {
 
       EntityField field = sort.field();
 
-      if (field == null) {
-        throw new IllegalFieldException(
-            "Illegal sort field: " + sort.field() + " (" + sort.field().qualifiedLogicalName() + ")");
-      }
-
-      if (!fieldProviders.isInstance(field)) {
+      if (field == null || !fieldProviders.isInstance(field)) {
         throw new IllegalFieldException(
             "Illegal sort field: " + field + " — expected a " + fieldProviders.getSimpleName()
-                + " but got " + field.getClass().getSimpleName());
+                + " but got " + field);
       }
 
       E typedField = fieldProviders.cast(field);

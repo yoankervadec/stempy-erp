@@ -19,7 +19,7 @@ public class DefaultDomainFieldResolverTest {
 
   @Test
   void registeredFieldIsResolved() {
-    EntityField field = resolver.resolve("RetailProduct.id");
+    EntityField field = resolver.resolve("RetailProductVariant.id");
     Assertions.assertEquals(RetailProductVariant.Fields.ID, field);
   }
 
@@ -45,9 +45,9 @@ public class DefaultDomainFieldResolverTest {
   void invalidFormatThrowsException() {
     FieldNotFoundException ex = Assertions.assertThrows(
         FieldNotFoundException.class,
-        () -> resolver.resolve("RetailProduct id"));
+        () -> resolver.resolve("RetailProductVariant id"));
 
-    Assertions.assertTrue(ex.getMessage().contains("RetailProduct id"));
+    Assertions.assertTrue(ex.getMessage().contains("RetailProductVariant id"));
   }
 
   @Test
