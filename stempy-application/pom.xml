@@ -82,7 +82,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                com.lesconstructionssapete.stempyerp.app.App
+                                com.lesconstructionssapete.stempyerp.App
                             </mainClass>
                         </manifest>
                     </archive>
@@ -95,6 +95,12 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Exec Plugin for running the app -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
             </plugin>
 
         </plugins>
